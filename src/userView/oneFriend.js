@@ -4,7 +4,35 @@ import { NavLink, Link  } from "react-router-dom";
 import "react-table/react-table.css"
 import ReactTable from "react-table";
 
+class PicWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    let {photos} = this.props;
+    this.state = {
+      photos: photos,
+      imgSrc: photos[0].url,
+      count: 0
+    };
+  }
 
+  render() {
+    let click = () => {
+      if (this.state.count < this.state.photos.length-1) {
+           this.state.count ++;
+      } else {
+        this.state.count = 0;
+      }
+      this.setState({
+         imgSrc: this.state.photos[this.state.count].url
+       });
+    }
+    return (
+      <div>
+        <img onClick={click}  src={this.state.imgSrc}/>
+      </div>
+    );
+  }
+}
 
 class OneFriend extends Component {
   constructor(props) {
@@ -18,53 +46,32 @@ class OneFriend extends Component {
   }
 
   render() {
-    let {data} = this.props;
-  ///  console.log("---------------------------- friens");   <OneFriend data={one.person}/>
-    //global.tostr(data)
-
-    var friends =  store.update.data.matches || data.matches  ;
-    // let fields = options.fields;
- //console.log(friends)
- const { args } = this.props.location.state;
- console.log(args);
-console.log(args.person);
-  console.log(args.person.photos);
-
-    var Pic = (photos) => (
+  //  let {data} = this.props;
+  //  var friends =  store.update.data.matches || data.matches  ;
+    let { args } = this.props.location.state;
+    let prsn = args.person;
+    let Info = () => (
       <div>
-          <img  src={photos[0].url} alt="new"/>
-          <img  src={photos[1].url} alt="new"/>
+        <h3>Name: </h3>{prsn.name}
+        <h3>Bio: </h3>{prsn.birth_date}
       </div>
     )
+    let person = [{
+      image: (<PicWrapper photos={args.person.photos} />),
+      person: args.person,
+      info: (<Info />)
+    }]
 
-    const person = () => {
-      let prsn = args.person
-      let obj = {
-        firstName: prsn.name,
-        lastName: prsn.birth_date//,
-      //  image: (<Pic src={prsn.photos} />)
-      }
-      return [obj];
-    }
-
-     console.log(person())
-
-
-
-  const present = [
+    let present = [
       {
         columns: [
           {
-            Header: "Image",
+            Header: "Photos",
             accessor: "image"
           },
           {
-            Header: "First Name",
-            accessor: "firstName"
-          },
-          {
-            Header: "Firssdfsdme",
-            accessor: "firstName"
+            Header: "Info",
+            accessor: "info"
           }
         ]
       }
@@ -74,9 +81,10 @@ console.log(args.person);
       <div>
             <div>
               <ReactTable className="-striped -highlight"
-                data={person()}
+                data={person}
                 columns={present}
-                defaultPageSize={20}
+                defaultPageSize={1}
+                showPagination={false}
                 style={{
                   width: '100%',
                   height: '30%',
@@ -85,7 +93,6 @@ console.log(args.person);
                 getTdProps={(state, rowInfo, column, instance) => {
                     return {
                       onClick: (e, handleOriginal) => {
-
                         if (handleOriginal) {
                           handleOriginal()
                         }
@@ -102,7 +109,7 @@ console.log(args.person);
   }
   }
 
-  export default OneFriend;
+export default OneFriend;
 
 
 
