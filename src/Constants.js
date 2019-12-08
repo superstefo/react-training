@@ -7,7 +7,8 @@ const Const = {
       PHONE: ipAdress + 'requestCode',
       GET_TOKEN: ipAdress + 'getToken/'
     },
-    UPDATES: ipAdress + 'updates'
+    UPDATES: ipAdress + 'updates',
+    PROFILE: ipAdress + 'profile'
   }
 }
 

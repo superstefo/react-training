@@ -3,7 +3,7 @@ import Const from '../Constants';
 import AjaxService from '../AjaxService'
 import RenderForm from '../basic/RenderForm'
 import './index.css';
-import {withRouter}from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 class PhoneForm extends React.Component {
   constructor(props) {
@@ -27,25 +27,24 @@ class PhoneForm extends React.Component {
     }, {});
 
     promise.then(() => {
-       history.push('/confirm-token');
+      history.push('/confirm-token');
     })
     return false;
   }
 
   render() {
     const optns = {
-      handleSubmit : this.handleSubmit,
+      handleSubmit: this.handleSubmit,
       fields: [
-        {name: 'Phone number', placeholder: 'Please, fill in ur phone number', onChangeFun :this.handleChange },
-        {name: 'Test field', placeholder: 'test field...', onChangeFun : (arg) =>{console.log("name333 - hone333");}}
+        { name: 'Phone number', placeholder: 'Please, fill in ur phone number', onChangeFun: this.handleChange }
       ]
     }
 
-   return (
-     <div>
-      <RenderForm options={optns}/>
-     </div >
-   )
+    return (
+      <div>
+        <RenderForm options={optns} />
+      </div >
+    )
   }
 }
-export default  withRouter(PhoneForm)
+export default withRouter(PhoneForm)

@@ -19,7 +19,7 @@ function Header() {
         <Btn to="/home" label="Home" />
         <Btn to="/user" label="User" />
         <Btn to="/pals" label="Pals" />
-        <Btn to="/chat" label="Chat" />
+        <Btn to="/settings" label="Settings" />
         <Btn to="/logout" label="|->" />
       </div>
     </nav>

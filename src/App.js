@@ -5,20 +5,18 @@ import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
 import OneFriend from './userView/oneFriend';
 import Header from './basic/header.js';
+import Chat from './chat/chat.js';
 import store from './store'
-import {Provider } from 'react-redux'
-//import './App.css';
-import {BrowserRouter as Router,  Route,  Switch} from 'react-router-dom';
+
+import PollService from './PollService';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 
-//import About from './About';
-//import Page from './Page';            < Route path = "/pages/:id "component = {Page}/>
-
-global.tostr = function(object) {
+global.tostr = function (object) {
   var cache = [];
   var str = JSON.stringify(object,
     // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON"
-    function(key, value) {
+    function (key, value) {
       if (typeof value === 'object' && value !== null) {
         if (cache.indexOf(value) !== -1) {
           // Circular reference found, discard key
@@ -33,28 +31,26 @@ global.tostr = function(object) {
   console.log(str);
   return str;
 };
-
 const App = (props) => {
-   function getProps() {
-
-    console.log("getting props========================  ff" + store.updates);
+  function getProps() {
     return store.updates;
   }
 
   return (
 
-    <div className="container" style={{paddingTop: 10}}>
-    < Router >
-     <Header />
-        < Switch >
-          < Route exact path = "/" component = {Home}/>
-          < Route path = "/phone" component = {PhoneForm}/>
-          < Route path = "/friend" component = {OneFriend} />}/>
-          < Route path = "/user" render = {() => <UserView data={getProps()} />}/>
-          < Route path = "/confirm-token" component = {ConfirmCode}/>
-          < Route path = "*" component = {Home}/>
-        < /Switch >
-    < /Router >
+    <div className="container" style={{ paddingTop: 10 }}>
+      <Router>
+        <Header />
+        <Switch>
+          < Route exact path="/" component={Home} />
+          < Route path="/phone" component={PhoneForm} />
+          < Route path="/friend" component={OneFriend} />
+          < Route path="/chat" component={Chat} />
+          < Route path="/user" render={() => <UserView data={getProps()} />} />
+          < Route path="/confirm-token" component={ConfirmCode} />
+          < Route path="*" component={Home} />
+        </Switch>
+      </Router>
     </div >
   );
 };

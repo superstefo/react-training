@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import store from '../store'
-import { NavLink, Link  } from "react-router-dom";
 import "react-table/react-table.css"
 import ReactTable from "react-table";
+import BtnLink from "../building-blocks/BtnLink";
 
 class PicWrapper extends React.Component {
   constructor(props) {
     super(props);
-    let {photos} = this.props;
+    let { photos } = this.props;
     this.state = {
       photos: photos,
       imgSrc: photos[0].url,
@@ -17,18 +17,18 @@ class PicWrapper extends React.Component {
 
   render() {
     let click = () => {
-      if (this.state.count < this.state.photos.length-1) {
-           this.state.count ++;
+      if (this.state.count < this.state.photos.length - 1) {
+        this.state.count++;
       } else {
         this.state.count = 0;
       }
       this.setState({
-         imgSrc: this.state.photos[this.state.count].url
-       });
+        imgSrc: this.state.photos[this.state.count].url
+      });
     }
     return (
       <div>
-        <img onClick={click}  src={this.state.imgSrc}/>
+        <img onClick={click} src={this.state.imgSrc} />
       </div>
     );
   }
@@ -37,23 +37,18 @@ class PicWrapper extends React.Component {
 class OneFriend extends Component {
   constructor(props) {
     super(props);
-      let {args} = this.props;
   }
 
-  componentDidMount () {
-    const { args } = this.props.location.state;
-    console.log(args);
+  componentDidMount() {
   }
 
   render() {
-  //  let {data} = this.props;
-  //  var friends =  store.update.data.matches || data.matches  ;
-    let { args } = this.props.location.state;
+    const { args } = this.props.location.state;
     let prsn = args.person;
     let Info = () => (
-      <div>
-        <h3>Name: </h3>{prsn.name}
-        <h3>Bio: </h3>{prsn.birth_date}
+      <div> <div> <BtnLink label="Chat" data={args} pathname="/chat" /></div>
+        <div> <h3>Name: </h3>{prsn.name} </div>
+        <div> <h3>Bio: </h3>{prsn.birth_date} </div>
       </div>
     )
     let person = [{
@@ -79,35 +74,35 @@ class OneFriend extends Component {
 
     return (
       <div>
-            <div>
-              <ReactTable className="-striped -highlight"
-                data={person}
-                columns={present}
-                defaultPageSize={1}
-                showPagination={false}
-                style={{
-                  width: '100%',
-                  height: '30%',
-                  //  backgroundColor: '#dadada'
-                }}
-                getTdProps={(state, rowInfo, column, instance) => {
-                    return {
-                      onClick: (e, handleOriginal) => {
-                        if (handleOriginal) {
-                          handleOriginal()
-                        }
-                      }
-                    }
-                  }}
-              />
-              <br />
+        <div>
+          <ReactTable className="-striped -highlight"
+            data={person}
+            columns={present}
+            defaultPageSize={1}
+            showPagination={false}
+            style={{
+              width: '100%',
+              height: '30%',
+              //  backgroundColor: '#dadada'
+            }}
+            getTdProps={(state, rowInfo, column, instance) => {
+              return {
+                onClick: (e, handleOriginal) => {
+                  if (handleOriginal) {
+                    handleOriginal()
+                  }
+                }
+              }
+            }}
+          />
+          <br />
 
-            </div>
+        </div>
 
       </div>
     )
   }
-  }
+}
 
 export default OneFriend;
 
