@@ -6,18 +6,20 @@ import { withRouter } from 'react-router-dom'
 import store from '../store'
 import EnterText from './enterText'
 import MessageWrapper from './messageWrapper'
-
+import PollService from '../PollService'
 
 class Chat extends React.Component {
     constructor(props) {
         super(props);
         let match = props.location.state.data
+        console.log(match);
         this.state = {
             store: store,
             match: match,
             friendId: match.person._id,
             messages: match.messages
         };
+        PollService.registerCallback(this.triggerRenderFunc)
     }
     prepareMessages = (allMsgs, friendId) => {
         var result = [];
@@ -43,12 +45,19 @@ class Chat extends React.Component {
 
     //call it to start render() in order to visualize the change
     triggerRenderFunc = () => {
-        this.setState({ messages: this.state.match.messages })
-    }
+        let match =  store.getMatchById(this.state.match._id)
+      //    console.log("triggerRenderFunc--------------------------------");
+
+  //    this.setState({ messages: this.state.store.update.data.matches[index].messages  })
+      this.setState({ messages: match.messages })
+
+  }
 
     render() {
+
         let match = this.state.match;
-        let messages = match.messages
+        let messages = match.messages //this.state.messages
+        //  console.log(messages);
         const present = [
             {
                 columns: [
@@ -128,7 +137,7 @@ export default withRouter(Chat)
 
 // post get messages anf changes pool every few seconds       {"nudge":true,"last_activity_date":"2019-12-08T08:42:58.661Z"}
 // https://api.gotinder.com/updates?locale=en-GB
-// { 
+// {
 // blocks: []
 // deleted_lists: []
 // goingout: []

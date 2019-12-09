@@ -24,7 +24,7 @@ class MessageWrapper extends React.Component {
 
         return (
             <div onClick={showHideDate}>
-                <p class="text-justify text-wrap" >  {msg.message} </p>
+                <p className="text-justify text-wrap" >  {msg.message} </p>
                 {this.state.showDate ? (<p class="text-justify text-wrap" >  {this.state.date} </p>) : null}
             </div>
         );

@@ -8,7 +8,8 @@ const Const = {
       GET_TOKEN: ipAdress + 'getToken/'
     },
     UPDATES: ipAdress + 'updates',
-    PROFILE: ipAdress + 'profile'
+    PROFILE: ipAdress + 'profile',
+    SEND_MESSAGE: ipAdress + 'postMessage'
   }
 }
 

@@ -8,8 +8,8 @@ class Friends extends React.Component {
 
   render() {
     let { data } = this.props;
-
-    var friends = store.update.data.matches || data.matches;
+    let dt = store.getStore();
+    var friends = dt.update.data.matches || data.matches;
     var Pic = (arg) => (
       <div>
         <Link to={{ pathname: "/friend", state: { args: arg.data } }}>
