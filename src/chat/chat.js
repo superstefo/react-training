@@ -1,12 +1,12 @@
 import React from 'react';
-import Const from '../Constants';
-import AjaxService from '../AjaxService'
+//import Const from '../services/Constants';
+//import AjaxService from '../services/AjaxService'
 import ReactTable from "react-table";
 import { withRouter } from 'react-router-dom'
 import store from '../store'
 import EnterText from './enterText'
 import MessageWrapper from './messageWrapper'
-import PollService from '../PollService'
+import PollService from '../services/PollService'
 
 class Chat extends React.Component {
     constructor(props) {
@@ -14,6 +14,7 @@ class Chat extends React.Component {
         let match = props.location.state.data
         console.log(match);
         this.state = {
+            pageSize: 10,
             store: store,
             match: match,
             friendId: match.person._id,
@@ -33,7 +34,7 @@ class Chat extends React.Component {
 
             let transformedMsg = {};
             result.push(transformedMsg);
-            if (msg.from == friendId) {
+            if (msg.from === friendId) {
                 transformedMsg.theirs = (<MessageWrapper msg={msg} />);
             }
             else {
@@ -42,27 +43,27 @@ class Chat extends React.Component {
         }
         return result;
     }
+    componentWillUnmount() {
+      console.log('will unmount1111111111111111');
+    }
+    useEffect() {
+      console.log('will useEffect');
+    }
 
     //call it to start render() in order to visualize the change
     triggerRenderFunc = () => {
         let match =  store.getMatchById(this.state.match._id)
-      //    console.log("triggerRenderFunc--------------------------------");
-
-  //    this.setState({ messages: this.state.store.update.data.matches[index].messages  })
+        //console.log(match.messages);
+        //this.setState({ messages: this.state.store.update.data.matches[0].messages  })
       this.setState({ messages: match.messages })
-
   }
 
     render() {
-
-        let match = this.state.match;
-        let messages = match.messages //this.state.messages
-        //  console.log(messages);
         const present = [
             {
                 columns: [
                     {
-                        Header: match.person.name,
+                        Header: this.state.match.person.name,
                         accessor: "theirs"
                     },
                     {
@@ -73,9 +74,8 @@ class Chat extends React.Component {
             }
         ]
 
-        var transformedd = this.prepareMessages(messages, match.person._id);
+        var reorderedMessages = this.prepareMessages(this.state.messages, this.state.friendId);
 
-        // props for the  <EnterText  {...inputProps} />
         let inputProps = {
             data: this.state.store,
             friendId: this.state.match.person._id,
@@ -83,11 +83,10 @@ class Chat extends React.Component {
         }
 
         return (
-
             <div>
                 <div>
                     <ReactTable className="-striped -highlight"
-                        data={transformedd}
+                        data={reorderedMessages}
                         columns={present}
                         defaultPageSize={10}
                         showPagination={false}
@@ -116,24 +115,6 @@ class Chat extends React.Component {
     }
 }
 export default withRouter(Chat)
-
-
-
-
-
-//ssend message post
-// Request URL: https://api.gotinder.com/user/matches/5db0afddaac4230100ca487b5deac762689584010078812e?locale=en-GB
-// created_date: "2019-12-08T08:18:43.582Z"
-// from: "5deac762689584010078812e"
-// match_id: "5db0afddaac4230100ca487b5deac762689584010078812e"
-// media: {width: null, height: null}
-// message: "за неделята"
-// sent_date: "2019-12-08T08:18:43.582Z"
-// to: "5db0afddaac4230100ca487b"
-// _id: "5decb1e34dc39b0100f9a8f2"
-
-//https://api.gotinder.com/v2/profile?include=account%2Cboost%2Ccontact_cards%2Cemail_settings%2Cinstagram%2Clikes%2Cnotifications%2Cplus_control%2Cproducts%2Cpurchase%2Creadreceipts%2Cspotify%2Csuper_likes%2Ctinder_u%2Ctravel%2Ctutorials%2Cuser&locale=en-GB
-//Request Method: GET
 
 // post get messages anf changes pool every few seconds       {"nudge":true,"last_activity_date":"2019-12-08T08:42:58.661Z"}
 // https://api.gotinder.com/updates?locale=en-GB

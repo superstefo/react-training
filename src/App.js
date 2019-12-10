@@ -4,11 +4,11 @@ import PhoneForm from './auth/PhoneForm';
 import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
 import OneFriend from './userView/oneFriend';
-import Header from './basic/header.js';
+import Header from './building-blocks/header.js';
 import Chat from './chat/chat.js';
 import store from './store'
 
-import PollService from './PollService';
+import PollService from './services/PollService';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import store from '../store'
-import Const from '../Constants';
-import AjaxService from '../AjaxService'
-
+import Const from '../services/Constants';
+import AjaxService from '../services/AjaxService'
 
 class EnterText extends React.Component {
     constructor(props) {
@@ -18,23 +17,20 @@ class EnterText extends React.Component {
     render() {
         let createMessage = (match, store) => {
             var dt = new Date();
-          //  console.log(store)
             return {
                 created_date: dt.toISOString(),
-                from: store.profile.data._id, //store.profile.data.user._id,
+                from: store.profile.data._id,
                 match_id: match.id,
                 message: this.state.value,
                 sent_date: dt.toISOString(),
                 timestamp: dt.getTime(),
-                to: match.person._id//,
-                //  _id: "5dde14c497d37f0100999c20"
+                to: match.person._id
             }
         }
         let onKeyPress = (e) => {
             if (e.key !== 'Enter') {
                 return;
             }
-          //  var elem = e.srcElement || e.target;
 
             let matches = store.update.data.matches;
             for (let index = 0; index < matches.length; index++) {
@@ -42,17 +38,13 @@ class EnterText extends React.Component {
 
                 if (oneMatch.person._id == this.state.friendId) {
                     let newMsgObj = createMessage(oneMatch, this.state.store);
-                    //  let stre = store.getStore();
                     AjaxService.doPost(Const.URLS.SEND_MESSAGE, newMsgObj, {})
                     store.update.data.matches[index].messages.push(newMsgObj);
-                  //  let update = stre.update
-                  //  stre.addToStore("update", update)
-                  //  console.log(stre.update);
                     this.state.triggerRenderFunc(index);
                     break;
                 }
             }
-            this.setState({ value: '' })
+            this.setState({ value: '' });
         }
 
         let onChange = (e) => {

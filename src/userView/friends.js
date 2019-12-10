@@ -23,8 +23,8 @@ class Friends extends React.Component {
       let obj = {
         firstName: prsn.name,
         lastName: prsn.birth_date,
-        image: (<Pic src="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" data={friendship} />)
-        //   (<Pic src={prsn.photos[0].url} data={friendship} />)
+        image: //(<Pic src="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" data={friendship} />)
+           (<Pic src={prsn.photos[0].url} data={friendship} />)
       }
       return { ...obj };
     });

@@ -1,7 +1,7 @@
 import React from 'react';
-import Const from '../Constants';
-import AjaxService from '../AjaxService'
-import RenderForm from '../basic/RenderForm'
+import Const from '../services/Constants';
+import AjaxService from '../services/AjaxService'
+import RenderForm from '../building-blocks/RenderForm'
 import './index.css';
 import {withRouter}from 'react-router-dom'
 import store from '../store'
@@ -31,12 +31,9 @@ class ConfirmCode extends React.Component {
         let data = value.data;
     //    console.log(data);
         store.updates = data;
-        history.push('/user' );
-
-
+        history.push('/user');
       }
     })
-
   };
 
   handleSubmit = event => {

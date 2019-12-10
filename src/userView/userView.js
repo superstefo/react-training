@@ -1,7 +1,6 @@
 import React from 'react';
-import Const from '../Constants';
-import AjaxService from '../AjaxService'
-import RenderForm from '../basic/RenderForm'
+import Const from '../services/Constants';
+import RenderForm from '../building-blocks/RenderForm'
 import Friends from './friends'
 
 import {withRouter}from 'react-router-dom'

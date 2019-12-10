@@ -1,6 +1,5 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import ControlledInput from "./Select";
 
 function Header() {
   let Btn = (prop) => (
