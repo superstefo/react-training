@@ -3,49 +3,29 @@ import Home from './Home';
 import PhoneForm from './auth/PhoneForm';
 import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
+import Friends from './userView/friends'
 import OneFriend from './userView/oneFriend';
 import Header from './building-blocks/header.js';
 import Chat from './chat/chat.js';
 import store from './store'
-
 import PollService from './services/PollService';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-
-global.tostr = function (object) {
-  var cache = [];
-  var str = JSON.stringify(object,
-    // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON"
-    function (key, value) {
-      if (typeof value === 'object' && value !== null) {
-        if (cache.indexOf(value) !== -1) {
-          // Circular reference found, discard key
-          return;
-        }
-        // Store value in our collection
-        cache.push(value);
-      }
-      return value;
-    }, 4);
-  cache = null; // enable garbage collection <Redirect to="/"/>
-  console.log(str);
-  return str;
-};
 const App = (props) => {
   function getProps() {
     return store.updates;
   }
 
   return (
-
     <div className="container" style={{ paddingTop: 10 }}>
       <Router>
-        <Header />
+        <Header beanId="header1" />
         <Switch>
           < Route exact path="/" component={Home} />
           < Route path="/phone" component={PhoneForm} />
           < Route path="/friend" component={OneFriend} />
-          < Route path="/chat" component={Chat} />
+          < Route path="/chat" render={() => <Chat beanId="chat1"/>} />
+          < Route path="/pals" render={() => <Friends data={getProps()} />} />
           < Route path="/user" render={() => <UserView data={getProps()} />} />
           < Route path="/confirm-token" component={ConfirmCode} />
           < Route path="*" component={Home} />

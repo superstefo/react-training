@@ -1,6 +1,8 @@
 import React from 'react';
 import Const from './Constants';
 import AjaxService from './AjaxService'
+import BeanContextAware from './BeanContextAware'
+import ReactDOM from 'react-dom';
 import store from '../store'
 
 class PollService extends React.Component {
@@ -28,35 +30,35 @@ class PollService extends React.Component {
   }
 
   getUpdates = () => {
+    let header = BeanContextAware.get('header1');
+    let chat1 = BeanContextAware.get('chat1');
     let promise = AjaxService.doGet(Const.URLS.UPDATES, {})
     promise.then((data) => {
       store.addToStore('update', null);
       store.addToStore('update', data);
-      // history.push('/confirm-token');
+
+      if (chat1) {
+        chat1.triggerRenderFunc();
+      }
+      if (header) {
+        header.changeButtonVisibility({ isVisible: true});
+      }
     }).catch((e) => {
+      if (header) {
+        header.changeButtonVisibility({ isVisible: false})
+      }
       console.log(e);
     })
-  }
-
-  registerCallback = (func) => {
-    // this.checkIfLogged()
-    // this.startPoll();
-    this.state.funcCallbacks.push(func)
-  }
-  componentDidMount = () => {
-    // this.checkIfLogged()
-    // this.startPoll();
   }
 
   startPoll = () => {
     this.pollInterval = setInterval(
       () => {
-        console.log("poll");
         this.getUpdates();
           this.state.funcCallbacks.map((func) =>{
           func()
         })
-      }, 10000
+      }, 60000
     );
   }
 
@@ -65,6 +67,5 @@ class PollService extends React.Component {
       clearTimeout(this.pollInterval)
     }
   }
-
 }
 export default new PollService();

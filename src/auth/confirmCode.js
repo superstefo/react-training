@@ -17,10 +17,11 @@ class ConfirmCode extends React.Component {
 
   handleChange = event => {
     this.state.confirmToken = event.target.value;
+    //this.setState({confirmToken: event.target.value});
   };
 
   getUpdates = () => {
-  //  global.tostr(store)
+
     let { history } = this.props;
 
     let promise = AjaxService.doGet(Const.URLS.UPDATES);
@@ -29,7 +30,6 @@ class ConfirmCode extends React.Component {
       if (value && value.status === 200 && value.data) {
 
         let data = value.data;
-    //    console.log(data);
         store.updates = data;
         history.push('/user');
       }
@@ -48,9 +48,6 @@ class ConfirmCode extends React.Component {
       if (value && value.status === 200 && value.data) {
           that.getUpdates()
       }
-    //  console.log(value); // 1
-          //   history.push('/user');
-
     });
 
   }

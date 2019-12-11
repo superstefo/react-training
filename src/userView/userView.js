@@ -1,34 +1,20 @@
 import React from 'react';
-import Const from '../services/Constants';
-import RenderForm from '../building-blocks/RenderForm'
-import Friends from './friends'
-
 import {withRouter}from 'react-router-dom'
-import store from '../store'
-import {Provider } from 'react-redux'
-
 
 class UserView extends React.Component {
-  constructor(props) {
-    super(props);
-  //  var { data } = this.props;
-  //  console.log(data);
-    // this.state = {
-    //   phone: ''
-    // };
-  }
-
-
+  
   render() {
-
-  let { data } = this.props;
-  // console.log("----------------------------- UserView");
-  // global.tostr(data)
-   return (
-     <div> <h3>This is your user view </h3>
-        <Friends data={data}/>
-     </div >
-   )
+    let { data } = this.props;
+     return (
+       <div>
+        <h3>This is your user view </h3>
+        <h3>This is your user view </h3>
+        <h3>This is your user view </h3>
+        <h3>This is your user view </h3>
+        <h3>This is your user view </h3>
+        <h3>This is your user view </h3>
+       </div >
+     )
   }
 }
 export default withRouter(UserView)

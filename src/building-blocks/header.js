@@ -1,27 +1,55 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import BeanContextAware from '../services/BeanContextAware'
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      beanId: props.beanId,
+      showUser: false,
+      isVisible: false
+    };
+  }
 
-function Header() {
-  let Btn = (prop) => (
-    <div>
-      <NavLink exact activeClassName="active" to={prop.to}>
-        <button type="button"  className="btn btn-primary">
-        {prop.label}
-        </button>
-      </NavLink>
-    </div>
-  )
+  changeButtonVisibility = (obj) => {
+    this.setState({
+      isVisible: true
+    });
+  }
 
-  return (
-    <nav>
-      <div className="btn-group">
-        <Btn to="/home" label="Home" />
-        <Btn to="/user" label="User" />
-        <Btn to="/pals" label="Pals" />
-        <Btn to="/settings" label="Settings" />
-        <Btn to="/logout" label="|->" />
+  componentDidMount() {
+    BeanContextAware.add(this);
+  }
+
+  componentWillUnmount() {
+    BeanContextAware.remove(this);
+  }
+
+  render() {
+    let Btn = (props) => (
+      <div>
+        <NavLink exact activeClassName="active" to={props.to}>
+          <button type="button"  className="btn btn-primary">
+          {props.label}
+          </button>
+        </NavLink>
       </div>
-    </nav>
-  );
+    )
+
+    return (
+      <div className="text-center ">
+        <nav>
+          <div className="btn-group">
+            <Btn to="/home" label="Home" />
+            { this.state.isVisible ? <Btn to="/user" label="User" /> : null }
+            { this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null }
+            { this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null }
+            { this.state.isVisible ? <Btn to="/logout" label="|->" /> : null }
+          </div>
+        </nav>
+      </div>
+    );
+  }
 }
+
 export default Header;

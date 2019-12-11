@@ -15,6 +15,7 @@ class PhoneForm extends React.Component {
 
   handleChange = event => {
     this.state.phone = event.target.value;
+  //  this.setState({phone: event.target.value});
   };
 
   handleSubmit = event => {

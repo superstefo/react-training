@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import store from '../store'
 import "react-table/react-table.css"
 import ReactTable from "react-table";
 import BtnLink from "../building-blocks/BtnLink";
@@ -18,9 +17,9 @@ class PicWrapper extends React.Component {
   render() {
     let click = () => {
       if (this.state.count < this.state.photos.length - 1) {
-        this.state.count++;
+        this.setState({count: this.state.count + 1});
       } else {
-        this.state.count = 0;
+        this.setState({count: 0});
       }
       this.setState({
         imgSrc: this.state.photos[this.state.count].url
@@ -28,19 +27,13 @@ class PicWrapper extends React.Component {
     }
     return (
       <div>
-        <img onClick={click} src={this.state.imgSrc} />
+        <img onClick={click} src={this.state.imgSrc} alt="some image" />
       </div>
     );
   }
 }
 
 class OneFriend extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-  }
 
   render() {
     const { args } = this.props.location.state;
@@ -96,50 +89,10 @@ class OneFriend extends Component {
             }}
           />
           <br />
-
         </div>
-
       </div>
     )
   }
 }
 
 export default OneFriend;
-
-
-
-
-
-//
-//
-//
-//
-// import React from 'react';
-// import { Field, reduxForm } from 'redux-form'
-// import store from '../store'
-// import {Provider } from 'react-redux'
-//
-//
-//
-// class OneFriend extends React.Component {
-//
-//   render() {
-//     const {data} = this.props;
-//   //  console.log("---------------------------- OneFriend 00000000000000");
-//     //  global.tostr(data)
-//     //console.log(    data);
-//
-//      let OneFr = () => (
-//         <div>  "bio: "
-//           {data.person.bio  }
-//        </div>
-//      )
-//
-//
-//
-//     return (
-//       <OneFr />
-//     )
-//   }
-// }
-// export default OneFriend

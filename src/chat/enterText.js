@@ -40,7 +40,7 @@ class EnterText extends React.Component {
                     let newMsgObj = createMessage(oneMatch, this.state.store);
                     AjaxService.doPost(Const.URLS.SEND_MESSAGE, newMsgObj, {})
                     store.update.data.matches[index].messages.push(newMsgObj);
-                    this.state.triggerRenderFunc(index);
+                    this.state.triggerRenderFunc();
                     break;
                 }
             }
