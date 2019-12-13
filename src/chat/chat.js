@@ -5,24 +5,25 @@ import store from '../store'
 import EnterText from './enterText'
 import MessageWrapper from './messageWrapper'
 import BeanContextAware from '../services/BeanContextAware'
+import Select from '../building-blocks/Select'
 
 class Chat extends React.Component {
     constructor(props) {
         super(props);
         let match = props.location.state.data;
         let friendId = match.person._id;
-        console.log(friendId);
-        console.log(match);
+        let lastSeenMsg = match.seen ? match.seen.last_seen_msg_id : null;
         this.state = {
-            pageSize: 10,
+            lastSeenMsg: lastSeenMsg,
+            numberMsgShown: 10,
             matchId: match.id,
             store: store,
             match: store.getMatchById(match.id),
             friendId: friendId,
             messages: match.messages
         };
-          console.log(this.state.match);
     }
+
     componentDidMount() {
       BeanContextAware.add(this);
     }
@@ -30,37 +31,53 @@ class Chat extends React.Component {
     componentWillUnmount() {
       BeanContextAware.remove(this);
     }
+    prepareMessages = (allMsgs, friendId, numberMsgShown) => {
+      console.log(this.state.match);
+      let result = [];
+      result.length = numberMsgShown;
+      let isSeen = false;
+      for (let ind = allMsgs.length - 1; 0 <= numberMsgShown; numberMsgShown--, ind--) {
 
+        let msg = allMsgs[ind];
 
-    prepareMessages = (allMsgs, friendId) => {
-        var result = [];
-        let numberSown = 10;
-        let startIndex = allMsgs.length - numberSown;
-        if (startIndex < 0) {
-            startIndex = 0;
+        if (!msg) {
+          msg = {};
         }
-        for (; startIndex < allMsgs.length; startIndex++) {
-            let msg = allMsgs[startIndex];
-
-            let transformedMsg = {};
-            result.push(transformedMsg);
-            if (msg.from === friendId) {
-                transformedMsg.theirs = (<MessageWrapper msg={msg} />);
-            }
-            else {
-                transformedMsg.mine = (<MessageWrapper msg={msg} />);
-            }
+        if (!isSeen && msg._id && msg._id === this.state.lastSeenMsg) {
+          isSeen = true;
         }
-        return result;
+
+        let transformedMsg = {};
+
+        result[numberMsgShown] = transformedMsg;
+
+        if (msg.from === friendId) {
+            transformedMsg.theirs = (<MessageWrapper msg={msg} />);
+        }
+        else {
+          msg.isSeen = isSeen;
+          transformedMsg.mine = (<MessageWrapper msg={msg} />);
+
+        }
+      }
+      return result;
     }
 
     //call it to start render() in order to visualize the change
     triggerRenderFunc = () => {
-        let match =  store.getMatchById(this.state.match._id)
-        this.setState({ messages: match.messages })
+        let match = store.getMatchById(this.state.match._id)
+        this.setState({
+          match: match,
+          messages: match.messages })
+    }
+
+    changeState = (obj) => {
+      console.log(obj);
+      this.setState(obj)
     }
 
     render() {
+
         const present = [
             {
                 columns: [
@@ -76,27 +93,33 @@ class Chat extends React.Component {
             }
         ]
 
-        var reorderedMessages = this.prepareMessages(this.state.messages, this.state.friendId);
+        var reorderedMessages = this.prepareMessages(this.state.messages, this.state.friendId, this.state.numberMsgShown);
 
+        console.log(reorderedMessages.length);
         let inputProps = {
             data: this.state.store,
             friendId: this.state.match.person._id,
             triggerRenderFunc: this.triggerRenderFunc
         }
-
+        const tableStyle = {
+        //  "borderBottom": "none",
+        //  border: "none",
+        //  boxShadow: "none",
+          width: '100%',
+          height: '30%',
+          //  backgroundColor: '#dadada'
+        };
         return (
-            <div>
+            <div><Select />
                 <div>
-                    <ReactTable className="-striped -highlight"
+                    <ReactTable className=""
                         data={reorderedMessages}
                         columns={present}
-                        defaultPageSize={10}
+                        defaultPageSize={reorderedMessages.length}
+                        pageSize={reorderedMessages.length}
                         showPagination={false}
-                        style={{
-                            width: '100%',
-                            height: '30%',
-                            //  backgroundColor: '#dadada'
-                        }}
+                        bordered={false}
+                        style={tableStyle}
                         getTdProps={(state, rowInfo, column, instance) => {
                             return {
                                 onClick: (e, handleOriginal) => {
@@ -108,7 +131,7 @@ class Chat extends React.Component {
                         }}
                     />
                     <div>
-                        <EnterText  {...inputProps} />
+                        <EnterText {...inputProps} />
                     </div>
                     <br />
                 </div>

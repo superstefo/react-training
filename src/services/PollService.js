@@ -9,13 +9,13 @@ class PollService extends React.Component {
 
   constructor(props) {
     super(props);
-    this.checkIfLogged();
     this.state = {
       showDate: false,
       pollInterval: null,
       isLogged: false,
       funcCallbacks: []
     };
+    this.checkIfLogged();
   };
 
   checkIfLogged = () => {
@@ -45,7 +45,11 @@ class PollService extends React.Component {
       }
     }).catch((e) => {
       if (header) {
+        console.log("get updates errror ");
         header.changeButtonVisibility({ isVisible: false})
+        if (this.pollInterval) {
+          clearTimeout(this.pollInterval)
+        }
       }
       console.log(e);
     })
@@ -55,17 +59,9 @@ class PollService extends React.Component {
     this.pollInterval = setInterval(
       () => {
         this.getUpdates();
-          this.state.funcCallbacks.map((func) =>{
-          func()
-        })
-      }, 60000
+      }, 20000
     );
   }
 
-  componentWillUnmount = () => {
-    if (this.pollInterval) {
-      clearTimeout(this.pollInterval)
-    }
-  }
 }
 export default new PollService();

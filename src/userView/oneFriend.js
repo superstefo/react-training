@@ -2,36 +2,7 @@ import React, { Component } from 'react';
 import "react-table/react-table.css"
 import ReactTable from "react-table";
 import BtnLink from "../building-blocks/BtnLink";
-
-class PicWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    let { photos } = this.props;
-    this.state = {
-      photos: photos,
-      imgSrc: photos[0].url,
-      count: 0
-    };
-  }
-
-  render() {
-    let click = () => {
-      if (this.state.count < this.state.photos.length - 1) {
-        this.setState({count: this.state.count + 1});
-      } else {
-        this.setState({count: 0});
-      }
-      this.setState({
-        imgSrc: this.state.photos[this.state.count].url
-      });
-    }
-    return (
-      <div>
-        <img onClick={click} src={this.state.imgSrc} alt="some image" />
-      </div>
-    );
-  }
-}
+import PicWrapper from "../building-blocks/PicWrapper";
 
 class OneFriend extends Component {
 
@@ -68,7 +39,7 @@ class OneFriend extends Component {
     return (
       <div>
         <div>
-          <ReactTable className="-striped -highlight"
+          <ReactTable
             data={person}
             columns={present}
             defaultPageSize={1}

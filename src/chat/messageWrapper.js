@@ -6,6 +6,7 @@ class MessageWrapper extends React.Component {
         let { msg } = this.props;
         let date = new Date(msg.timestamp);
         this.state = {
+            isSeen: msg.isSeen,
             showDate: false,
             date: date.toDateString()
         };
@@ -25,7 +26,9 @@ class MessageWrapper extends React.Component {
         return (
             <div onClick={showHideDate}>
                 <p className="text-justify text-wrap" >  {msg.message} </p>
-                {this.state.showDate ? (<p class="text-justify text-wrap" >  {this.state.date} </p>) : null}
+
+                {this.state.isSeen ? (<span className="badge badge-secondary text-justify text-wrap">seen</span>) : null}
+                {this.state.showDate ? (<span className="badge small" >  {this.state.date} </span>) : null}
             </div>
         );
     }
