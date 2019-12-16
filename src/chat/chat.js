@@ -31,6 +31,7 @@ class Chat extends React.Component {
     componentWillUnmount() {
       BeanContextAware.remove(this);
     }
+
     prepareMessages = (allMsgs, friendId, numberMsgShown) => {
       console.log(this.state.match);
       let result = [];
@@ -66,18 +67,19 @@ class Chat extends React.Component {
     //call it to start render() in order to visualize the change
     triggerRenderFunc = () => {
         let match = store.getMatchById(this.state.match._id)
+        let lastSeenMsg = match.seen ? match.seen.last_seen_msg_id : null;
         this.setState({
+          lastSeenMsg: lastSeenMsg,
           match: match,
-          messages: match.messages })
+          messages: match.messages }
+        )
     }
 
     changeState = (obj) => {
-      console.log(obj);
       this.setState(obj)
     }
 
     render() {
-
         const present = [
             {
                 columns: [
@@ -95,16 +97,12 @@ class Chat extends React.Component {
 
         var reorderedMessages = this.prepareMessages(this.state.messages, this.state.friendId, this.state.numberMsgShown);
 
-        console.log(reorderedMessages.length);
         let inputProps = {
             data: this.state.store,
             friendId: this.state.match.person._id,
             triggerRenderFunc: this.triggerRenderFunc
         }
         const tableStyle = {
-        //  "borderBottom": "none",
-        //  border: "none",
-        //  boxShadow: "none",
           width: '100%',
           height: '30%',
           //  backgroundColor: '#dadada'
@@ -119,6 +117,7 @@ class Chat extends React.Component {
                         pageSize={reorderedMessages.length}
                         showPagination={false}
                         bordered={false}
+                        sortable={false}
                         style={tableStyle}
                         getTdProps={(state, rowInfo, column, instance) => {
                             return {

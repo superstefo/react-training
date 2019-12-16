@@ -10,6 +10,7 @@ class PollService extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      last_activity_date: "2019-11-11T01:58:00.404Z",
       showDate: false,
       pollInterval: null,
       isLogged: false,
@@ -22,6 +23,7 @@ class PollService extends React.Component {
     let promise = AjaxService.doGet(Const.URLS.PROFILE, {})
     promise.then((data) => {
       store.addToStore('profile', data);
+      console.log(data);
       this.getUpdates()
       this.startPoll();
     }).catch((e) => {
@@ -29,14 +31,21 @@ class PollService extends React.Component {
     })
   }
 
-  getUpdates = () => {
+  getUpdates = (lastDate) => { /// String requestJson = "{\"last_activity_date\": \"2019-11-11T01:58:00.404Z\"}";
     let header = BeanContextAware.get('header1');
     let chat1 = BeanContextAware.get('chat1');
-    let promise = AjaxService.doGet(Const.URLS.UPDATES, {})
+    let data = {
+      "last_activity_date": lastDate
+    }
+    let promise = AjaxService.doPost(Const.URLS.UPDATES, data, {});
     promise.then((data) => {
+      console.log(data);
+    //  console.log(data.data.last_activity_date);
+    //if (!store.update) {
       store.addToStore('update', null);
       store.addToStore('update', data);
-
+    //}
+    //  this.state.last_activity_date= data.data.last_activity_date ;
       if (chat1) {
         chat1.triggerRenderFunc();
       }
@@ -58,7 +67,8 @@ class PollService extends React.Component {
   startPoll = () => {
     this.pollInterval = setInterval(
       () => {
-        this.getUpdates();
+        console.log(this.state.last_activity_date);
+        this.getUpdates( this.state.last_activity_date);
       }, 20000
     );
   }

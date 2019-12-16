@@ -49,26 +49,17 @@ class Friends extends React.Component {
           <ReactTable className="-striped -highlight"
             data={persons}
             columns={present}
-            defaultPageSize={20}
+            defaultPageSize={persons.length}
+            pageSize={persons.length}
+            showPagination={false}
             style={{
               width: '100%',
               height: '30%',
               //  backgroundColor: '#dadada'
             }}
-            getTdProps={(state, rowInfo, column, instance) => {
-              return {
-                onClick: (e, handleOriginal) => {
-                  if (handleOriginal) {
-                    handleOriginal()
-                  }
-                }
-              }
-            }}
           />
           <br />
-
         </div>
-
       </div>
     )
   }

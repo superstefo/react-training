@@ -40,9 +40,10 @@ class Header extends React.Component {
       <div className="text-center ">
         <nav>
           <div className="btn-group">
-            <Btn to="/home" label="Home" />
+            { !this.state.isVisible ? <Btn to="/home" label="Home" /> : null }
             { this.state.isVisible ? <Btn to="/user" label="User" /> : null }
             { this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null }
+            { this.state.isVisible ? <Btn to="/more-pals" label="More Pals" /> : null }
             { this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null }
             { this.state.isVisible ? <Btn to="/logout" label="|->" /> : null }
           </div>

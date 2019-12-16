@@ -24,8 +24,9 @@ render() {
   const profile = this.props.data.profile.data
   console.log(profile);
   let prsn = {};
-  let country = profile.country ? profile.country.name : null;
-  let city = profile.city ? profile.city.name : null;
+  let country = profile.pos_info ? (profile.pos_info.country ? profile.pos_info.country.name : "") : "";
+  let city = profile.pos_info ? (profile.pos_info.city ? profile.pos_info.city.name : "") : "";
+
   let pos = profile.pos ? [profile.pos.lat, profile.pos.lon] : [0,0]
 //  const { args } = this.props.location.state;
 //let prsn = args.person;age_filter_max: 1000
