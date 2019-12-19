@@ -6,7 +6,7 @@ import UserView from './userView/userView';
 import Friends from './userView/friends';
 import OneFriend from './userView/oneFriend';
 import MoreFriends from './userView/MoreFriends';
-import Header from './building-blocks/header.js';
+import Header from './building-blocks/header';
 import Chat from './chat/chat.js';
 import store from './store';
 import PollService from './services/PollService';

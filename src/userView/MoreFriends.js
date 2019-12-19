@@ -7,6 +7,7 @@ import AjaxService from '../services/AjaxService'
 import Const from '../services/Constants';
 import PicWrapper from "../building-blocks/PicWrapper";
 import BtnLink from "../building-blocks/BtnLink";
+import Info from "../building-blocks/Info";
 
 class MoreFriends extends React.Component {
   constructor(props) {
@@ -18,12 +19,16 @@ class MoreFriends extends React.Component {
       isLoading: false,
       error: null,
     };
+    this.abortController = new AbortController();
     console.log("constructor");
   }
   componentWillMount(){
     console.log('component  Will    Mount ');
   }
-
+componentWillUnmount(){
+  console.log('component  Will   унннннн Mount ');
+  this.abortController.abort()
+}
   getNewFriends = () => {
     let promise = AjaxService.doGet(Const.URLS.NEW_FRIENDS, {})
     promise.then((data) => {
@@ -98,23 +103,10 @@ class MoreFriends extends React.Component {
 
     let allFr = this.state.allFr;
 
-    let Info = (args) =>{
-      // data is the person
-      let {data} = args;
-      return(
-        <div>
-          <div> <h3>Name: </h3>{data.name} </div>
-          <div> <h3>Birthday: </h3>{data.birth_date} </div>
-          <div> <h3>Distance (miles): </h3>{data.distance_mi} </div>
-            <div> <h3>Bio: </h3>{data.bio} </div>
-
-        </div>
-    )}
-
     const persons = allFr.map(one => {
 
       let obj = {
-        info: (<Info data={one} />),
+        info: (<Info person={one} />),
         image: (<PicWrapper photos={one.photos} />)
       }
       return { ...obj };
@@ -142,11 +134,12 @@ class MoreFriends extends React.Component {
       <button type="button" onClick={this.getMeta} className="btn btn-primary">  Get Meta  </button>
       <button type="button" onClick={this.getMeta2} className="btn btn-primary">  Get Meta2  </button>
       <button type="button" onClick={this.getMatches} className="btn btn-primary">  Get Matches  </button>
-          <button type="button" onClick={this.hideAge} className="btn btn-primary">  Hide Age  </button>
+
         <div>
           <ReactTable className="-striped -highlight"
             data={persons}
             columns={present}
+            sortable={false}
             defaultPageSize={persons.length}
             pageSize={persons.length}
             showPagination={false}

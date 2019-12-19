@@ -23,8 +23,8 @@ class PicWrapper extends React.Component {
       });
     }
     return (
-      <div>
-        <img onClick={click} src={this.state.imgSrc} alt="some image" />
+      <div className="container-fluid px-0">
+        <img onClick={click} src={this.state.imgSrc} alt="some image"  className='img-fluid w-100'/>
       </div>
     );
   }

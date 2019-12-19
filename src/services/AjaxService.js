@@ -2,10 +2,6 @@ import React from 'react';
 import axios from 'axios';
 
 class AjaxService extends React.Component {
-
-  constructor(props) {
-    super(props);
-  };
   execute = (method, url, data, headers) => {
     return axios({
       method: method,

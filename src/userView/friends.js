@@ -11,9 +11,9 @@ class Friends extends React.Component {
     let dt = store.getStore();
     var friends = dt.update.data.matches;
     var Pic = (arg) => (
-      <div>
+      <div className="container-fluid px-0">
         <Link to={{ pathname: "/friend", state: { args: arg.data } }}>
-          <img src={arg.src} alt="new" />
+          <img src={arg.src} alt="new" className='img-fluid w-100' />
         </Link>
       </div>
     )
@@ -51,6 +51,7 @@ class Friends extends React.Component {
             columns={present}
             defaultPageSize={persons.length}
             pageSize={persons.length}
+            sortable={false}
             showPagination={false}
             style={{
               width: '100%',

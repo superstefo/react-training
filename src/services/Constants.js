@@ -12,6 +12,7 @@ const Const = {
     SEND_MESSAGE: ipAdress + 'postMessage',
     SEND_LOCATION: ipAdress + 'location',
     NEW_FRIENDS: ipAdress + 'new-friends',
+    SEND_SEEN: ipAdress + 'seen/'
   }
 }
 
