@@ -5,11 +5,38 @@ import "react-table/react-table.css"
 import ReactTable from "react-table";
 
 class Friends extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showUser: false,
+      isVisible: false,
+      msgMatches: [],
+      sortingFunc: this.sortByLastActivityDate
+    };
+  }
+
+  sortByLastActivityDate = (a, b) => {
+    let timeA = new Date(a.last_activity_date).getTime();
+    let timeB = new Date(b.last_activity_date).getTime();
+    return timeB - timeA;
+  }
+
+  applySorting = (arrToBeSorted, sortingFunc) => {
+    try {
+      arrToBeSorted.sort(sortingFunc);
+    } catch (e) {
+      console.error(e);
+    }
+    return arrToBeSorted;
+  }
 
   render() {
-    let { data } = this.props;
     let dt = store.getStore();
-    var friends = dt.update.data.matches;
+
+    let friends = dt.update.data.matches;
+
+    this.applySorting(friends, this.state.sortingFunc);
+
     var Pic = (arg) => (
       <div className="container-fluid px-0">
         <Link to={{ pathname: "/friend", state: { args: arg.data } }}>
@@ -18,7 +45,7 @@ class Friends extends React.Component {
       </div>
     )
 
-    const persons = friends.map(friendship => {
+    let persons = friends.map(friendship => {
       let prsn = friendship.person
       let obj = {
         firstName: prsn.name,

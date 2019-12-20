@@ -20,7 +20,6 @@ class Header extends React.Component {
 
   addMsgMatch = (mtch) => {
     var pos = this.findInMsgMatches(mtch);
-    console.log(pos);
     if (pos > -1) { // if found - do not add it again
       return;
     }
@@ -50,6 +49,7 @@ class Header extends React.Component {
       })
     }
   }
+
   changeButtonVisibility = (obj) => {
     this.setState({
       isVisible: true
@@ -84,7 +84,7 @@ class Header extends React.Component {
           </Link>
       </div>
     )
-
+    let isVisibleNewMsgs = this.state.msgMatches.length ? true : false
     return (
       <div className="text-center ">
         <nav>
@@ -95,7 +95,7 @@ class Header extends React.Component {
             { this.state.isVisible ? <Btn to="/more-pals" label="More Pals" /> : null }
             { this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null }
             { this.state.isVisible ? <Btn to="/logout" label="|->" /> : null }
-            { this.state.isVisible ? <BtnBadge pathname="/chat" data={this.state.msgMatches[0]} label="Chat" /> : null }
+            { (this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge pathname="/chat" data={this.state.msgMatches[0]} label="Chat" /> : null }
 
           </div>
         </nav>

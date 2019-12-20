@@ -74,7 +74,7 @@ render() {
         bindMap: true,
         startPort: "default",
         overlayAll: true,
-        showControls: true,
+        showControls: false,
         showInputs: false,
         useDynamic: true,
         pointMode:  pointMode,
@@ -106,7 +106,7 @@ render() {
           }}
         />
         <br />
-      </div> <LocationPicker {...options} />;
+      </div><LocationPicker {...options} />
     </div>
   )
 }

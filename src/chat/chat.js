@@ -21,7 +21,7 @@ class Chat extends React.Component {
             numberMsgShown: 10,
             matchId: match.id,
             store: store,
-            match: store.getMatchById(match.id),
+            match: match,//store.getMatchById(match.id),
             friendId: friendId,
             messages: match.messages
         };
@@ -38,16 +38,13 @@ class Chat extends React.Component {
     prepareMessages = (allMsgs, friendId, numberMsgShown) => {
       let result = [];
       result.length = numberMsgShown;
-      let isSeen = false;
+
       for (let ind = allMsgs.length - 1; 0 <= numberMsgShown; numberMsgShown--, ind--) {
 
         let msg = allMsgs[ind];
 
         if (!msg) {
           msg = {};
-        }
-        if (!isSeen && msg._id && msg._id === this.state.lastSeenMsg) {
-          isSeen = true;
         }
 
         let transformedMsg = {};
@@ -57,7 +54,6 @@ class Chat extends React.Component {
             transformedMsg.theirs = (<MessageWrapper msg={msg} />);
         }
         else {
-          msg.isSeen = isSeen;
           transformedMsg.mine = (<MessageWrapper msg={msg} />);
         }
       }
@@ -84,42 +80,43 @@ class Chat extends React.Component {
     sendSeen = (allMsgs) => {
       if (!this.state.lastSeenMsg) {
         console.log("empty value...");
-    //    return;
       }
 
       for (let ind = allMsgs.length - 1; 0 <= ind; ind--) {
 
-        let msg = allMsgs[ind];
+        let msgWrapped = allMsgs[ind];
 
-        if (!msg || !msg.theirs) {
+        if (!msgWrapped || !msgWrapped.theirs) {
           continue;
         }
-        msg = msg.theirs.props.msg
-
+        let msg = msgWrapped.theirs.props.msg;
+//console.log("msg id " +msg._id + "    this.state.lastSeenMsg " +this.state.lastSeenMsg)
         if (msg._id !== this.state.lastSeenMsg) {
-          console.log(msg);
           AjaxService.doGet(Const.URLS.SEND_SEEN + msg.match_id + "/" + msg._id, {});
-          let match = store.getMatchById(msg.match_id) /// TODO: ////////////////////////////////////////////             test with this.state.match
+          let match = this.state.match;//store.getMatchById(msg.match_id) /// TODO: ////////////////////////////////////////////             test with this.state.match
           if (match.seen) {
             match.seen.last_seen_msg_id = msg._id;
           }
 
-          //this.state.lastDate = msg.id;
           this.deleteFromHeader(msg.match_id)
+          return;
         }
-        return;
+        if (msgWrapped.theirs) {
+          break;
+        }
+
       }
     }
 
-  deleteFromHeader = (mtchId) => {
-    let header = BeanContextAware.get('header1');
-    if (header) {
+    deleteFromHeader = (mtchId) => {
+      let header = BeanContextAware.get('header1');
+      if (header) {
 
-      let mtch = store.getMatchById(mtchId)  // TODO: ////////////////////////////////////////             test with this.state.match
+      //  let mtch = store.getMatchById(mtchId)  // TODO: ////////////////////////////////////////             test with this.state.match
 
-      header.removeMsgMatch(mtch);
+        header.removeMsgMatch(this.state.match);
+      }
     }
-  }
 
     render() {
         const present = [

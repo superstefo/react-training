@@ -24,7 +24,7 @@ class PollService extends React.Component {
     let promise = AjaxService.doGet(Const.URLS.PROFILE, {})
     promise.then((data) => {
       store.addToStore('profile', data);
-    //  console.log(data);
+
       this.getUpdates()
       this.startPoll();
     }).catch((e) => {
@@ -37,10 +37,9 @@ class PollService extends React.Component {
     for (let i = 0; i < matches.length; i++) {
       let matchUpdate = matches[i];
       let oldMatch = store.getMatchById(matchUpdate._id);
-      //merge brand new objects:
+      //merge brand new matches:
       if (!oldMatch) {
         store.getStore().update.data.matches.push(matchUpdate);
-      //  continue;
       }
 
       //merge new messages:
@@ -61,12 +60,18 @@ class PollService extends React.Component {
         }
         oldMatch.seen.last_seen_msg_id = lastSeenMsg;
       }
+
+      /// merge last_activity_date:
+      let lastActivityDate = matchUpdate.last_activity_date ? matchUpdate.last_activity_date : null;
+      if (lastActivityDate) {
+        oldMatch.last_activity_date = lastActivityDate;
+      }
     }
   }
-///"matches":[{"seen":{"match_seen":true,"last_seen_msg_id":"5dfb961aaee4f0010041db9b"},"_id":"5b6cb323bda62dd93231bc685ddb4b7f765537010078d6f4","messages":[],"readreceipt":{"enabled":false}}],"blocks":[],"inbox":[],"liked_messages":[],"harassing_messages":[],"lists":[],"goingout":[],"deleted_lists":[],"squads":[],"last_activity_date":"2019-12-19T15:43:50.478Z","poll_interval":{"standard":2000,"persistent":60000}}
+
   markLastUneadMessages = (store, updates) => {
     let matches = updates.data.matches;
-  //  console.log(matches);
+
     for (let i = 0; i < matches.length; i++) {
       let matchUpdate = matches[i];
       let oldMatch = store.getMatchById(matchUpdate._id);
@@ -74,25 +79,26 @@ class PollService extends React.Component {
       let newLastSeenMsgId = matchUpdate.seen ? matchUpdate.seen.last_seen_msg_id : null;
       let oldLastSeenMsgId = oldMatch.seen ? oldMatch.seen.last_seen_msg_id : null;
       var localUser = store.profile.data;
-    //      console.log(newLastSeenMsgId + oldLastSeenMsgId + localUser);
-      if (!newLastSeenMsgId || !localUser) {
+
+      newLastSeenMsgId = newLastSeenMsgId || oldLastSeenMsgId;
+      if (!newLastSeenMsgId || !localUser || !localUser._id) {
         continue;
       }
       let newMsgs = matchUpdate.messages;
-      console.log(matches);
+
       for (var ind = newMsgs.length-1; 0 <= ind; ind--) {
         let msg = newMsgs[ind];
-          console.log(msg);
-    console.log(localUser);
-        if (msg.from && localUser._id && localUser._id !== msg.from) {
-              console.log("inside");
-              console.log(oldLastSeenMsgId !== newLastSeenMsgId);
-          if (oldLastSeenMsgId !== newLastSeenMsgId) {
+
+        if (!msg.from) {
+          continue;
+        }
+
+        if (localUser._id !== msg.from) {
+
+          if (msg._id !== newLastSeenMsgId) {
             this.addToUnreadMessagesBadge(oldMatch);
-              console.log("msg");
-                console.log(msg);
-            break;
           }
+          break;
         }
       }
     }
@@ -102,25 +108,24 @@ class PollService extends React.Component {
     let header = BeanContextAware.get('header1');
     console.log(mtch);
     if (header) {
-    //  console.log(mtch);
       header.addMsgMatch(mtch)
     }
   }
-  getUpdates = (lastDate) => { /// String requestJson = "{\"last_activity_date\": \"2019-11-11T01:58:00.404Z\"}";
+
+  getUpdates = (lastDate) => {
     let header = BeanContextAware.get('header1');
     let chat1 = BeanContextAware.get('chat1');
     let data = {
       "last_activity_date": lastDate
     }
+
     let promise = AjaxService.doPost(Const.URLS.UPDATES, data, {});
     promise.then((data) => {
       if (store.update) {
         this.mergeUpdates(store, data);
-        console.log(data.data);
       } else {
         store.addToStore('update', null);
         store.addToStore('update', data);
-      //  this.mergeUpdates(store, data);
       }
 
       this.markLastUneadMessages(store, data);
