@@ -6,6 +6,7 @@ import UserView from './userView/userView';
 import Friends from './userView/friends';
 import OneFriend from './userView/oneFriend';
 import MoreFriends from './userView/MoreFriends';
+import FriendRequests from './userView/FriendRequests';
 import Header from './building-blocks/header';
 import Chat from './chat/chat.js';
 import store from './store';
@@ -26,6 +27,7 @@ const App = (props) => {
           < Route path="/chat" render={() => <Chat beanId="chat1"/>} />
           < Route path="/pals" render={() => <Friends data={store.updates} />} />
           < Route path="/more-pals" render={() => <MoreFriends data={store.updates} />} />
+          < Route path="/pal-requests" render={() => <FriendRequests data={store.updates} />} />
           < Route path="/user" render={() => <UserView data={store} />} />
           < Route path="/confirm-token" component={ConfirmCode} />
           < Route path="*" component={Home} />

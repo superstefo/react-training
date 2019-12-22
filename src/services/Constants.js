@@ -12,8 +12,12 @@ const Const = {
     SEND_MESSAGE: ipAdress + 'postMessage',
     SEND_LOCATION: ipAdress + 'location',
     NEW_FRIENDS: ipAdress + 'new-friends',
-    SEND_SEEN: ipAdress + 'seen/'
-  }
+    SEND_SEEN: ipAdress + 'seen/',
+    FAST_MATCH: ipAdress + 'fast-match',
+    LIKE: ipAdress + 'like/',
+    PASS: ipAdress + 'pass/'
+  },
+  LOCAL_CASH_VAR_NAME: "__TnDr__"
 }
 
 export default Const;

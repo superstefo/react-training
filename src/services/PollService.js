@@ -17,7 +17,7 @@ class PollService extends React.Component {
       isLogged: false,
       funcCallbacks: []
     };
-    this.checkIfLogged();
+ //   this.checkIfLogged();
   };
 
   checkIfLogged = () => {
@@ -130,7 +130,7 @@ class PollService extends React.Component {
 
       this.markLastUneadMessages(store, data);
 
-      this.state.last_activity_date= data.data.last_activity_date;
+      this.state.last_activity_date = data.data.last_activity_date;
 
       if (chat1) {
         chat1.triggerRenderFunc();

@@ -1,5 +1,6 @@
-import { createStore, combineReducers } from 'redux'
-import { reducer as reduxFormReducer } from 'redux-form'
+import { createStore, combineReducers } from 'redux';
+import { reducer as reduxFormReducer } from 'redux-form';
+import Const from './services/Constants';
 
 const reducer = combineReducers({
   form: reduxFormReducer // mounted under "form"

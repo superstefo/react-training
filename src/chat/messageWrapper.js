@@ -6,16 +6,16 @@ class MessageWrapper extends React.Component {
       let { msg } = this.props;
       let msgDateObj = new Date(msg.timestamp);
 
-      let dateStr = msgDateObj.toLocaleTimeString();
-
+      let timeStr = msgDateObj.toLocaleTimeString();
+      let dateStr = msgDateObj.toLocaleDateString()
       if (dateStr !== new Date().toLocaleDateString()) {
-        dateStr = dateStr + ",  " + msgDateObj.toLocaleDateString();
+        timeStr = timeStr + ",  " + dateStr;
       }
 
       this.state = {
           isSeen: msg.isSeen,
           showDate: false,
-          date: dateStr
+          date: timeStr
       };
     }
 

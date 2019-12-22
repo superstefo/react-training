@@ -26,16 +26,16 @@ class Header extends React.Component {
     let msgMatches = this.state.msgMatches
     this.state.msgMatches.push(mtch)
     this.setState({
-        msgMatches : msgMatches
-      })
+      msgMatches: msgMatches
+    })
   }
 
   findInMsgMatches = (mtch) => {
     let msgMatches = this.state.msgMatches
-      for(var i = 0, len = msgMatches.length; i < len; i++) {
-        if (msgMatches[i].id === mtch.id)
+    for (var i = 0, len = msgMatches.length; i < len; i++) {
+      if (msgMatches[i].id === mtch.id)
         return i;
-      }
+    }
     return -1;
   }
 
@@ -43,17 +43,15 @@ class Header extends React.Component {
     var pos = this.findInMsgMatches(mtch);
     if (pos > -1) {
       let msgMatches = this.state.msgMatches
-      msgMatches.splice(pos,1);
+      msgMatches.splice(pos, 1);
       this.setState({
-        msgMatches : msgMatches
+        msgMatches: msgMatches
       })
     }
   }
 
   changeButtonVisibility = (obj) => {
-    this.setState({
-      isVisible: true
-    });
+    this.setState(obj);
   }
 
   componentDidMount() {
@@ -68,8 +66,8 @@ class Header extends React.Component {
     let Btn = (props) => (
       <div>
         <NavLink exact activeClassName="active" to={props.to}>
-          <button type="button"  className="btn btn-primary">
-          {props.label}
+          <button type="button" className="btn btn-primary">
+            {props.label}
           </button>
         </NavLink>
       </div>
@@ -77,11 +75,11 @@ class Header extends React.Component {
 
     let BtnBadge = (props) => (
       <div>
-          <Link to={{ pathname: props.pathname, state: { data: props.data } }}>
-              <button type="button" className="btn btn-primary" >
-                  {props.label} new: {this.state.msgMatches.length}
-              </button>
-          </Link>
+        <Link to={{ pathname: props.pathname, state: { data: props.data } }}>
+          <button type="button" className="btn btn-primary" >
+            {props.label} new: {this.state.msgMatches.length}
+          </button>
+        </Link>
       </div>
     )
     let isVisibleNewMsgs = this.state.msgMatches.length ? true : false
@@ -89,13 +87,13 @@ class Header extends React.Component {
       <div className="text-center ">
         <nav>
           <div className="btn-group">
-            { !this.state.isVisible ? <Btn to="/home" label="Home" /> : null }
-            { this.state.isVisible ? <Btn to="/user" label="User" /> : null }
-            { this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null }
-            { this.state.isVisible ? <Btn to="/more-pals" label="More Pals" /> : null }
-            { this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null }
-            { this.state.isVisible ? <Btn to="/logout" label="|->" /> : null }
-            { (this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge pathname="/chat" data={this.state.msgMatches[0]} label="Chat" /> : null }
+            {!this.state.isVisible ? <Btn to="/home" label="Home" /> : null}
+            {this.state.isVisible ? <Btn to="/user" label="User" /> : null}
+            {this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null}
+            {this.state.isVisible ? <Btn to="/more-pals" label="More Pals" /> : null}
+            {this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null}
+            {this.state.isVisible ? <Btn to="/logout" label="|->" /> : null}
+            {(this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge pathname="/chat" data={this.state.msgMatches[0]} label="Chat" /> : null}
 
           </div>
         </nav>

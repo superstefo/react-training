@@ -1,6 +1,6 @@
 import React from 'react';
-import store from '../store'
-import { Link } from "react-router-dom";
+//import store from '../store'
+//import { Link } from "react-router-dom";
 import "react-table/react-table.css"
 import ReactTable from "react-table";
 import AjaxService from '../services/AjaxService'
@@ -14,100 +14,68 @@ class MoreFriends extends React.Component {
     super(props);
 
     this.state = {
-      allFr: [],
-      hits: [],
-      isLoading: false,
-      error: null,
+      allFr: []
     };
     this.abortController = new AbortController();
-    console.log("constructor");
   }
-  componentWillMount(){
-    console.log('component  Will    Mount ');
+
+  componentDidMount() {
+    this.getNewFriends();
   }
-componentWillUnmount(){
-  console.log('component  Will   унннннн Mount ');
-  this.abortController.abort()
-}
+
   getNewFriends = () => {
     let promise = AjaxService.doGet(Const.URLS.NEW_FRIENDS, {})
     promise.then((data) => {
       let allFr = data.data.results;
-      store.addToStore('newfriends', allFr);
-      console.log(allFr);
-      this.setState({allFr: allFr});
+      //    console.log(allFr);
+      this.setState({ allFr: allFr });
     }).catch((e) => {
       console.log(e);
     })
   }
 
-  getMeta = () => {
-    let promise = AjaxService.doGet('http://localhost:8080/meta', {})
+  pass = (userId) => {
+    let promise = AjaxService.doGet(Const.URLS.PASS + userId, {})
     promise.then((data) => {
-
       console.log(data);
-
     }).catch((e) => {
       console.log(e);
     })
   }
-  getMeta2 = () => {
-    let promise = AjaxService.doGet('http://localhost:8080/meta2', {})
+
+  like = (userId) => {
+    console.log(userId);
+    let promise = AjaxService.doGet(Const.URLS.LIKE + userId, {})
     promise.then((data) => {
-
       console.log(data);
-
     }).catch((e) => {
       console.log(e);
     })
-  }
-  getFrreq = () => {
-    let promise = AjaxService.doGet('http://localhost:8080/friend-requests', {})
-    promise.then((data) => {
-
-      console.log(data);
-
-    }).catch((e) => {
-      console.log(e);
-    })
-  }
-
-  getMatches = () => {
-    let promise = AjaxService.doGet('http://localhost:8080/matches', {})
-    promise.then((data) => {
-
-      console.log(data);
-
-    }).catch((e) => {
-      console.log(e);
-    })
-  }
-  hideAge = () => {
-      let promise = AjaxService.doPost('http://localhost:8080/profile', {}, {});
-      promise.then((data) => {
-        console.log(data);
-      //  history.push('/confirm-token');
-      }).catch((e) => {
-        console.log(e);
-      })
-    }
-  componentDidMount(){
-    console.log('component   Did  Mount   First this called');
-    this.getNewFriends();
   }
 
   render() {
-    console.log("render()");
+    let InfoWrapper = (args) => {
+      let { person } = args;
 
-  //let prsn = args.person;  <div> <BtnLink label="Chat" data={args} pathname="/chat" /></div>
+      return (
+        <div className="text-justify text-wrap">
+          <div>
+            <button type="button" className="btn btn-success" onClick={() => this.like(person._id)}> Like </button>
+            <button type="button" className="btn btn-danger ml-2" onClick={() => this.pass(person._id)}> Pass </button>
+          </div>
+          <Info person={person} />
+        </div>
+      )
+    }
+
+    let Pic = args => (<PicWrapper photos={args.photos} />)
 
     let allFr = this.state.allFr;
 
-    const persons = allFr.map(one => {
-
+    let persons = allFr.map(one => {
       let obj = {
-        info: (<Info person={one} />),
-        image: (<PicWrapper photos={one.photos} />)
+        info: (<InfoWrapper person={one} />),
+        image: (<Pic photos={one.photos} />)
       }
       return { ...obj };
     });
@@ -129,11 +97,10 @@ componentWillUnmount(){
 
     return (
       <div>
-      <button type="button" onClick={this.getNewFriends} className="btn btn-primary">  Get New Friends  </button>
-      <button type="button" onClick={this.getFrreq} className="btn btn-primary">  Get Fried requests  </button>
-      <button type="button" onClick={this.getMeta} className="btn btn-primary">  Get Meta  </button>
-      <button type="button" onClick={this.getMeta2} className="btn btn-primary">  Get Meta2  </button>
-      <button type="button" onClick={this.getMatches} className="btn btn-primary">  Get Matches  </button>
+        <div className="text-justify text-center">
+          <BtnLink label="Friend Requests" data={null} pathname="/pal-requests" />
+          <button type="button" className="btn btn-primary" onClick={this.getNewFriends}> Reload </button>
+        </div>
 
         <div>
           <ReactTable className="-striped -highlight"
