@@ -1,8 +1,9 @@
 import React from 'react';
 import Const from '../services/Constants';
-import AjaxService from '../services/AjaxService'
-import RenderForm from '../building-blocks/RenderForm'
-//import './index.css';
+import AjaxService from '../services/AjaxService';
+import CashService from '../services/CashService';
+import PollService from '../services/PollService';
+import RenderForm from '../building-blocks/RenderForm';
 import { withRouter } from 'react-router-dom';
 import store from '../store';
 
@@ -19,61 +20,65 @@ class PhoneForm extends React.Component {
     //  this.setState({phone: event.target.value});
   };
 
+
   handleSubmit = event => {
     event.preventDefault();
-
     let { history } = this.props;
+    let phone = this.state.phone;
+    console.log(phone);
 
-
-    console.log(this.state.phone);
-
-
-    let cashVarName = Const.LOCAL_CASH_VAR_NAME;
-
-    let cash = localStorage.getItem(cashVarName);
-    //console.log(cash);
-    cash = JSON.parse(cash);
-    //console.log(cash);
-    if (cash[this.state.phone]) {
-
-      let isToUseCurrent = window.confirm('A session with this phone numer: ' + this.state.phone + ' already exists.\nUse current session?')
-      console.log(isToUseCurrent);
-      if (isToUseCurrent) {
-        // set phone to store.phone and x-auth-token
-        // start poll if check
-        //  history.push('/confirm-token');
-        return;
-      } else {
-        console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-
-        // set phone to store.phone
-        // set phone to localStorage
-      }
-    } else {
-      // cash[this.state.phone] = {}
-      // localStorage.setItem(cashVarName, cash)
-      // console.log(localStorage.getItem(cashVarName));
+    let ifTrue = function() {
+      history.push('/user')
     }
 
-    console.log(localStorage.getItem(cashVarName));
+    let ifFalse = function() {
+      let promise = AjaxService.doPost(Const.URLS.AUTH.PHONE, {
+        'phone': phone
+      }, {});
 
-    let promise = AjaxService.doPost(Const.URLS.AUTH.PHONE, {
-      'phone': this.state.phone
-    }, {});
+      promise.then(() => {
+        console.log("promise - then  ");
+        CashService[Const.PHONE_HEADER_NAME] = phone;
+        history.push('/confirm-token');
+      }).catch((e) => {
+        CashService[Const.PHONE_HEADER_NAME] = null;
+        console.error(e);
+      })
+    }
 
-    promise.then(() => {
-      console.log("promise - then  ");
-      store.phoneNumber = this.state.phone;
-      cash[this.state.phone] = {};
-      localStorage.setItem(cashVarName, JSON.stringify(cash));
-      history.push('/confirm-token');
-    }).catch((e) => {
-      delete store.phoneNumber;
-      delete cash[this.state.phone];
-      localStorage.setItem(cashVarName, JSON.stringify(cash));
-      console.log(e);
-    })
-    return false;
+    if (this.isToUseCurrentSession(phone)) {
+      console.log("Using exsisting session..");
+    //  history.push('/user');
+      PollService.checkIfLogged({}, ifTrue, () => {history.push('/confirm-token') });
+
+    }
+    PollService.checkIfLogged({}, ifTrue, ifFalse);
+
+  //  return false;
+  }
+
+  isToUseCurrentSession = (phone) => {
+    console.log("isToUseCurrentSession");
+    let ls = CashService.getLocalStorage();
+
+    if (!ls[phone]) {
+      return false;
+    }
+
+    let isToUseCurrent = window.confirm('A session with this phone numer: ' + phone + ' already exists.\nUse current session?')
+
+    if (isToUseCurrent) {
+      console.log("use current session:");
+      CashService[Const.PHONE_HEADER_NAME] = phone;
+      CashService[Const.AUTH_HEADER_NAME] = ls[phone][Const.AUTH_HEADER_NAME];
+    //  return true;
+    } else {
+      //do not use current session:
+      console.log("do not use current session:");
+      CashService[Const.PHONE_HEADER_NAME] = phone;
+    //  return false;
+    }
+    return isToUseCurrent;
   }
 
   render() {

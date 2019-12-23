@@ -17,7 +17,9 @@ const Const = {
     LIKE: ipAdress + 'like/',
     PASS: ipAdress + 'pass/'
   },
-  LOCAL_CASH_VAR_NAME: "__TnDr__"
+  LOCAL_CASH_VAR_NAME: '__TnDr__',
+  AUTH_HEADER_NAME: 'X-Auth-Token',
+  PHONE_HEADER_NAME: 'phone-number'
 }
 
 export default Const;

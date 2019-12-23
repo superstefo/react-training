@@ -1,11 +1,12 @@
 import React from 'react';
 import Const from '../services/Constants';
-import AjaxService from '../services/AjaxService'
-import PollService from '../services/PollService'
-import RenderForm from '../building-blocks/RenderForm'
+import AjaxService from '../services/AjaxService';
+import PollService from '../services/PollService';
+import CashService from '../services/CashService';
+import RenderForm from '../building-blocks/RenderForm';
 import './index.css';
-import { withRouter } from 'react-router-dom'
-import store from '../store'
+import { withRouter } from 'react-router-dom';
+import store from '../store';
 
 class ConfirmCode extends React.Component {
   constructor(props) {
@@ -17,8 +18,6 @@ class ConfirmCode extends React.Component {
   }
 
   componentDidMount() {
-    //  localStorage.getItem('state')
-    //  localStorage.setItem('state', 'off'); 
   }
 
   handleChange = event => {
@@ -26,57 +25,49 @@ class ConfirmCode extends React.Component {
     //this.setState({confirmToken: event.target.value});
   };
 
-  // getUpdates = () => {
-
-  //   let { history } = this.props;
-
-  //   let promise = AjaxService.doGet(Const.URLS.UPDATES);
-
-  //   promise.then((value) => {
-  //     if (value && value.status === 200 && value.data) {
-
-  //       let data = value.data;
-  //       store.updates = data;
-  //       history.push('/user');
-  //     }
-  //   })
-  // };
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log("----------confirm code----------------------handleSubmit---------");
-    if (!store.phoneNumber) {
-      throw new Error("store.phoneNumber is null");
+    let phoneNumber = CashService[Const.PHONE_HEADER_NAME];
+    if (!phoneNumber) {
+      throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
     }
-    let promise = AjaxService.doGet(Const.URLS.AUTH.GET_TOKEN + this.state.confirmToken + "/" + store.phoneNumber);
-
-    let cashVarName = Const.LOCAL_CASH_VAR_NAME;
-    var cash = localStorage.getItem(cashVarName);
-    cash = JSON.parse(cash);
+    let { history } = this.props;
+    let ls = CashService.getLocalStorage();
+    let promise = AjaxService.doGet(Const.URLS.AUTH.GET_TOKEN + this.state.confirmToken + "/" + phoneNumber);
 
     promise.then(function (value) {
       console.log(value);
       if (value && value.status === 200 && value.data) {
         console.log(value);
-        console.log(value.data["X-Auth-Token"]);
-        //  throw "errrrrrrrrrrr"
-        if (!cash) {
-          cash = {};
-        }
-        if (!cash[store.phoneNumber]) {
-          cash[store.phoneNumber] = {};
+        let token = value.data[Const.AUTH_HEADER_NAME];
+        console.log(token);
+
+        if (!ls[phoneNumber]) {
+          ls[phoneNumber] = {};
         }
 
-        cash[store.phoneNumber]["X-Auth-Token"] = value.data["X-Auth-Token"];
+        let headers = {
+          [Const.AUTH_HEADER_NAME] : token
+        }
 
-        localStorage.setItem(cashVarName, JSON.stringify(cash));
-        store["X-Auth-Token"] = value.data["X-Auth-Token"];
-        PollService.checkIfLogged();
+        let onSuccess = function() {
+          ls[phoneNumber][Const.AUTH_HEADER_NAME] = token;
+          CashService.setLocalStorage(ls);
+          CashService[Const.AUTH_HEADER_NAME] = token;
+          history.push('/user');
+        }
+
+        let onFailure = function() {
+          history.push('/phone');
+        }
+
+        PollService.checkIfLogged(headers, onSuccess, onFailure);
       }
     }).catch((e) => {
-      delete cash[store.phoneNumber];
-      delete store.phoneNumber;
-      localStorage.setItem(cashVarName, JSON.stringify(cash));
+      // delete cash[store.phoneNumber];
+      // delete store.phoneNumber;
+      // localStorage.setItem(cashVarName, JSON.stringify(cash));
       console.log(e);
     })
 

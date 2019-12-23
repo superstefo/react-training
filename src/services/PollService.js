@@ -1,6 +1,7 @@
 import React from 'react';
 import Const from './Constants';
 import AjaxService from './AjaxService'
+import CashService from './CashService';
 import BeanContextAware from './BeanContextAware'
 import ReactDOM from 'react-dom';
 import Header from '../building-blocks/header';
@@ -17,18 +18,20 @@ class PollService extends React.Component {
       isLogged: false,
       funcCallbacks: []
     };
- //   this.checkIfLogged();
+    //this.checkIfLogged();
   };
 
-  checkIfLogged = () => {
-    let promise = AjaxService.doGet(Const.URLS.PROFILE, {})
+  checkIfLogged = (headers, onSuccess, onFailure) => {
+    let promise = AjaxService.doGet(Const.URLS.PROFILE, headers)
     promise.then((data) => {
       store.addToStore('profile', data);
+      onSuccess()
+       this.getUpdates()
+       this.startPoll();
 
-      this.getUpdates()
-      this.startPoll();
     }).catch((e) => {
-      console.log(e);
+      console.error(e);
+      onFailure()
     })
   }
 
