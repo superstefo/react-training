@@ -7,6 +7,14 @@ import ReactDOM from 'react-dom';
 import Header from '../building-blocks/header';
 import store from '../store'
 
+
+//let appSettings1 = BeanContextAware.get('appSettings1');
+
+  // if (appSettings1) {
+  //   appSettings1.changeState({ numberMsgShown: 33});
+  // }
+
+
 class PollService extends React.Component {
 
   constructor(props) {
@@ -26,8 +34,8 @@ class PollService extends React.Component {
     promise.then((data) => {
       store.addToStore('profile', data);
       onSuccess()
-       this.getUpdates()
-       this.startPoll();
+      this.getUpdates()
+      this.startUpdatePoll(60000);
 
     }).catch((e) => {
       console.error(e);
@@ -48,9 +56,9 @@ class PollService extends React.Component {
       //merge new messages:
       let newMsgs = matchUpdate.messages;
       let newMsgsCount = newMsgs.length;
-      for (let y = oldMatch.messages.length-1; 0 <= newMsgsCount || 0 <= y; y--, newMsgsCount--) {
+      for (let y = oldMatch.messages.length - 1; 0 <= newMsgsCount || 0 <= y; y-- , newMsgsCount--) {
         if (oldMatch.messages[y] && !oldMatch.messages[y]._id) {
-          oldMatch.messages.splice(y,1);
+          oldMatch.messages.splice(y, 1);
         }
       }
       oldMatch.messages = oldMatch.messages.concat(newMsgs);
@@ -58,7 +66,7 @@ class PollService extends React.Component {
       /// merge seen:
       let lastSeenMsg = matchUpdate.seen ? matchUpdate.seen.last_seen_msg_id : null;
       if (lastSeenMsg) {
-        if ( !oldMatch.seen) {
+        if (!oldMatch.seen) {
           oldMatch.seen = {};
         }
         oldMatch.seen.last_seen_msg_id = lastSeenMsg;
@@ -89,7 +97,7 @@ class PollService extends React.Component {
       }
       let newMsgs = matchUpdate.messages;
 
-      for (var ind = newMsgs.length-1; 0 <= ind; ind--) {
+      for (var ind = newMsgs.length - 1; 0 <= ind; ind--) {
         let msg = newMsgs[ind];
 
         if (!msg.from) {
@@ -139,27 +147,32 @@ class PollService extends React.Component {
         chat1.triggerRenderFunc();
       }
       if (header) {
-        header.changeButtonVisibility({ isVisible: true});
+        header.changeButtonVisibility({ isVisible: true });
       }
     }).catch((e) => {
       if (header) {
         console.log("get updates errror ");
-        header.changeButtonVisibility({ isVisible: false})
-        if (this.pollInterval) {
-          clearTimeout(this.pollInterval)
-        }
+        header.changeButtonVisibility({ isVisible: false })
+       this.stopUpdatePoll();
+     
       }
       console.log(e);
     })
   }
 
-  startPoll = () => {
+  startUpdatePoll = (seconds) => {
+    this.stopUpdatePoll();
     this.pollInterval = setInterval(
       () => {
         this.getUpdates(this.state.last_activity_date);
-      }, 20000
+      }, seconds
     );
   }
 
+  stopUpdatePoll = () => {
+    if (this.pollInterval) {
+      clearTimeout(this.pollInterval)
+    }
+  }
 }
 export default new PollService();

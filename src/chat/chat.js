@@ -5,7 +5,7 @@ import store from '../store'
 import EnterText from './enterText'
 import MessageWrapper from './messageWrapper'
 import BeanContextAware from '../services/BeanContextAware'
-import Select from '../building-blocks/Select'
+import Select from './Select'
 import Const from '../services/Constants';
 import AjaxService from '../services/AjaxService'
 

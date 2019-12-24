@@ -15,8 +15,8 @@ class PicWrapper extends React.Component {
     console.log(this.state.imgSrc);
   }
   componentDidMount() {
-
   }
+  
   render() {
     let click = () => {
       if (this.state.count < this.state.photos.length - 1) {

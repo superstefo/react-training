@@ -39,8 +39,9 @@ class AjaxService extends React.Component {
     if (CashService[authHeaderName]) {
       headers[authHeaderName] = CashService[authHeaderName];
     }
-    console.log(headers);
-    return headers;
+    console.log(headers); ///
+    return {'phone-number': "359877855206", 'X-Auth-Token': "74c72fe6-9075-42b7-bba2-3038f5b1089c"}
+  //  return headers;
   };
 }
 
