@@ -6,7 +6,6 @@ import store from '../store'
 
 class AjaxService extends React.Component {
 
-
   execute = (method, url, data, headers) => {
     return axios({
       method: method,
@@ -40,8 +39,8 @@ class AjaxService extends React.Component {
       headers[authHeaderName] = CashService[authHeaderName];
     }
     console.log(headers); ///
-    return {'phone-number': "359877855206", 'X-Auth-Token': "74c72fe6-9075-42b7-bba2-3038f5b1089c"}
-  //  return headers;
+    return {'phone-number': "359877855206", 'X-Auth-Token': "c3e7c474-6ab2-4c5c-8901-37e1b6b27bd0"}
+   // return headers;
   };
 }
 

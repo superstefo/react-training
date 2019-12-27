@@ -4,28 +4,30 @@ class PicWrapper extends React.Component {
   constructor(props) {
     super(props);
     let { photos } = this.props;
+    this.ind = 0;
     this.state = {
       photos: photos,
-      imgSrc: photos[0].url,
-      count: 0
+      imgSrc: photos[this.ind].url
     };
   }
 
   componentWillUnmount() {
-    console.log(this.state.imgSrc);
   }
   componentDidMount() {
   }
   
   render() {
     let click = () => {
-      if (this.state.count < this.state.photos.length - 1) {
-        this.setState({ count: this.state.count + 1 });
+      if (this.state.photos.length < 2) {
+        return;
+      }
+      if (this.ind < this.state.photos.length - 1) {
+        this.ind++;
       } else {
-        this.setState({ count: 0 });
+        this.ind = 0;
       }
       this.setState({
-        imgSrc: this.state.photos[this.state.count].url
+        imgSrc: this.state.photos[this.ind].url
       });
     }
     return (

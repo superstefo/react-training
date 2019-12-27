@@ -20,6 +20,20 @@ class PhoneForm extends React.Component {
     //  this.setState({phone: event.target.value});
   };
 
+  sendPhoneNum = function(phone) {
+    //let { history } = this.props;
+    let promise = AjaxService.doPost(Const.URLS.AUTH.PHONE, {
+      'phone': phone
+    }, {});
+
+    promise.then(() => {
+      CashService[Const.PHONE_HEADER_NAME] = phone;
+      this.props.history.push('/confirm-token');
+    }).catch((e) => {
+      CashService[Const.PHONE_HEADER_NAME] = null;
+      console.error(e);
+    })
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -31,34 +45,19 @@ class PhoneForm extends React.Component {
       history.push('/user')
     }
 
-    let ifFalse = function() {
-      let promise = AjaxService.doPost(Const.URLS.AUTH.PHONE, {
-        'phone': phone
-      }, {});
-
-      promise.then(() => {
-        console.log("promise - then  ");
-        CashService[Const.PHONE_HEADER_NAME] = phone;
-        history.push('/confirm-token');
-      }).catch((e) => {
-        CashService[Const.PHONE_HEADER_NAME] = null;
-        console.error(e);
-      })
-    }
-
     if (this.isToUseCurrentSession(phone)) {
       console.log("Using exsisting session..");
     //  history.push('/user');
       PollService.checkIfLogged({}, ifTrue, () => {history.push('/confirm-token') });
-
+      return;
+    } else {
+      //PollService.checkIfLogged({}, ifTrue, sendPhoneNum);
+      this.sendPhoneNum(phone);
+      return;
     }
-    PollService.checkIfLogged({}, ifTrue, ifFalse);
-
-  //  return false;
   }
 
   isToUseCurrentSession = (phone) => {
-    console.log("isToUseCurrentSession");
     let ls = CashService.getLocalStorage();
 
     if (!ls[phone]) {
@@ -71,12 +70,10 @@ class PhoneForm extends React.Component {
       console.log("use current session:");
       CashService[Const.PHONE_HEADER_NAME] = phone;
       CashService[Const.AUTH_HEADER_NAME] = ls[phone][Const.AUTH_HEADER_NAME];
-    //  return true;
     } else {
       //do not use current session:
       console.log("do not use current session:");
       CashService[Const.PHONE_HEADER_NAME] = phone;
-    //  return false;
     }
     return isToUseCurrent;
   }
@@ -96,4 +93,4 @@ class PhoneForm extends React.Component {
     )
   }
 }
-export default withRouter(PhoneForm)
+export default withRouter(PhoneForm);

@@ -12,16 +12,11 @@ export default class SelectPollInterval extends Component {
   }
 
   changeHandler(e) {
-  //  let appSettings1 = BeanContextAware.get('appSettings1');
-    console.log(e.target.value);
-    
-      this.setState({
-        numberMsgShown: e.target.value
-      })
-      // if (appSettings1) {
-      //   appSettings1.changeState({ numberMsgShown: 33});
-      // }
-     this.props. onSelectPollInterval(e.target.value)
+    this.setState({
+      interval: e.target.value
+    })
+
+    this.props.onSelectPollInterval(e.target.value)
   }
 
   render() {
@@ -39,6 +34,7 @@ export default class SelectPollInterval extends Component {
             <option value="50000">50 sec</option>
             <option value="60000">1 min</option>
             <option value="300000">5 min</option>
+            <option value="600000">10 min</option>
           </select>
         </div>
       </form>

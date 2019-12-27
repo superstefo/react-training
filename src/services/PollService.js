@@ -8,23 +8,16 @@ import Header from '../building-blocks/header';
 import store from '../store'
 
 
-//let appSettings1 = BeanContextAware.get('appSettings1');
-
-  // if (appSettings1) {
-  //   appSettings1.changeState({ numberMsgShown: 33});
-  // }
-
-
 class PollService extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      last_activity_date: null,
-      showDate: false,
-      pollInterval: null,
-      isLogged: false,
-      funcCallbacks: []
+      last_activity_date: null//,
+    //  showDate: false,
+    //  pollInterval: null,
+  //    isLogged: false,
+    //  funcCallbacks: []
     };
     //this.checkIfLogged();
   };
@@ -35,7 +28,7 @@ class PollService extends React.Component {
       store.addToStore('profile', data);
       onSuccess()
       this.getUpdates()
-      this.startUpdatePoll(60000);
+      this.startUpdatePoll(20000);
 
     }).catch((e) => {
       console.error(e);
@@ -162,9 +155,16 @@ class PollService extends React.Component {
 
   startUpdatePoll = (seconds) => {
     this.stopUpdatePoll();
+    if (!seconds) {
+      console.error("error null val for 'seconds'");
+      
+      return;
+    }
     this.pollInterval = setInterval(
       () => {
         this.getUpdates(this.state.last_activity_date);
+        console.log("startUpdatePoll = " +seconds);
+        
       }, seconds
     );
   }
