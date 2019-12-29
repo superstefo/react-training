@@ -1,22 +1,29 @@
 import React from 'react';
 import Const from './Constants';
-import store from '../store'
+//import store from '../store'
 
 class CashService extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+    //  pollInterval: 20000//,
+      //  numberMsgShown: 10
+  //   };
+  // }
    __TnDr__ = {
-    "00359877855206": { "X-Auth-Token": "ec5f20d0-419a-417f-b05b-071af21e92f3" },
+    "00359877855206": { "X-Auth-Token": "ec5f20d0-419a-417f-b05b-071af21e92f3", 'settings' :{"textColor":""} },
     "00359877783567": { "X-Auth-Token": "ec5f20d0-419a-417f-b05b-071af21e92f3" }
   }
 
-  phoneNumber = null;
+  [Const.PHONE_HEADER_NAME] = null;
   [Const.AUTH_HEADER_NAME] = null;
 
   lsobj = (() => {
-    console.log("CashService----------------------");
+   // console.log("CashService----------------------");
 
     let cashVarName = Const.LOCAL_CASH_VAR_NAME;
     let ls = localStorage.getItem(cashVarName);
-    console.log(ls);
+  //  console.log(ls);
     if (!ls) {
       ls = {}
       localStorage.setItem(cashVarName, JSON.stringify(ls));
@@ -33,6 +40,7 @@ class CashService extends React.Component {
   })();
 
   getLocalStorage = () => {
+    console.log(this.lsobj);
     return this.lsobj;
   };
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import store from '../store'
 import Const from '../services/Constants';
-import AjaxService from '../services/AjaxService'
+import AjaxService from '../services/AjaxService';
+import AppSettingsService from '../settings/AppSettingsService';
 
 class EnterText extends React.Component {
     constructor(props) {
@@ -51,17 +52,20 @@ class EnterText extends React.Component {
             var elem = e.srcElement || e.target;
             this.setState({ value: elem.value })
         }
+        let textColor = AppSettingsService.getSetting("textColor");
+        let bgColor = AppSettingsService.getSetting("bgColor");
 
         const inputProps = {
             placeholder: 'Write...',
             value: this.state.value,
             onChange: onChange,
+            className: "form-control " + bgColor + " " + textColor,
             onKeyPress: onKeyPress
         }
 
         return (
             <div>
-                <input className='form-control' {...inputProps} type="text" />
+                <input {...inputProps} type="text" />
             </div>
         )
     }

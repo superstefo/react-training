@@ -3,6 +3,7 @@ import Const from '../services/Constants';
 import AjaxService from '../services/AjaxService';
 import CashService from '../services/CashService';
 import PollService from '../services/PollService';
+import AppSettingsService from '../settings/AppSettingsService';
 import RenderForm from '../building-blocks/RenderForm';
 import { withRouter } from 'react-router-dom';
 import store from '../store';
@@ -20,7 +21,7 @@ class PhoneForm extends React.Component {
     //  this.setState({phone: event.target.value});
   };
 
-  sendPhoneNum = function(phone) {
+  sendPhoneNum = function (phone) {
     //let { history } = this.props;
     let promise = AjaxService.doPost(Const.URLS.AUTH.PHONE, {
       'phone': phone
@@ -39,28 +40,22 @@ class PhoneForm extends React.Component {
     event.preventDefault();
     let { history } = this.props;
     let phone = this.state.phone;
-    console.log(phone);
-
-    let ifTrue = function() {
-      history.push('/user')
-    }
 
     if (this.isToUseCurrentSession(phone)) {
       console.log("Using exsisting session..");
-    //  history.push('/user');
-      PollService.checkIfLogged({}, ifTrue, () => {history.push('/confirm-token') });
-      return;
+      AppSettingsService.applySettingsFromLocalStorage();
+      PollService.checkIfLogged({}, () => { history.push('/user') }, () => { history.push('/confirm-token') });
     } else {
-      //PollService.checkIfLogged({}, ifTrue, sendPhoneNum);
+      AppSettingsService.applySettingsFromLocalStorage();
       this.sendPhoneNum(phone);
-      return;
     }
   }
+
 
   isToUseCurrentSession = (phone) => {
     let ls = CashService.getLocalStorage();
 
-    if (!ls[phone]) {
+    if (!ls[phone] || !ls[phone][Const.AUTH_HEADER_NAME]) {
       return false;
     }
 

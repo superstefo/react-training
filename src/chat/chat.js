@@ -64,7 +64,7 @@ class Chat extends React.Component {
   //call it to start render() in order to visualize the change
   triggerRenderFunc = () => {
     let match = store.getMatchById(this.state.match._id)
-    console.log(match);
+  //  console.log(match);
     let lastSeenMsg = match.seen ? match.seen.last_seen_msg_id : null;
     this.setState({
       lastSeenMsg: lastSeenMsg,

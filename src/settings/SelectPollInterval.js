@@ -1,22 +1,32 @@
 import React, { Component } from 'react'
-import BeanContextAware from '../services/BeanContextAware'
+import BeanContextAware from '../services/BeanContextAware';
+import AppSettingsService from './AppSettingsService';
+//import PollService from '../services/PollService';
 
 export default class SelectPollInterval extends Component {
   constructor(props) {
     super(props)
-    
+
     this.state = {
-      interval: 20000
+      interval: AppSettingsService.updatePollInterval,
+      styles: this.getLocalStyles()
     }
-    this.changeHandler = this.changeHandler.bind(this)
   }
 
-  changeHandler(e) {
+  changeHandler = (e) => {
     this.setState({
-      interval: e.target.value
+      interval: e.target.value,
+      styles: this.getLocalStyles()
     })
+    AppSettingsService.updatePollInterval = e.target.value;
+    this.props.onSelectPollInterval(e.target.value);
+  }
 
-    this.props.onSelectPollInterval(e.target.value)
+  getLocalStyles = () => {
+    let textColor = AppSettingsService.getSetting("textColor") || "";
+    let bgColor = AppSettingsService.getSetting("bgColor") || "";
+
+    return "form-control " + bgColor + " " + textColor;
   }
 
   render() {
@@ -25,7 +35,7 @@ export default class SelectPollInterval extends Component {
         <div className='form-group'>
           <label>Poll interval for getting updates to be every:</label>
           <select
-            className='form-control'
+            className={this.state.styles}
             value={this.state.interval}
             onChange={this.changeHandler}>
             <option value="10000">10 sec</option>

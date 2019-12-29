@@ -1,4 +1,7 @@
 import React from 'react';
+import CashService from './services/CashService';
+import AppSettingsService from './settings/AppSettingsService';
+import PollService from './services/PollService';
 import Home from './Home';
 import PhoneForm from './auth/PhoneForm';
 import ConfirmCode from './auth/confirmCode';
@@ -11,7 +14,6 @@ import AppSettings from './settings/AppSettings';
 import Header from './building-blocks/header';
 import Chat from './chat/chat.js';
 import store from './store';
-import PollService from './services/PollService';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 

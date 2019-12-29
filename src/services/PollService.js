@@ -1,10 +1,11 @@
 import React from 'react';
 import Const from './Constants';
 import AjaxService from './AjaxService'
-import CashService from './CashService';
+//import CashService from './CashService';
 import BeanContextAware from './BeanContextAware'
-import ReactDOM from 'react-dom';
-import Header from '../building-blocks/header';
+//import ReactDOM from 'react-dom';
+//import Header from '../building-blocks/header';
+import AppSettingsService from '../settings/AppSettingsService';
 import store from '../store'
 
 
@@ -14,10 +15,10 @@ class PollService extends React.Component {
     super(props);
     this.state = {
       last_activity_date: null//,
-    //  showDate: false,
-    //  pollInterval: null,
-  //    isLogged: false,
-    //  funcCallbacks: []
+      //  showDate: false,
+      //  pollInterval: null,
+      //    isLogged: false,
+      //  funcCallbacks: []
     };
     //this.checkIfLogged();
   };
@@ -28,7 +29,7 @@ class PollService extends React.Component {
       store.addToStore('profile', data);
       onSuccess()
       this.getUpdates()
-      this.startUpdatePoll(20000);
+      this.startUpdatePoll(AppSettingsService.updatePollInterval);
 
     }).catch((e) => {
       console.error(e);
@@ -44,6 +45,8 @@ class PollService extends React.Component {
       //merge brand new matches:
       if (!oldMatch) {
         store.getStore().update.data.matches.push(matchUpdate);
+        this.addToUnreadMessagesBadge(matchUpdate);
+        return;
       }
 
       //merge new messages:
@@ -75,6 +78,7 @@ class PollService extends React.Component {
 
   markLastUneadMessages = (store, updates) => {
     let matches = updates.data.matches;
+    console.log(matches);
 
     for (let i = 0; i < matches.length; i++) {
       let matchUpdate = matches[i];
@@ -110,7 +114,7 @@ class PollService extends React.Component {
 
   addToUnreadMessagesBadge = (mtch) => {
     let header = BeanContextAware.get('header1');
-    console.log(mtch);
+  //  console.log(mtch);
     if (header) {
       header.addMsgMatch(mtch)
     }
@@ -146,32 +150,32 @@ class PollService extends React.Component {
       if (header) {
         console.log("get updates errror ");
         header.changeButtonVisibility({ isVisible: false })
-       this.stopUpdatePoll();
-     
+        this.stopUpdatePoll();
+
       }
       console.log(e);
     })
   }
 
   startUpdatePoll = (seconds) => {
-    this.stopUpdatePoll();
     if (!seconds) {
       console.error("error null val for 'seconds'");
-      
       return;
     }
-    this.pollInterval = setInterval(
+    this.stopUpdatePoll();
+    this.pollInterval = seconds
+    this.pollIntervalObj = setInterval(
       () => {
         this.getUpdates(this.state.last_activity_date);
-        console.log("startUpdatePoll = " +seconds);
-        
+        console.log("startUpdatePoll = " + seconds);
+
       }, seconds
     );
   }
 
   stopUpdatePoll = () => {
-    if (this.pollInterval) {
-      clearTimeout(this.pollInterval)
+    if (this.pollIntervalObj) {
+      clearTimeout(this.pollIntervalObj)
     }
   }
 }
