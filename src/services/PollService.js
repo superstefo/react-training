@@ -14,7 +14,7 @@ class PollService extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      last_activity_date: null//,
+      last_activity_date: "1984-08-01T00:00:00.000Z"//,
       //  showDate: false,
       //  pollInterval: null,
       //    isLogged: false,
@@ -28,7 +28,7 @@ class PollService extends React.Component {
     promise.then((data) => {
       store.addToStore('profile', data);
       onSuccess()
-      this.getUpdates()
+      this.getUpdates(this.state.last_activity_date);
       this.startUpdatePoll(AppSettingsService.updatePollInterval);
 
     }).catch((e) => {
