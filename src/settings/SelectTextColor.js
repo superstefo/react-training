@@ -1,21 +1,12 @@
 import React, { Component } from 'react'
-//import BeanContextAware from '../services/BeanContextAware'
 import AppSettingsService from './AppSettingsService';
 
 export default class SelectTextColor extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected:   AppSettingsService.getSetting("textColor") || AppSettingsService.textColors[0],
-      styles : this.getLocalStyles()
+      selected: AppSettingsService.getSetting("textColor") || AppSettingsService.textColors[0]
     }
-  }
-
-  getLocalStyles = () => {
-    let textColor = AppSettingsService.getSetting("textColor") || "";
-    let bgColor = AppSettingsService.getSetting("bgColor") || ""; 
-    
-    return "form-control " + bgColor + " " + textColor;
   }
 
   changeHandler = (event) => {
@@ -25,12 +16,9 @@ export default class SelectTextColor extends Component {
     AppSettingsService.persistSetting("textColor", color);
 
     this.setState({
-      selected: color,
-      styles : this.getLocalStyles()
+      selected: color
     })
-  }
-
-  componentDidMount() {
+    this.props.triggerRender();
   }
 
   render() {
@@ -39,9 +27,9 @@ export default class SelectTextColor extends Component {
         <div className='form-group'>
           <label>Select text color:</label>
           <select
-            className={this.state.styles}
+            className={this.props.styles}
             value={this.state.selected}
-            onChange={(clazz) => this.changeHandler(clazz)}>
+            onChange={this.changeHandler}>
             {AppSettingsService.textColors.map(
               (color) => {
                 return (<option key={color.name} value={color.class}>{color.name}</option>);

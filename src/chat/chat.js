@@ -8,12 +8,12 @@ import BeanContextAware from '../services/BeanContextAware'
 import Select from './Select'
 import Const from '../services/Constants';
 import AjaxService from '../services/AjaxService'
+import AppSettingsService from '../settings/AppSettingsService';
 
 class Chat extends React.Component {
   constructor(props) {
     super(props);
     let match = props.location.state.data;
-    //  console.log(match);
     let friendId = match.person._id;
     let lastSeenMsg = match.seen ? match.seen.last_seen_msg_id : null;
     this.state = {
@@ -25,6 +25,7 @@ class Chat extends React.Component {
       friendId: friendId,
       messages: match.messages
     };
+    this.inputStyles = AppSettingsService.getInputStyleClasses;
   }
 
   componentDidMount() {
@@ -64,14 +65,12 @@ class Chat extends React.Component {
   //call it to start render() in order to visualize the change
   triggerRenderFunc = () => {
     let match = store.getMatchById(this.state.match._id)
-  //  console.log(match);
     let lastSeenMsg = match.seen ? match.seen.last_seen_msg_id : null;
     this.setState({
       lastSeenMsg: lastSeenMsg,
       match: match,
       messages: match.messages
-    }
-    )
+    })
   }
 
   changeState = (obj) => {
@@ -145,9 +144,9 @@ class Chat extends React.Component {
 
 
     return (
-      <div><Select />
+      <div><Select getStyles={this.inputStyles} />
         <div>
-          <ReactTable className=""
+          <ReactTable
             data={reorderedMessages}
             columns={present}
             defaultPageSize={reorderedMessages.length}

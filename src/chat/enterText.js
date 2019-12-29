@@ -14,53 +14,54 @@ class EnterText extends React.Component {
             friendId: props.friendId,
             triggerRenderFunc: props.triggerRenderFunc
         }
+        this.getStyles = AppSettingsService.getInputStyleClasses;
     }
+
+    createMessage = (match, store) => {
+        var dt = new Date();
+        return {
+            created_date: dt.toISOString(),
+            from: store.profile.data._id,
+            match_id: match.id,
+            message: this.state.value,
+            sent_date: dt.toISOString(),
+            timestamp: dt.getTime(),
+            to: match.person._id
+        }
+    }
+
+    onKeyPress = (e) => {
+        if (e.key !== 'Enter') {
+            return;
+        }
+
+        let matches = store.update.data.matches;
+        for (let index = 0; index < matches.length; index++) {
+            const oneMatch = matches[index];
+
+            if (oneMatch.person._id == this.state.friendId) {
+                let newMsgObj = this.createMessage(oneMatch, this.state.store);
+                AjaxService.doPost(Const.URLS.SEND_MESSAGE, newMsgObj, {})
+                store.update.data.matches[index].messages.push(newMsgObj);
+                this.state.triggerRenderFunc();
+                break;
+            }
+        }
+        this.setState({ value: '' });
+    }
+
+    onChange = (e) => {
+        var elem = e.srcElement || e.target;
+        this.setState({ value: elem.value })
+    }
+
     render() {
-        let createMessage = (match, store) => {
-            var dt = new Date();
-            return {
-                created_date: dt.toISOString(),
-                from: store.profile.data._id,
-                match_id: match.id,
-                message: this.state.value,
-                sent_date: dt.toISOString(),
-                timestamp: dt.getTime(),
-                to: match.person._id
-            }
-        }
-        let onKeyPress = (e) => {
-            if (e.key !== 'Enter') {
-                return;
-            }
-
-            let matches = store.update.data.matches;
-            for (let index = 0; index < matches.length; index++) {
-                const oneMatch = matches[index];
-
-                if (oneMatch.person._id == this.state.friendId) {
-                    let newMsgObj = createMessage(oneMatch, this.state.store);
-                    AjaxService.doPost(Const.URLS.SEND_MESSAGE, newMsgObj, {})
-                    store.update.data.matches[index].messages.push(newMsgObj);
-                    this.state.triggerRenderFunc();
-                    break;
-                }
-            }
-            this.setState({ value: '' });
-        }
-
-        let onChange = (e) => {
-            var elem = e.srcElement || e.target;
-            this.setState({ value: elem.value })
-        }
-        let textColor = AppSettingsService.getSetting("textColor");
-        let bgColor = AppSettingsService.getSetting("bgColor");
-
-        const inputProps = {
+        let inputProps = {
             placeholder: 'Write...',
             value: this.state.value,
-            onChange: onChange,
-            className: "form-control " + bgColor + " " + textColor,
-            onKeyPress: onKeyPress
+            onChange: this.onChange,
+            className: this.getStyles(),
+            onKeyPress: this.onKeyPress
         }
 
         return (

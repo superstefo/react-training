@@ -1,6 +1,4 @@
 import React from 'react';
-import store from '../store';
-import BeanContextAware from '../services/BeanContextAware';
 import PollService from '../services/PollService';
 import SelectPollInterval from './SelectPollInterval';
 import AppSettingsService from './AppSettingsService';
@@ -10,11 +8,9 @@ import SelectBackgroundColor from './SelectBackgroundColor';
 class AppSettings extends React.Component {
   constructor(props) {
     super(props);
-console.log("-------------------------------------------------AppSettings constructor");
 
     this.state = {
-    //  pollInterval: 20000//,
-      //  numberMsgShown: 10
+      styles: AppSettingsService.getInputStyleClasses()
     };
   }
 
@@ -26,19 +22,17 @@ console.log("-------------------------------------------------AppSettings constr
   }
 
   triggerRender = () => {
-    let val = this.state.pollInterval;
     this.setState({
-      pollInterval: val
+      styles: AppSettingsService.getInputStyleClasses()
     })
   }
 
   render() {
     return (
       <div>
-        <SelectPollInterval onSelectPollInterval={this.onSelectPollInterval} />
-        <SelectBackgroundColor triggerRender={this.triggerRender}/>
-        <SelectTextColor />
-        <br />
+        <SelectPollInterval styles={this.state.styles} onSelectPollInterval={this.onSelectPollInterval} />
+        <SelectBackgroundColor styles={this.state.styles} triggerRender={this.triggerRender} />
+        <SelectTextColor styles={this.state.styles} triggerRender={this.triggerRender} />
       </div>
     )
   }

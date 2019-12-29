@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import BeanContextAware from '../services/BeanContextAware'
 
-export default class ControlledInput extends Component {
+export default class Select extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      numberMsgShown: 10
+      numberMsgShown: 10,
+      getStyles: props.getStyles
     }
-    this.changeHandler = this.changeHandler.bind(this)
   }
 
-  changeHandler(e) {
+  changeHandler = (e) => {
     let chat1 = BeanContextAware.get('chat1');
       this.setState({
         numberMsgShown: e.target.value
@@ -26,7 +26,7 @@ export default class ControlledInput extends Component {
         <div className='form-group'>
           <label>Number of messages to show:</label>
           <select
-            className='form-control'
+            className={this.state.getStyles()}
             value={this.state.numberMsgShown}
             onChange={this.changeHandler}>
             <option value="10">10</option>
