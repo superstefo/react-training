@@ -6,7 +6,6 @@ import PollService from '../services/PollService';
 import AppSettingsService from '../settings/AppSettingsService';
 import RenderForm from '../building-blocks/RenderForm';
 import { withRouter } from 'react-router-dom';
-import store from '../store';
 
 class PhoneForm extends React.Component {
   constructor(props) {
@@ -18,11 +17,9 @@ class PhoneForm extends React.Component {
 
   handleChange = event => {
     this.state.phone = event.target.value;
-    //  this.setState({phone: event.target.value});
   };
 
   sendPhoneNum = function (phone) {
-    //let { history } = this.props;
     let promise = AjaxService.doPost(Const.URLS.AUTH.PHONE, {
       'phone': phone
     }, {});
@@ -42,7 +39,6 @@ class PhoneForm extends React.Component {
     let phone = this.state.phone;
 
     if (this.isToUseCurrentSession(phone)) {
-      console.log("Using exsisting session..");
       AppSettingsService.applySettingsFromLocalStorage();
       PollService.checkIfLogged({}, () => { history.push('/user') }, () => { history.push('/confirm-token') });
     } else {

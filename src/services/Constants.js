@@ -1,4 +1,4 @@
-const ipAdress = 'http://localhost:8080/';
+let ipAdress = 'http://localhost:'+'8484'+'/';
 
 const Const = {
   URLS: {

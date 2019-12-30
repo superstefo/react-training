@@ -17,7 +17,7 @@ import store from './store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 
-const App = (props) => {
+const App = () => {
   return (
     <div className="container" style={{ paddingTop: 10 }}>
 

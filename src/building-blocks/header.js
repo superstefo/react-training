@@ -12,6 +12,7 @@ class Header extends React.Component {
       isVisible: false,
       msgMatches: []
     };
+    this.initialTitle = document.title;
   }
 
   changeState = (obj) => {
@@ -28,6 +29,7 @@ class Header extends React.Component {
     this.setState({
       msgMatches: msgMatches
     })
+    this.startFlashTabTitle();
   }
 
   findInMsgMatches = (mtch) => {
@@ -47,6 +49,7 @@ class Header extends React.Component {
       this.setState({
         msgMatches: msgMatches
       })
+      this.stopFlashTabTitle();
     }
   }
 
@@ -61,6 +64,31 @@ class Header extends React.Component {
   componentWillUnmount() {
     BeanContextAware.remove(this);
   }
+
+  startFlashTabTitle = () => {
+    if (this.state.msgMatches.length > 0) {
+     // return;
+    }
+    this.stopFlashTabTitle();
+    this.flashIntervalObj = setInterval(
+      () => {
+        if ( this.initialTitle === document.title) {
+          document.title = this.state.msgMatches.length + " "+ this.initialTitle;
+        } else {
+          document.title = this.initialTitle;  
+        }
+      }, 2000
+    );
+  }
+
+  stopFlashTabTitle = () => {
+    //if (this.flashIntervalObj && this.state.msgMatches.length == 0) {
+      clearTimeout(this.flashIntervalObj);
+      document.title = this.initialTitle;  
+    //}
+  }
+
+
 
   render() {
     let Btn = (props) => (

@@ -1,12 +1,9 @@
 import React from 'react';
 import Const from './Constants';
-import AjaxService from './AjaxService'
-//import CashService from './CashService';
-import BeanContextAware from './BeanContextAware'
-//import ReactDOM from 'react-dom';
-//import Header from '../building-blocks/header';
+import AjaxService from './AjaxService';
+import BeanContextAware from './BeanContextAware';
 import AppSettingsService from '../settings/AppSettingsService';
-import store from '../store'
+import store from '../store';
 
 
 class PollService extends React.Component {
@@ -78,12 +75,14 @@ class PollService extends React.Component {
 
   markLastUneadMessages = (store, updates) => {
     let matches = updates.data.matches;
-    console.log(matches);
 
     for (let i = 0; i < matches.length; i++) {
       let matchUpdate = matches[i];
       let oldMatch = store.getMatchById(matchUpdate._id);
 
+      // if (!oldMatch) {
+      //   oldMatch = matchUpdate;
+      // }
       let newLastSeenMsgId = matchUpdate.seen ? matchUpdate.seen.last_seen_msg_id : null;
       let oldLastSeenMsgId = oldMatch.seen ? oldMatch.seen.last_seen_msg_id : null;
       var localUser = store.profile.data;
@@ -150,9 +149,8 @@ class PollService extends React.Component {
       if (header) {
         console.log("get updates errror ");
         header.changeButtonVisibility({ isVisible: false })
-        this.stopUpdatePoll();
-
       }
+      this.stopUpdatePoll();
       console.log(e);
     })
   }
@@ -167,8 +165,6 @@ class PollService extends React.Component {
     this.pollIntervalObj = setInterval(
       () => {
         this.getUpdates(this.state.last_activity_date);
-        console.log("startUpdatePoll = " + seconds);
-
       }, seconds
     );
   }

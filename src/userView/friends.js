@@ -47,11 +47,14 @@ class Friends extends React.Component {
 
     let persons = friends.map(friendship => {
       let prsn = friendship.person
-      let obj = {
+      let obj;
+      if (prsn) {
+       obj = {
         firstName: prsn.name,
         lastName: prsn.birth_date,
         image: (<Pic src={prsn.photos[0].url} data={friendship} />)
       }
+    }
       return { ...obj };
     });
 
