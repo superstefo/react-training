@@ -4,9 +4,8 @@ import AjaxService from '../services/AjaxService';
 import PollService from '../services/PollService';
 import CashService from '../services/CashService';
 import RenderForm from '../building-blocks/RenderForm';
-import './index.css';
+//import './index.css';
 import { withRouter } from 'react-router-dom';
-import store from '../store';
 
 class ConfirmCode extends React.Component {
   constructor(props) {
@@ -17,14 +16,10 @@ class ConfirmCode extends React.Component {
     };
   }
 
-  componentDidMount() {
-  }
-
   handleChange = event => {
     this.state.confirmToken = event.target.value;
     //this.setState({confirmToken: event.target.value});
   };
-
 
   handleSubmit = event => {
     event.preventDefault();
@@ -39,9 +34,7 @@ class ConfirmCode extends React.Component {
     promise.then(function (value) {
       console.log(value);
       if (value && value.status === 200 && value.data) {
-        console.log(value);
         let token = value.data[Const.AUTH_HEADER_NAME];
-        console.log(token);
 
         if (!ls[phoneNumber]) {
           ls[phoneNumber] = {};

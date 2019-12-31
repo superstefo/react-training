@@ -5,19 +5,13 @@ import BeanContextAware from './BeanContextAware';
 import AppSettingsService from '../settings/AppSettingsService';
 import store from '../store';
 
-
 class PollService extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      last_activity_date: "1984-08-01T00:00:00.000Z"//,
-      //  showDate: false,
-      //  pollInterval: null,
-      //    isLogged: false,
-      //  funcCallbacks: []
     };
-    //this.checkIfLogged();
+
+    this.last_activity_date = "1984-08-01T00:00:00.000Z";
   };
 
   checkIfLogged = (headers, onSuccess, onFailure) => {
@@ -25,7 +19,7 @@ class PollService extends React.Component {
     promise.then((data) => {
       store.addToStore('profile', data);
       onSuccess()
-      this.getUpdates(this.state.last_activity_date);
+      this.getUpdates(this.getLastActivityDate());
       this.startUpdatePoll(AppSettingsService.updatePollInterval);
 
     }).catch((e) => {
@@ -36,6 +30,7 @@ class PollService extends React.Component {
 
   mergeUpdates = (store, updates) => {
     let matches = updates.data.matches;
+
     for (let i = 0; i < matches.length; i++) {
       let matchUpdate = matches[i];
       let oldMatch = store.getMatchById(matchUpdate._id);
@@ -43,7 +38,7 @@ class PollService extends React.Component {
       if (!oldMatch) {
         store.getStore().update.data.matches.push(matchUpdate);
         this.addToUnreadMessagesBadge(matchUpdate);
-        return;
+        break;
       }
 
       //merge new messages:
@@ -80,9 +75,6 @@ class PollService extends React.Component {
       let matchUpdate = matches[i];
       let oldMatch = store.getMatchById(matchUpdate._id);
 
-      // if (!oldMatch) {
-      //   oldMatch = matchUpdate;
-      // }
       let newLastSeenMsgId = matchUpdate.seen ? matchUpdate.seen.last_seen_msg_id : null;
       let oldLastSeenMsgId = oldMatch.seen ? oldMatch.seen.last_seen_msg_id : null;
       var localUser = store.profile.data;
@@ -113,7 +105,6 @@ class PollService extends React.Component {
 
   addToUnreadMessagesBadge = (mtch) => {
     let header = BeanContextAware.get('header1');
-  //  console.log(mtch);
     if (header) {
       header.addMsgMatch(mtch)
     }
@@ -137,7 +128,8 @@ class PollService extends React.Component {
 
       this.markLastUneadMessages(store, data);
 
-      this.state.last_activity_date = data.data.last_activity_date;
+      /// merge global (updates polling) last_activity_date:
+      this.last_activity_date = data.data.last_activity_date;
 
       if (chat1) {
         chat1.triggerRenderFunc();
@@ -164,9 +156,13 @@ class PollService extends React.Component {
     this.pollInterval = seconds
     this.pollIntervalObj = setInterval(
       () => {
-        this.getUpdates(this.state.last_activity_date);
+        this.getUpdates(this.getLastActivityDate());
       }, seconds
     );
+  }
+
+  getLastActivityDate = () => {
+    return this.last_activity_date;
   }
 
   stopUpdatePoll = () => {

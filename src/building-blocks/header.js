@@ -29,7 +29,7 @@ class Header extends React.Component {
     this.setState({
       msgMatches: msgMatches
     })
-    this.startFlashTabTitle();
+    this.toggleFlashTabTitle();
   }
 
   findInMsgMatches = (mtch) => {
@@ -49,7 +49,7 @@ class Header extends React.Component {
       this.setState({
         msgMatches: msgMatches
       })
-      this.stopFlashTabTitle();
+      this.toggleFlashTabTitle();
     }
   }
 
@@ -65,27 +65,30 @@ class Header extends React.Component {
     BeanContextAware.remove(this);
   }
 
-  startFlashTabTitle = () => {
-    if (this.state.msgMatches.length > 0) {
-     // return;
+  toggleFlashTabTitle = () => {
+    if (this.state.msgMatches.length > 0 && !this.flashIntervalObj) {
+      this.startFlashTabTitle();
+    } else {
+      this.stopFlashTabTitle();
     }
-    this.stopFlashTabTitle();
+  }
+
+  startFlashTabTitle = () => {
     this.flashIntervalObj = setInterval(
       () => {
-        if ( this.initialTitle === document.title) {
-          document.title = this.state.msgMatches.length + " "+ this.initialTitle;
+        if (this.initialTitle === document.title) {
+          document.title = "(" + this.state.msgMatches.length + ") " + this.initialTitle;
         } else {
-          document.title = this.initialTitle;  
+          document.title = this.initialTitle;
         }
-      }, 2000
+      }, 1000
     );
   }
 
   stopFlashTabTitle = () => {
-    //if (this.flashIntervalObj && this.state.msgMatches.length == 0) {
-      clearTimeout(this.flashIntervalObj);
-      document.title = this.initialTitle;  
-    //}
+    clearTimeout(this.flashIntervalObj);
+    this.flashIntervalObj = null;
+    document.title = this.initialTitle;
   }
 
 

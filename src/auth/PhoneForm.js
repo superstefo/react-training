@@ -38,15 +38,24 @@ class PhoneForm extends React.Component {
     let { history } = this.props;
     let phone = this.state.phone;
 
+    let ls = CashService.getLocalStorage();
     if (this.isToUseCurrentSession(phone)) {
+      console.log("use current session:");
+      CashService[Const.PHONE_HEADER_NAME] = phone;
+      CashService[Const.AUTH_HEADER_NAME] = ls[phone][Const.AUTH_HEADER_NAME];
       AppSettingsService.applySettingsFromLocalStorage();
       PollService.checkIfLogged({}, () => { history.push('/user') }, () => { history.push('/confirm-token') });
     } else {
+      //do not use current session:
+      console.log("do not use current session:");
+      CashService[Const.PHONE_HEADER_NAME] = phone;
+
+      delete ls[phone][Const.AUTH_HEADER_NAME];
+      CashService.setLocalStorage(ls);
       AppSettingsService.applySettingsFromLocalStorage();
       this.sendPhoneNum(phone);
     }
   }
-
 
   isToUseCurrentSession = (phone) => {
     let ls = CashService.getLocalStorage();
@@ -55,17 +64,8 @@ class PhoneForm extends React.Component {
       return false;
     }
 
-    let isToUseCurrent = window.confirm('A session with this phone numer: ' + phone + ' already exists.\nUse current session?')
-
-    if (isToUseCurrent) {
-      console.log("use current session:");
-      CashService[Const.PHONE_HEADER_NAME] = phone;
-      CashService[Const.AUTH_HEADER_NAME] = ls[phone][Const.AUTH_HEADER_NAME];
-    } else {
-      //do not use current session:
-      console.log("do not use current session:");
-      CashService[Const.PHONE_HEADER_NAME] = phone;
-    }
+    let isToUseCurrent = window.confirm('A session with this phone numer: ' + phone
+      + ' already exists.\nUse current session?');
     return isToUseCurrent;
   }
 

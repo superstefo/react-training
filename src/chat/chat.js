@@ -58,7 +58,6 @@ class Chat extends React.Component {
         transformedMsg.mine = (<MessageWrapper msg={msg} />);
       }
     }
-
     return result;
   }
 
@@ -79,12 +78,18 @@ class Chat extends React.Component {
 
   sendSeen = (allMsgs) => {
     if (!this.state.lastSeenMsg) {
-      console.log("empty value...");
+      console.log("empty value of 'lastSeenMsg'..");
     }
 
-    for (let ind = allMsgs.length - 1; 0 <= ind; ind--) {
+    //clear notification for new friends, who have not send message:
+    if (!allMsgs || !allMsgs.length) {
+      this.deleteFromHeader();
+      return;
+    }
 
-      let msgWrapped = allMsgs[ind];
+    for (let index = allMsgs.length - 1; 0 <= index; index--) {
+
+      let msgWrapped = allMsgs[index];
 
       if (!msgWrapped || !msgWrapped.theirs) {
         continue;
@@ -130,18 +135,13 @@ class Chat extends React.Component {
       }
     ]
     var reorderedMessages = this.prepareMessages(this.state.messages, this.state.friendId, this.state.numberMsgShown);
+
     this.sendSeen(reorderedMessages);
     let inputProps = {
       data: this.state.store,
       friendId: this.state.match.person._id,
       triggerRenderFunc: this.triggerRenderFunc
     }
-    const tableStyle = {
-      width: '100%',
-      height: '30%',
-      //  backgroundColor: '#dadada'
-    };
-
 
     return (
       <div><Select getStyles={this.inputStyles} />
@@ -154,16 +154,7 @@ class Chat extends React.Component {
             showPagination={false}
             bordered={false}
             sortable={false}
-            style={tableStyle}
-            getTdProps={(state, rowInfo, column, instance) => {
-              return {
-                onClick: (e, handleOriginal) => {
-                  if (handleOriginal) {
-                    handleOriginal()
-                  }
-                }
-              }
-            }}
+
           />
           <div>
             <EnterText {...inputProps} />

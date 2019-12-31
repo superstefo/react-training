@@ -39,7 +39,7 @@ class EnterText extends React.Component {
         for (let index = 0; index < matches.length; index++) {
             const oneMatch = matches[index];
 
-            if (oneMatch.person._id == this.state.friendId) {
+            if (oneMatch.person._id === this.state.friendId) {
                 let newMsgObj = this.createMessage(oneMatch, this.state.store);
                 AjaxService.doPost(Const.URLS.SEND_MESSAGE, newMsgObj, {})
                 store.update.data.matches[index].messages.push(newMsgObj);

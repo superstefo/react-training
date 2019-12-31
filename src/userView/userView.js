@@ -1,10 +1,8 @@
 import React from 'react';
-import ReactDependentScript from "react-dependent-script";
 import LocationPicker from "react-leaflet-location-picker";
 import {withRouter}from 'react-router-dom'
 import "react-table/react-table.css"
 import ReactTable from "react-table";
-import BtnLink from "../building-blocks/BtnLink";
 import Info from "../building-blocks/Info";
 import PicWrapper from "../building-blocks/PicWrapper";
 import AjaxService from '../services/AjaxService'

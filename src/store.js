@@ -1,6 +1,5 @@
 import { createStore, combineReducers } from 'redux';
 import { reducer as reduxFormReducer } from 'redux-form';
-import Const from './services/Constants';
 
 const reducer = combineReducers({
   form: reduxFormReducer // mounted under "form"
@@ -21,37 +20,33 @@ let addToFunctionsQ = (funct) => {
 
 store.getStore = () => {
   // add dummy function as a placeholder
-  addToFunctionsQ(() => {});
+  addToFunctionsQ(() => { });
   return store;
 }
 
 store.getMatchById = (id) => {
   if (!id) {
-    throw "'id' is not allowed to be: " + id
+    throw new Error("'id' is not allowed to be: " + id);
   }
   let matches = store.getStore().update.data.matches
   for (var i = 0; i < matches.length; i++) {
-    if (id == matches[i]._id) {
+    if (id === matches[i]._id) {
       return matches[i];
     }
-
   }
   return null;
 }
 
 store.addToStore = (key, value) => {
-  if (!key ||  typeof (key) != 'string') {
-    throw "Only objects of type 'string' are allowed!"
+  if (!key || typeof (key) != 'string') {
+    throw new Error("Only objects of type 'string' are allowed!");
   }
 
   addToFunctionsQ(
-    function() {
-      store[key]=value;
+    function () {
+      store[key] = value;
     }
   );
-
 }
-
-
 
 export default store;
