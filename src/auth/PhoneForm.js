@@ -49,10 +49,11 @@ class PhoneForm extends React.Component {
       //do not use current session:
       console.log("do not use current session:");
       CashService[Const.PHONE_HEADER_NAME] = phone;
-
-      delete ls[phone][Const.AUTH_HEADER_NAME];
-      CashService.setLocalStorage(ls);
-      AppSettingsService.applySettingsFromLocalStorage();
+      if (ls && ls[phone] && ls[phone][Const.AUTH_HEADER_NAME]) {
+        delete ls[phone][Const.AUTH_HEADER_NAME];
+        CashService.setLocalStorage(ls);
+        AppSettingsService.applySettingsFromLocalStorage();
+      } 
       this.sendPhoneNum(phone);
     }
   }

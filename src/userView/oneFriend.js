@@ -17,7 +17,6 @@ class OneFriend extends React.Component {
     )
     let person = [{
       image: (<PicWrapper photos={args.person.photos} />),
-    //  person: args.person,
       info: (<InfoWithButton />)
     }]
 
@@ -45,11 +44,6 @@ class OneFriend extends React.Component {
             sortable={false}
             defaultPageSize={1}
             showPagination={false}
-            style={{
-              width: '100%',
-              height: '30%',
-              //  backgroundColor: '#dadada'
-            }}
           />
           <br />
         </div>

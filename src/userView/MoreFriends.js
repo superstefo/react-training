@@ -1,9 +1,7 @@
 import React from 'react';
-//import store from '../store'
-//import { Link } from "react-router-dom";
 import "react-table/react-table.css"
 import ReactTable from "react-table";
-import AjaxService from '../services/AjaxService'
+import AjaxService from '../services/AjaxService';
 import Const from '../services/Constants';
 import PicWrapper from "../building-blocks/PicWrapper";
 import BtnLink from "../building-blocks/BtnLink";
@@ -27,7 +25,6 @@ class MoreFriends extends React.Component {
     let promise = AjaxService.doGet(Const.URLS.NEW_FRIENDS, {})
     promise.then((data) => {
       let allFr = data.data.results;
-      //    console.log(allFr);
       this.setState({ allFr: allFr });
     }).catch((e) => {
       console.log(e);
@@ -37,14 +34,12 @@ class MoreFriends extends React.Component {
   pass = (userId) => {
     let promise = AjaxService.doGet(Const.URLS.PASS + userId, {})
     promise.then((data) => {
-      console.log(data);
     }).catch((e) => {
       console.log(e);
     })
   }
 
   like = (userId) => {
-    console.log(userId);
     let promise = AjaxService.doGet(Const.URLS.LIKE + userId, {})
     promise.then((data) => {
       console.log(data);
@@ -110,10 +105,6 @@ class MoreFriends extends React.Component {
             defaultPageSize={persons.length}
             pageSize={persons.length}
             showPagination={false}
-            style={{
-              width: '100%',
-              height: '30%',
-            }}
           />
           <br />
         </div>

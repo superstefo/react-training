@@ -9,6 +9,7 @@ const Const = {
     },
     UPDATES: ipAdress + 'updates',
     PROFILE: ipAdress + 'profile',
+    USER: ipAdress + 'user/',
     SEND_MESSAGE: ipAdress + 'postMessage',
     SEND_LOCATION: ipAdress + 'location',
     NEW_FRIENDS: ipAdress + 'new-friends',

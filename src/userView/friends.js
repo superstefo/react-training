@@ -1,8 +1,10 @@
 import React from 'react';
-import store from '../store'
-import { Link } from "react-router-dom";
+import store from '../store';
+import AjaxService from '../services/AjaxService';
+import Const from '../services/Constants';
 import "react-table/react-table.css"
 import ReactTable from "react-table";
+import { withRouter } from 'react-router-dom';
 
 class Friends extends React.Component {
   constructor(props) {
@@ -30,6 +32,21 @@ class Friends extends React.Component {
     return arrToBeSorted;
   }
 
+  getMoreData = (args) => {
+    let userId = args.data.person._id;
+    let promise = AjaxService.doGet(Const.URLS.USER + userId, {});
+    promise.then((data) => {
+      args.data.user = data.data.results;
+      args.data.person.distance_mi = data.data.results.distance_mi;
+      this.props.history.push({
+        pathname: '/friend',
+        state: { args: args.data }
+      })
+    }).catch((e) => {
+      console.error(e);
+    })
+  }
+
   render() {
     let dt = store.getStore();
 
@@ -39,9 +56,7 @@ class Friends extends React.Component {
 
     var Pic = (arg) => (
       <div className="container-fluid px-0">
-        <Link to={{ pathname: "/friend", state: { args: arg.data } }}>
-          <img src={arg.src} alt="new" className='img-fluid w-100' />
-        </Link>
+          <img src={arg.src} alt="new" className='img-fluid w-100' onClick={() => this.getMoreData(arg)}/>
       </div>
     )
 
@@ -83,11 +98,6 @@ class Friends extends React.Component {
             pageSize={persons.length}
             sortable={false}
             showPagination={false}
-            style={{
-              width: '100%',
-              height: '30%',
-              //  backgroundColor: '#dadada'
-            }}
           />
           <br />
         </div>
@@ -95,4 +105,5 @@ class Friends extends React.Component {
     )
   }
 }
-export default Friends;
+
+export default withRouter(Friends);
