@@ -13,6 +13,8 @@ import AppSettingsService from '../settings/AppSettingsService';
 class Chat extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
+    
     let match = props.location.state.data;
     let friendId = match.person._id;
     let lastSeenMsg = match.seen ? match.seen.last_seen_msg_id : null;

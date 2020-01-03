@@ -1,7 +1,8 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import BeanContextAware from '../services/BeanContextAware'
-
+import BeanContextAware from '../services/BeanContextAware';
+import MatchDecoratorService from '../services/MatchDecoratorService';
+import { withRouter } from 'react-router-dom';
 
 class Header extends React.Component {
   constructor(props) {
@@ -91,7 +92,22 @@ class Header extends React.Component {
     document.title = this.initialTitle;
   }
 
+  getUserData = (match) => {
+    let clBack = (match) => {
+         this.props.history.push({
+         pathname: '/friend',
+         state: { args: match }
+       })
+     }
+     MatchDecoratorService.getUserData(match, clBack);
+   }
 
+   goChat = (match) => {
+      this.props.history.push({
+        pathname: '/chat',
+        state: { data: match }
+      })
+   }
 
   render() {
     let Btn = (props) => (
@@ -103,17 +119,27 @@ class Header extends React.Component {
         </NavLink>
       </div>
     )
+    let isVisibleNewMsgs = this.state.msgMatches.length ? true : false;
 
-    let BtnBadge = (props) => (
-      <div>
-        <Link to={{ pathname: props.pathname, state: { data: props.data } }}>
-          <button type="button" className="btn btn-primary" >
-            {props.label} new: {this.state.msgMatches.length}
-          </button>
-        </Link>
-      </div>
-    )
-    let isVisibleNewMsgs = this.state.msgMatches.length ? true : false
+    let BtnBadge = (props) => {
+      let mtch = props.data;
+      if (!mtch.messages || mtch.messages.length == 0) {
+        return (
+          <div>
+            <button onClick={() => this.getUserData(mtch)} className="btn btn-primary" > 
+            New: {this.state.msgMatches.length} </button>
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            <button onClick={() => this.goChat(mtch)} className="btn btn-primary" > 
+            New: {this.state.msgMatches.length} </button>
+          </div>
+        )
+      }
+    }
+
     return (
       <div className="text-center ">
         <nav>
@@ -124,8 +150,7 @@ class Header extends React.Component {
             {this.state.isVisible ? <Btn to="/more-pals" label="More Pals" /> : null}
             {this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null}
             {this.state.isVisible ? <Btn to="/logout" label="|->" /> : null}
-            {(this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge pathname="/chat" data={this.state.msgMatches[0]} label="Chat" /> : null}
-
+            {(this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
           </div>
         </nav>
       </div>
@@ -133,4 +158,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default withRouter(Header);

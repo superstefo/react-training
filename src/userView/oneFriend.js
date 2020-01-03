@@ -8,7 +8,7 @@ import PicWrapper from "../building-blocks/PicWrapper";
 class OneFriend extends React.Component {
 
   render() {
-    const { args } = this.props.location.state;
+    let { args } = this.props.location.state;
     let InfoWithButton = () => (
       <div>
         <BtnLink label="Chat" data={args} pathname="/chat" />

@@ -122,7 +122,8 @@ class PollService extends React.Component {
       if (store.update) {
         this.mergeUpdates(store, data);
       } else {
-        store.addToStore('update', null);
+        console.log(data);
+        
         store.addToStore('update', data);
       }
 
