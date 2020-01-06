@@ -16,7 +16,7 @@ class OneFriend extends React.Component {
       </div>
     )
     let person = [{
-      image: (<PicWrapper photos={args.person.photos} />),
+      image: (<PicWrapper photos={args.person.photos}  name={args.person.name}/>),
       info: (<InfoWithButton />)
     }]
 

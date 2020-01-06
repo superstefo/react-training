@@ -21,6 +21,7 @@ class AppSettingsService extends React.Component {
     ]
 
     this.updatePollInterval = 20000;
+    this.isToShowPhotos = true;
   }
 
   applySettingsFromLocalStorage = () => {

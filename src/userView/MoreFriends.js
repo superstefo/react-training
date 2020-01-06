@@ -63,14 +63,14 @@ class MoreFriends extends React.Component {
       )
     }
 
-    let Pic = args => (<PicWrapper photos={args.photos} />)
+    let Pic = args => (<PicWrapper photos={args.photos} name={args.name}/>)
 
     let allFr = this.state.allFr;
 
     let persons = allFr.map(one => {
       let obj = {
         info: (<InfoWrapper person={one} />),
-        image: (<Pic photos={one.photos} />)
+        image: (<Pic photos={one.photos} name={one.name} />)
       }
       return { ...obj };
     });

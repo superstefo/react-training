@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import BeanContextAware from '../services/BeanContextAware';
 import MatchDecoratorService from '../services/MatchDecoratorService';
 import { withRouter } from 'react-router-dom';
@@ -25,8 +25,8 @@ class Header extends React.Component {
     if (pos > -1) { // if found - do not add it again
       return;
     }
-    let msgMatches = this.state.msgMatches
-    this.state.msgMatches.push(mtch)
+    let msgMatches = this.state.msgMatches;
+    this.state.msgMatches.push(mtch);
     this.setState({
       msgMatches: msgMatches
     })

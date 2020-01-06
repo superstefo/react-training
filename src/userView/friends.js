@@ -1,9 +1,11 @@
 import React from 'react';
 import store from '../store';
-import AjaxService from '../services/AjaxService';
+//import AjaxService from '../services/AjaxService';
+import AppSettingsService from '../settings/AppSettingsService';
 import MatchDecoratorService from '../services/MatchDecoratorService';
 //import Const from '../services/Constants';
-import "react-table/react-table.css"
+import "react-table/react-table.css";
+import OnePicWrapper from '../building-blocks/OnePicWrapper';
 import ReactTable from "react-table";
 import { withRouter } from 'react-router-dom';
 
@@ -33,9 +35,9 @@ class Friends extends React.Component {
     return arrToBeSorted;
   }
 
-  getUserData = (match) => {
-   let clBack = (match) => {
-        this.props.history.push({
+  getUserData = (event, match) => {
+    let clBack = (match) => {
+      this.props.history.push({
         pathname: '/friend',
         state: { args: match }
       })
@@ -50,20 +52,20 @@ class Friends extends React.Component {
 
     this.applySorting(friends, this.state.sortingFunc);
 
-    let Pic = (arg) => (
-      <div className="container-fluid px-0">
-          <img src={arg.src} alt="new" className='img-fluid w-100' onClick={() => this.getUserData(arg.match)}/>
-      </div>
-    )
-
     let persons = friends.map(match => {
       let prsn = match.person
       let obj;
       if (prsn) {
-       obj = {
+        let picProps = {
+          condition: AppSettingsService.isToShowPhotos,
+          src: prsn.photos[0].url,
+          match: match,
+          changeHandler: this.getUserData
+        }
+      obj = {
         firstName: prsn.name,
         lastName: prsn.birth_date,
-        image: (<Pic src={prsn.photos[0].url} match={match} />)
+        image: (<OnePicWrapper { ...picProps}/>)
       }
     }
       return { ...obj };

@@ -33,7 +33,7 @@ render() {
   }
 
   let person = [{
-    image: (<PicWrapper photos={profile.photos} />),
+    image: (<PicWrapper photos={profile.photos} name={profile.name}/>),
     info: (<Info person={profile}/>)
   }]
 
