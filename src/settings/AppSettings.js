@@ -48,8 +48,3 @@ class AppSettings extends React.Component {
   }
 }
 export default AppSettings;
-
-// this.changeHandler = props.changeHandler;
-// this.condition = props.condition;
-// this.defaultChecked = props.defaultChecked
-// this.label = props.label;

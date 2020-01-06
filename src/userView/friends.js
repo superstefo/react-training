@@ -1,9 +1,7 @@
 import React from 'react';
 import store from '../store';
-//import AjaxService from '../services/AjaxService';
 import AppSettingsService from '../settings/AppSettingsService';
 import MatchDecoratorService from '../services/MatchDecoratorService';
-//import Const from '../services/Constants';
 import "react-table/react-table.css";
 import OnePicWrapper from '../building-blocks/OnePicWrapper';
 import ReactTable from "react-table";

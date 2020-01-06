@@ -126,7 +126,7 @@ class Header extends React.Component {
       if (!mtch.messages || mtch.messages.length == 0) {
         return (
           <div>
-            <button onClick={() => this.getUserData(mtch)} className="btn btn-primary" > 
+            <button onClick={() =>{ this.removeMsgMatch(mtch); this.getUserData(mtch)}} className="btn btn-primary" > 
             New: {this.state.msgMatches.length} </button>
           </div>
         )

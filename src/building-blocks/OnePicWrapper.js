@@ -1,5 +1,4 @@
 import React from 'react';
-import AppSettingsService from '../settings/AppSettingsService';
 
 class OnePicWrapper extends React.Component {
   constructor(props) {
