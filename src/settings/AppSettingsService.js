@@ -24,51 +24,42 @@ class AppSettingsService extends React.Component {
     this.isToShowPhotos = true;
   }
 
-  applySettingsFromLocalStorage = () => {
-    let ls = CashService.getLocalStorage();
-    let phone = CashService[Const.PHONE_HEADER_NAME];
-
-    if (!ls[phone]) {
-      return;
+  applyDesignSettings = () => {
+    let textColor = this.getSetting("textColor") || this.textColors[0]?.class;
+    if (textColor) {
+      console.log(textColor);
+      
+      this.applyClass(document.body, this.textColors, textColor);
     }
 
-    let textColor = this.getSetting("textColor") || this.textColors[0];
-    this.applyClass(document.body, this.textColors, textColor);
-
-    let bgColor = this.getSetting("bgColor") || this.bgColors[0];
-    this.applyClass(document.body, this.bgColors, bgColor);
+    let bgColor = this.getSetting("bgColor") || this.bgColors[0].class;
+    if (bgColor) {
+      this.applyClass(document.body, this.bgColors, bgColor);
+    }
   }
 
   persistSetting = (settingName, settingObject) => {
-    let ls = CashService.getLocalStorage();
-    let phone = CashService[Const.PHONE_HEADER_NAME];
-
-    if (!phone || !ls[phone]) {
-      return;
-    }
-
-    let settings = ls[phone]["settings"];
+    let settings = CashService.getSettings();
     if (!settings) {
       settings = {};
+      CashService.setSettings(settings);
     }
-
     settings[settingName] = settingObject;
-    ls[phone]["settings"] = settings;
-    CashService.setLocalStorage(ls);
+    CashService.persistSettings(settings);
   }
 
   getSetting = (settingName) => {
-    let ls = CashService.getLocalStorage();
-    let phone = CashService[Const.PHONE_HEADER_NAME];
+    let settings = CashService.getSettings();
+    // let phone = CashService[Const.PHONE_HEADER_NAME];
 
-    if (!phone || !ls[phone]) {
-      return;
-    }
-    let settings = ls[phone]["settings"];
-    if (!settings) {
-      return;
-    }
-    return settings[settingName];
+    // if (!phone || !ls[phone]) {
+    //   return;
+    // }
+    // let settings = ls[phone]["settings"];
+    // if (!settings) {
+    //   return;
+    // }
+    return settings?.[settingName];
   }
 
   applyClass = (element, colors, selectedColor) => {

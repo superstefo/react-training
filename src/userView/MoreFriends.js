@@ -2,6 +2,7 @@ import React from 'react';
 import "react-table/react-table.css"
 import ReactTable from "react-table";
 import AjaxService from '../services/AjaxService';
+import NotesService from '../notes/NotesService';
 import Const from '../services/Constants';
 import PicWrapper from "../building-blocks/PicWrapper";
 import BtnLink from "../building-blocks/BtnLink";
@@ -57,6 +58,8 @@ class MoreFriends extends React.Component {
           <div>
             <button type="button" className="btn btn-success" onClick={() => this.like(person._id)}> Like </button>
             <button type="button" className="btn btn-danger ml-2" onClick={() => this.pass(person._id)}> Pass </button>
+            <button type="button" className="btn btn-primary ml-2" onClick={() => NotesService.saveOneBookmark(person._id)}> Save </button>
+            <button type="button" className="btn btn-danger ml-2" onClick={() => NotesService.removeOneBookmark(args.person._id)}> Un-Bookmark </button>
           </div>
           <Info person={person} />
         </div>

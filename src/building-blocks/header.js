@@ -149,6 +149,7 @@ class Header extends React.Component {
             {this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null}
             {this.state.isVisible ? <Btn to="/more-pals" label="More Pals" /> : null}
             {this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null}
+            {true ? <Btn to="/notes" label="Notes" /> : null}
             {this.state.isVisible ? <Btn to="/logout" label="|->" /> : null}
             {(this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
           </div>

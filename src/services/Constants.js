@@ -16,7 +16,14 @@ const Const = {
     SEND_SEEN: ipAdress + 'seen/',
     FAST_MATCH: ipAdress + 'fast-match',
     LIKE: ipAdress + 'like/',
-    PASS: ipAdress + 'pass/'
+    PASS: ipAdress + 'pass/',
+
+
+    //// storage api:
+    STORAGE: ipAdress + 'storage/',
+    STORAGE_TOKEN: ipAdress + 'storage/token/',
+    STORAGE_BOOKMARKS: ipAdress + 'storage/bookmarks/',
+    STORAGE_SETTINGS: ipAdress + 'storage/settings/'
   },
   LOCAL_CASH_VAR_NAME: '__TnDr__',
   AUTH_HEADER_NAME: 'X-Auth-Token',

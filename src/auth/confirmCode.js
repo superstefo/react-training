@@ -23,12 +23,12 @@ class ConfirmCode extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    let phoneNumber = CashService[Const.PHONE_HEADER_NAME];
+    let phoneNumber = CashService.getPhone();
     if (!phoneNumber) {
       throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
     }
     let { history } = this.props;
-    let ls = CashService.getLocalStorage();
+
     let promise = AjaxService.doGet(Const.URLS.AUTH.GET_TOKEN + this.state.confirmToken + "/" + phoneNumber);
 
     promise.then(function (value) {
@@ -36,18 +36,13 @@ class ConfirmCode extends React.Component {
       if (value && value.status === 200 && value.data) {
         let token = value.data[Const.AUTH_HEADER_NAME];
 
-        if (!ls[phoneNumber]) {
-          ls[phoneNumber] = {};
-        }
-
         let headers = {
           [Const.AUTH_HEADER_NAME] : token
         }
 
         let onSuccess = function() {
-          ls[phoneNumber][Const.AUTH_HEADER_NAME] = token;
-          CashService.setLocalStorage(ls);
-          CashService[Const.AUTH_HEADER_NAME] = token;
+          CashService.setToken(token);
+          CashService.persistToken(token);
           history.push('/user');
         }
 

@@ -1,49 +1,94 @@
 import React from 'react';
 import Const from './Constants';
+import AjaxService from './AjaxService';
 
 class CashService extends React.Component {
 
   [Const.PHONE_HEADER_NAME] = null;
   [Const.AUTH_HEADER_NAME] = null;
+  settings = {bgColor: "bg-dark", textColor: "text-white"};
+  bookmarks = [];
 
-  lsobj = (() => {
-    let cashVarName = Const.LOCAL_CASH_VAR_NAME;
-    let ls = localStorage.getItem(cashVarName);
-    if (!ls) {
-      ls = {}
-      localStorage.setItem(cashVarName, JSON.stringify(ls));
-      return ls;
-    }
-    let result;
-    try {
-      result = JSON.parse(ls);
-    } catch (error) {
-      console.log(error);
-      localStorage.removeItem(cashVarName);
-    }
-    return result;
-  })();
+  cashStructureTemplate = {
+    settings: this.settings, 
+    [Const.AUTH_HEADER_NAME]: {token: this[Const.AUTH_HEADER_NAME]},
+    bookmarks: this.bookmarks
+  }
+  
+  persistAll = function (phone, obj) {
+    console.log(obj);
+    
+    let promise = AjaxService.doPost(Const.URLS.STORAGE + phone, {
+      'json': JSON.stringify(obj)
+    }, {});
 
-  getLocalStorage = () => {
-    return this.lsobj;
+    // promise.then((data) => {
+    //   console.log(data);
+    // }).catch((e) => {
+    //   console.error(e);
+    // })
+  }
+
+  loadAll = function (phone) {
+    return AjaxService.doGet(Const.URLS.STORAGE + phone, {});
+  }
+
+  getPhone = () => {
+    return this[Const.PHONE_HEADER_NAME];
+  };
+  setPhone = (phone) => {
+    this[Const.PHONE_HEADER_NAME] = phone;
   };
 
-  setLocalStorage = (obj) => {
-    if (typeof obj !== 'object') {
-      throw new Error("'obj' must be of type 'object'! ");
-    }
-    this.private_____persistLocalStorage(obj);
-    this.lsobj = obj;
+  /// token:
+  getToken= () => {
+    return this[Const.AUTH_HEADER_NAME];
   };
 
-  parseLocalStorage = () => {
-    let ls = localStorage.getItem(Const.LOCAL_CASH_VAR_NAME);
-    return JSON.parse(ls);
+  setToken = (token) => {
+    this[Const.AUTH_HEADER_NAME] = token;
   };
 
-  private_____persistLocalStorage = (obj) => {
-    localStorage.setItem(Const.LOCAL_CASH_VAR_NAME, JSON.stringify(obj));
+  persistToken(token){
+    AjaxService.doPut(Const.URLS.STORAGE_TOKEN + this.getPhone(), {
+      'json': JSON.stringify({"token": token})
+    });
+  }
+
+  //// settings:
+  getSettings = () => {
+    return this.settings;
   };
+
+  setSettings = (settings) => {
+    this.settings = settings;
+  };
+
+  persistSettings = (settings) => {
+    AjaxService.doPut(Const.URLS.STORAGE_SETTINGS + this.getPhone(), {
+      'json': JSON.stringify(settings)
+    });
+  }
+
+  getBookmarks() {
+    return this.bookmarks;
+  }
+
+  setBookmarks(bookmarks) {
+    this.bookmarks = bookmarks;
+  }
+
+  persistBookmarks = function (arr) {
+    let promise = AjaxService.doPost(Const.URLS.STORAGE_BOOKMARKS + this.getPhone(), {
+      'json': JSON.stringify(arr)
+    }, {});
+
+    promise.then((data) => {
+      console.log(data);
+    }).catch((e) => {
+      console.error(e);
+    })
+  }
 
 }
 

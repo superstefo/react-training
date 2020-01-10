@@ -19,55 +19,71 @@ class PhoneForm extends React.Component {
     this.state.phone = event.target.value;
   };
 
-  sendPhoneNum = function (phone) {
+  phoneNumAuth = function (phone) {
     let promise = AjaxService.doPost(Const.URLS.AUTH.PHONE, {
       'phone': phone
     }, {});
 
     promise.then(() => {
-      CashService[Const.PHONE_HEADER_NAME] = phone;
+      CashService.setPhone(phone);
       this.props.history.push('/confirm-token');
     }).catch((e) => {
-      CashService[Const.PHONE_HEADER_NAME] = null;
+      CashService.setPhone(null);
       console.error(e);
     })
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
-    let { history } = this.props;
-    let phone = this.state.phone;
-
-    let ls = CashService.getLocalStorage();
-    if (this.isToUseCurrentSession(phone)) {
-      console.log("use current session:");
-      CashService[Const.PHONE_HEADER_NAME] = phone;
-      CashService[Const.AUTH_HEADER_NAME] = ls[phone][Const.AUTH_HEADER_NAME];
-      AppSettingsService.applySettingsFromLocalStorage();
-      PollService.checkIfLogged({}, () => { history.push('/user') }, () => { history.push('/confirm-token') });
-    } else {
-      //do not use current session:
-      console.log("do not use current session:");
-      CashService[Const.PHONE_HEADER_NAME] = phone;
-      if (ls && ls[phone] && ls[phone][Const.AUTH_HEADER_NAME]) {
-        delete ls[phone][Const.AUTH_HEADER_NAME];
-        CashService.setLocalStorage(ls);
-        AppSettingsService.applySettingsFromLocalStorage();
-      } 
-      this.sendPhoneNum(phone);
-    }
+  ifNotLogged = (phone) => {
+    CashService.setToken(null);
+    this.phoneNumAuth(phone);
   }
 
-  isToUseCurrentSession = (phone) => {
-    let ls = CashService.getLocalStorage();
+  handleSubmit = event => {
+    event.preventDefault();
+ 
+    let phone = this.state.phone;
 
-    if (!ls[phone] || !ls[phone][Const.AUTH_HEADER_NAME]) {
-      return false;
+    let promise = CashService.loadAll(phone);
+    CashService.setPhone(phone);
+    promise.then((data) => {
+      console.log(data?.data?.result);
+
+      let settings = data?.data?.result?.settings;
+      if (settings) {
+        CashService.setSettings(settings);
+        AppSettingsService.applyDesignSettings();
+      }
+      let bookmarks = data?.data?.result?.bookmarks;
+      if (bookmarks) {
+        CashService.setBookmarks(bookmarks);
+      }
+      let authToken = data?.data?.result?.[Const.AUTH_HEADER_NAME]?.token;
+      this.processAuth(authToken, phone);
+    }).catch((e) => {
+      console.error(e);
+    })
+  }
+
+  processAuth = (authToken, phone) => {
+    if (authToken) {
+
+      let isToUseCurrent = window.confirm('A session with this phone numer: ' 
+          + phone + ' already exists.\nUse current session?');
+
+      if (isToUseCurrent) {
+        console.log("use current session:");
+        CashService.setToken(authToken);
+        PollService.checkIfLogged({},
+          () => { this.props.history.push('/user') },
+          () => {this.ifNotLogged(phone)});
+      } else {
+        this.phoneNumAuth(phone);
+      }
+
+    } else {
+      CashService.persistAll(phone, CashService.cashStructureTemplate);
+      this.phoneNumAuth(phone);
     }
-
-    let isToUseCurrent = window.confirm('A session with this phone numer: ' + phone
-      + ' already exists.\nUse current session?');
-    return isToUseCurrent;
   }
 
   render() {
