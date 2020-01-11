@@ -14,7 +14,7 @@ class OneFriend extends React.Component {
       <div>
         <BtnLink label="Chat" data={args} pathname="/chat" />
         <div className="mt-1">
-          <button type="button" className="btn btn-primary" onClick={() => this.save(args.person._id)}> Bookmark </button>
+          <button type="button" className="btn btn-primary" onClick={() => NotesService.saveOneBookmark(args.person._id)}> Bookmark </button>
           <button type="button" className="btn btn-danger ml-2" onClick={() => NotesService.removeOneBookmark(args.person._id)}> Un-Bookmark </button>
           <button type="button" disabled={true} className="btn btn-danger ml-2" onClick={() => NotesService.saveOneBookmark(args.person._id)}> Unfriend </button>
         </div>

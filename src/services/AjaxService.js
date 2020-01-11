@@ -17,7 +17,7 @@ class AjaxService extends React.Component {
   doPost = (url, data, headers) => {
     return this.execute('post', url, data, this.getHeaders(headers));
   };
-  
+
   doPut = (url, data, headers) => {
     return this.execute('put', url, data, this.getHeaders(headers));
   };

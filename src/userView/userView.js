@@ -1,6 +1,6 @@
 import React from 'react';
 import LocationPicker from "react-leaflet-location-picker";
-import {withRouter}from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import "react-table/react-table.css"
 import ReactTable from "react-table";
 import Info from "../building-blocks/Info";
@@ -19,38 +19,38 @@ class UserView extends React.Component {
       error: null,
     };
   }
-render() {
-  var profile = this.state.profile
+  render() {
+    var profile = this.state.profile
 
-  let pos = profile.pos ? [profile.pos.lat, profile.pos.lon] : [0,0]
+    let pos = profile.pos ? [profile.pos.lat, profile.pos.lon] : [0, 0]
 
-  let postLocation = (args) => {
-    let newMsgObj = {
-      lat: args[0],
-      lon: args[1]
+    let postLocation = (args) => {
+      let newMsgObj = {
+        lat: args[0],
+        lon: args[1]
+      }
+      AjaxService.doPost(Const.URLS.SEND_LOCATION, newMsgObj, {})
     }
-    AjaxService.doPost(Const.URLS.SEND_LOCATION, newMsgObj, {})
-  }
 
-  let person = [{
-    image: (<PicWrapper photos={profile.photos} name={profile.name}/>),
-    info: (<Info person={profile}/>)
-  }]
+    let person = [{
+      image: (<PicWrapper photos={profile.photos} name={profile.name} />),
+      info: (<Info person={profile} />)
+    }]
 
-  let present = [
-    {
-      columns: [
-        {
-          Header: "Photos",
-          accessor: "image"
-        },
-        {
-          Header: "Info",
-          accessor: "info"
-        }
-      ]
-    }
-  ]
+    let present = [
+      {
+        columns: [
+          {
+            Header: "Photos",
+            accessor: "image"
+          },
+          {
+            Header: "Info",
+            accessor: "info"
+          }
+        ]
+      }
+    ]
 
     let pointVals = [pos];
     const pointMode = {
@@ -61,53 +61,53 @@ render() {
           pointVals = [point]
           pointMode.control.values = [point];
           console.log(pointVals);
-            postLocation(point);
-          },
+          postLocation(point);
+        },
         onRemove: point =>
           console.log("I've just been clicked for removal :(", point)
       }
     };
 
-      const options = {
-        bindMap: true,
-        startPort: "default",
-        overlayAll: true,
-        showControls: false,
-        showInputs: false,
-        useDynamic: true,
-        pointMode:  pointMode,
-        precision: 6
+    const options = {
+      bindMap: true,
+      startPort: "default",
+      overlayAll: true,
+      showControls: false,
+      showInputs: false,
+      useDynamic: true,
+      pointMode: pointMode,
+      precision: 6
     };
 
-  return (
-    <div>
+    return (
       <div>
-        <ReactTable
-          data={person}
-          columns={present}
-          sortable={false}
-          defaultPageSize={1}
-          showPagination={false}
-          style={{
-            width: '100%',
-            height: '30%',
-            //  backgroundColor: '#dadada'
-          }}
-          getTdProps={(state, rowInfo, column, instance) => {
-            return {
-              onClick: (e, handleOriginal) => {
-                if (handleOriginal) {
-                  handleOriginal()
+        <div>
+          <ReactTable
+            data={person}
+            columns={present}
+            sortable={false}
+            defaultPageSize={1}
+            showPagination={false}
+            style={{
+              width: '100%',
+              height: '30%',
+              //  backgroundColor: '#dadada'
+            }}
+            getTdProps={(state, rowInfo, column, instance) => {
+              return {
+                onClick: (e, handleOriginal) => {
+                  if (handleOriginal) {
+                    handleOriginal()
+                  }
                 }
               }
-            }
-          }}
-        />
-        <br />
-      </div><LocationPicker {...options} />
-    </div>
-  )
-}
+            }}
+          />
+          <br />
+        </div><LocationPicker {...options} />
+      </div>
+    )
+  }
 }
 
 export default withRouter(UserView);

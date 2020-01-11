@@ -1,26 +1,10 @@
 import React from 'react';
 import store from '../store';
-// import PollService from '../services/PollService';
-// import SelectPollInterval from './SelectPollInterval';
-// import AppSettingsService from './AppSettingsService';
-// import SelectTextColor from './SelectTextColor';
-// import SelectBackgroundColor from './SelectBackgroundColor';
-// import Checkbox from './Checkbox';
-// import { withRouter } from 'react-router-dom'
-// import store from '../store'
-// import EnterText from './enterText'
-// import MessageWrapper from './messageWrapper'
-// import BeanContextAware from '../services/BeanContextAware'
-// import Select from './Select'
 import Const from '../services/Constants';
 import AjaxService from '../services/AjaxService';
 import CashService from '../services/CashService';
 
 class NotesService extends React.Component {
-  constructor(props) {
-    super(props);
- 
-  }
 
   sanitizeStore = function () {
     if (!store.bookmarked) {
@@ -71,34 +55,17 @@ class NotesService extends React.Component {
 
     promise.then((data) => {
       console.log(data);
-      
     }).catch((e) => {
-
       console.error(e);
     })
   }
-
-  // get = function () {
-    
-  //   let promise = AjaxService.doGet(Const.URLS.STORAGE, {});
-
-  //   promise.then((data) => {
-  //     console.log(data);
-      
-  //   }).catch((e) => {
-
-  //     console.error(e);
-  //   })
-  // }
 
   delete = function ( phone  = CashService.getPhone()) {
     let promise = AjaxService.doDelete(Const.URLS.STORAGE  + phone, {});
 
     promise.then((data) => {
       console.log(data);
-      
     }).catch((e) => {
-
       console.error(e);
     })
   }
