@@ -18,16 +18,22 @@ class FriendRequests extends React.Component {
       error: null,
     };
     this.abortController = new AbortController();
+    this.isMountedOk = true;
+  }
+
+  componentDidMount() {
+    this.isMountedOk = true;
+    this.getFriendRequests();
   }
 
   componentWillUnmount() {
-    this.abortController.abort()
+    this.isMountedOk = false;
   }
 
   getFriendRequests = () => {
     let promise = AjaxService.doGet(Const.URLS.FAST_MATCH, {})
     promise.then((data) => {
-      if (!data || !data.data || !data.data.data || !data.data.data.results) {
+      if (!this.isMountedOk || !data?.data?.data?.results) {
         return;
       }
 
@@ -39,9 +45,7 @@ class FriendRequests extends React.Component {
     })
   }
 
-  componentDidMount() {
-    this.getFriendRequests();
-  }
+
 
   render() {
     let Info = args => <div className="text-justify text-wrap"> {args.info} </div>;

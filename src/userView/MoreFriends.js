@@ -16,17 +16,25 @@ class MoreFriends extends React.Component {
       allFr: []
     };
     this.abortController = new AbortController();
+    this.isMountedOk = true;
   }
 
   componentDidMount() {
     this.getNewFriends();
+    this.isMountedOk = true;
+  }
+ 
+  componentWillUnmount() {
+    this.isMountedOk = false;
   }
 
   getNewFriends = () => {
     let promise = AjaxService.doGet(Const.URLS.NEW_FRIENDS, {})
     promise.then((data) => {
       let allFr = data.data.results;
-      this.setState({ allFr: allFr });
+      if ( this.isMountedOk) {
+        this.setState({ allFr: allFr });
+      }
     }).catch((e) => {
       console.log(e);
     })

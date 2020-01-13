@@ -17,7 +17,7 @@ class Header extends React.Component {
   }
 
   changeState = (obj) => {
-    this.setState(obj)
+    this.setState(obj);
   }
 
   addMsgMatch = (mtch) => {
@@ -69,7 +69,7 @@ class Header extends React.Component {
   toggleFlashTabTitle = () => {
     if (this.state.msgMatches.length > 0 && !this.flashIntervalObj) {
       this.startFlashTabTitle();
-    } else {
+    } else if (this.state.msgMatches.length = 0) {
       this.stopFlashTabTitle();
     }
   }
