@@ -28,14 +28,31 @@ class Chat extends React.Component {
       messages: match.messages
     };
     this.inputStyles = AppSettingsService.getInputStyleClasses;
+    this.isOnFocus = true;
+    this.isMountedOk = true;
+  }
+
+  onFocus = (ev) => {
+    this.isOnFocus = true;
+    this.deleteFromHeader();
+  }
+
+  onBlur = (ev) => {
+    this.isOnFocus = false;
   }
 
   componentDidMount() {
     BeanContextAware.add(this);
+    window.addEventListener("focus", this.onFocus);
+    window.addEventListener("blur", this.onBlur);
+    this.isMountedOk = true;
   }
 
   componentWillUnmount() {
     BeanContextAware.remove(this);
+    window.removeEventListener("focus", this.onFocus);
+    window.removeEventListener("blur", this.onBlur);
+    this.isMountedOk = false;
   }
 
   prepareMessages = (allMsgs, friendId, numberMsgShown) => {
@@ -67,11 +84,13 @@ class Chat extends React.Component {
   triggerRenderFunc = () => {
     let match = store.getMatchById(this.state.match._id)
     let lastSeenMsg = match.seen ? match.seen.last_seen_msg_id : null;
-    this.setState({
-      lastSeenMsg: lastSeenMsg,
-      match: match,
-      messages: match.messages
-    })
+    if (this.isMountedOk) {
+      this.setState({
+        lastSeenMsg: lastSeenMsg,
+        match: match,
+        messages: match.messages
+      })
+    }
   }
 
   changeState = (obj) => {
@@ -116,7 +135,7 @@ class Chat extends React.Component {
 
   deleteFromHeader = () => {
     let header = BeanContextAware.get('header1');
-    if (header) {
+    if (header && this.isOnFocus) {
       header.removeMsgMatch(this.state.match);
     }
   }
@@ -144,27 +163,33 @@ class Chat extends React.Component {
       friendId: this.state.match.person._id,
       triggerRenderFunc: this.triggerRenderFunc
     }
-
-    return (
-      <div><Select getStyles={this.inputStyles} />
-        <div>
-          <ReactTable
-            data={reorderedMessages}
-            columns={present}
-            defaultPageSize={reorderedMessages.length}
-            pageSize={reorderedMessages.length}
-            showPagination={false}
-            bordered={false}
-            sortable={false}
-
-          />
+    if (this.isMountedOk) {
+      return (
+        <div><Select getStyles={this.inputStyles} />
           <div>
-            <EnterText {...inputProps} />
+            <ReactTable
+              data={reorderedMessages}
+              columns={present}
+              defaultPageSize={reorderedMessages.length}
+              pageSize={reorderedMessages.length}
+              showPagination={false}
+              bordered={false}
+              sortable={false}
+  
+            />
+            <div>
+              <EnterText {...inputProps} />
+            </div>
+            <br />
           </div>
-          <br />
         </div>
+      )
+    } 
+    return (
+      <div>
       </div>
     )
+
   }
 }
 export default withRouter(Chat);

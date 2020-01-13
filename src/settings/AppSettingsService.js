@@ -50,15 +50,6 @@ class AppSettingsService extends React.Component {
 
   getSetting = (settingName) => {
     let settings = CashService.getSettings();
-    // let phone = CashService[Const.PHONE_HEADER_NAME];
-
-    // if (!phone || !ls[phone]) {
-    //   return;
-    // }
-    // let settings = ls[phone]["settings"];
-    // if (!settings) {
-    //   return;
-    // }
     return settings?.[settingName];
   }
 
