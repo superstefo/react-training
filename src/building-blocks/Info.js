@@ -2,6 +2,11 @@ import React from 'react';
 
 function Info(args) {
   let { person } = args;
+  if (!person) {
+    return (
+      <div> </div>
+    )
+  }
   let country = person.pos_info ? (person.pos_info.country ? person.pos_info.country.name : "") : "";
   let age = person.birth_date ? person.birth_date.substring(0, 4) : "";
   let city = person.pos_info ? (person.pos_info.city ? person.pos_info.city.name : "") : "";

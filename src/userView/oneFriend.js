@@ -5,24 +5,46 @@ import BtnLink from "../building-blocks/BtnLink";
 import Info from "../building-blocks/Info";
 import NotesService from '../notes/NotesService';
 import PicWrapper from "../building-blocks/PicWrapper";
+import CashService from '../services/CashService';
 
 class OneFriend extends React.Component {
+  constructor(props) {
+    super(props);
+    this.allBookmarks = null;
+  }
+
+  remove = (userId) => {
+    NotesService.removeBookmark(userId);
+  }
+
+  save = (userId) => {
+    NotesService.saveBookmark(userId);
+  }
+
+  isBookmarked = (userId) => {
+    return this.allBookmarks[userId] !== undefined && this.allBookmarks[userId] !== null;
+  }
 
   render() {
     let { args } = this.props.location.state;
+    this.allBookmarks = CashService.getBookmarksAsObject();
     let InfoWithButton = () => (
       <div>
         <BtnLink label="Chat" data={args} pathname="/chat" />
         <div className="mt-1">
-          <button type="button" className="btn btn-primary" onClick={() => NotesService.saveOneBookmark(args.person._id)}> Bookmark </button>
-          <button type="button" className="btn btn-danger ml-2" onClick={() => NotesService.removeOneBookmark(args.person._id)}> Un-Bookmark </button>
-          <button type="button" disabled={true} className="btn btn-danger ml-2" onClick={() => NotesService.saveOneBookmark(args.person._id)}> Unfriend </button>
+          {!this.isBookmarked(args.person._id) ? <button type="button" className="btn btn-success"
+            onClick={() => this.save(args.person._id)}> <span>&#9734;</span> </button> : null}
+
+          {this.isBookmarked(args.person._id) ? <button type="button" className="btn btn-danger"
+            onClick={() => this.remove(args.person._id)}> <span>&#9734;</span></button> : null}
+
+          <button type="button" disabled={true} className="btn btn-danger ml-2 float-right" onClick={this.isBookmarked}> Unlike </button>
         </div>
-        <Info person={args.person}/>
+        <Info person={args.person} />
       </div>
-    ) 
+    )
     let person = [{
-      image: (<PicWrapper photos={args.person.photos}  name={args.person.name}/>),
+      image: (<PicWrapper photos={args.person.photos} name={args.person.name} />),
       info: (<InfoWithButton />)
     }]
 

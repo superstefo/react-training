@@ -3,6 +3,7 @@ import "react-table/react-table.css"
 import ReactTable from "react-table";
 import AjaxService from '../services/AjaxService';
 import NotesService from '../notes/NotesService';
+import CashService from '../services/CashService';
 import Const from '../services/Constants';
 import PicWrapper from "../building-blocks/PicWrapper";
 import BtnLink from "../building-blocks/BtnLink";
@@ -15,26 +16,33 @@ class MoreFriends extends React.Component {
     this.state = {
       allFr: []
     };
-    this.abortController = new AbortController();
+    //  this.abortController = new AbortController();
     this.isMountedOk = true;
+    this.allBookmarks = null;
+  }
+
+  getBookmarksAsObject = () => {
+    this.allBookmarks = CashService.getBookmarksAsObject();
   }
 
   componentDidMount() {
-    this.getNewFriends();
+    this.getNewFriends(this.getBookmarksAsObject);
     this.isMountedOk = true;
   }
- 
+
   componentWillUnmount() {
     this.isMountedOk = false;
   }
 
-  getNewFriends = () => {
+  getNewFriends = (callBack) => {
     let promise = AjaxService.doGet(Const.URLS.NEW_FRIENDS, {})
     promise.then((data) => {
-      let allFr = data.data.results;
-      if ( this.isMountedOk) {
-        this.setState({ allFr: allFr });
+      let allFr = data?.data?.results;
+      if (!this.isMountedOk) {
+        return;
       }
+      callBack()
+      this.setState({ allFr: allFr });
     }).catch((e) => {
       console.log(e);
     })
@@ -57,6 +65,10 @@ class MoreFriends extends React.Component {
     })
   }
 
+  isBookmarked = (userId) => {
+    return this.allBookmarks[userId] !== undefined && this.allBookmarks[userId] !== null;
+  }
+
   render() {
     let InfoWrapper = (args) => {
       let { person } = args;
@@ -66,15 +78,18 @@ class MoreFriends extends React.Component {
           <div>
             <button type="button" className="btn btn-success" onClick={() => this.like(person._id)}> Like </button>
             <button type="button" className="btn btn-danger ml-2" onClick={() => this.pass(person._id)}> Pass </button>
-            <button type="button" className="btn btn-primary ml-2" onClick={() => NotesService.saveOneBookmark(person._id)}> Save </button>
-            <button type="button" className="btn btn-danger ml-2" onClick={() => NotesService.removeOneBookmark(args.person._id)}> Un-Bookmark </button>
+
+            {!this.isBookmarked(person?._id) ? <button type="button" className="btn btn-primary float-right ml-2"
+              onClick={() => NotesService.saveBookmark(person?._id)}> <span>&#9734;</span> </button> : null}
+            {this.isBookmarked(person?._id) ? <button type="button" className="btn btn-danger float-right ml-2"
+              onClick={() => NotesService.removeBookmark(person?._id)}> <span>&#9734;</span> </button> : null}
           </div>
           <Info person={person} />
         </div>
       )
     }
 
-    let Pic = args => (<PicWrapper photos={args.photos} name={args.name}/>)
+    let Pic = args => (<PicWrapper photos={args.photos} name={args.name} />)
 
     let allFr = this.state.allFr;
 
@@ -105,7 +120,7 @@ class MoreFriends extends React.Component {
       <div>
         <div className="text-justify text-center">
           <BtnLink label="Friend Requests" data={null} pathname="/pal-requests" />
-          <button type="button" className="btn btn-primary" onClick={this.getNewFriends}> Reload </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.getNewFriends(this.getBookmarksAsObject)}> Reload </button>
         </div>
 
         <div>

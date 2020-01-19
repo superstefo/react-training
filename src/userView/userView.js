@@ -13,16 +13,20 @@ class UserView extends React.Component {
     super(props);
 
     this.state = {
-      profile: this.props.data.profile.data,
+      profile: this.props?.data?.profile?.data,
       hits: [],
       isLoading: false,
       error: null,
     };
   }
   render() {
-    var profile = this.state.profile
-
-    let pos = profile.pos ? [profile.pos.lat, profile.pos.lon] : [0, 0]
+    var profile = this.state?.profile
+    if (!profile) {
+      return (
+        <div></div>
+      )
+    }
+    let pos = profile?.pos ? [profile.pos.lat, profile.pos.lon] : [0, 0]
 
     let postLocation = (args) => {
       let newMsgObj = {
@@ -88,20 +92,6 @@ class UserView extends React.Component {
             sortable={false}
             defaultPageSize={1}
             showPagination={false}
-            style={{
-              width: '100%',
-              height: '30%',
-              //  backgroundColor: '#dadada'
-            }}
-            getTdProps={(state, rowInfo, column, instance) => {
-              return {
-                onClick: (e, handleOriginal) => {
-                  if (handleOriginal) {
-                    handleOriginal()
-                  }
-                }
-              }
-            }}
           />
           <br />
         </div><LocationPicker {...options} />

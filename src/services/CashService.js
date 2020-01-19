@@ -6,27 +6,24 @@ class CashService extends React.Component {
 
   [Const.PHONE_HEADER_NAME] = null;
   [Const.AUTH_HEADER_NAME] = null;
-  settings = {bgColor: "bg-dark", textColor: "text-white"};
+  settings = { bgColor: "bg-dark", textColor: "text-white" };
   bookmarks = [];
 
   cashStructureTemplate = {
-    settings: this.settings, 
-    [Const.AUTH_HEADER_NAME]: {token: this[Const.AUTH_HEADER_NAME]},
+    settings: this.settings,
+    [Const.AUTH_HEADER_NAME]: { token: this[Const.AUTH_HEADER_NAME] },
     bookmarks: this.bookmarks
   }
-  
+
   persistAll = function (phone, obj) {
     console.log(obj);
-    
+
     let promise = AjaxService.doPost(Const.URLS.STORAGE + phone, {
       'json': JSON.stringify(obj)
     }, {});
-
-    // promise.then((data) => {
-    //   console.log(data);
-    // }).catch((e) => {
-    //   console.error(e);
-    // })
+    promise.catch((e) => {
+      console.error(e);
+    })
   }
 
   loadAll = function (phone) {
@@ -36,12 +33,13 @@ class CashService extends React.Component {
   getPhone = () => {
     return this[Const.PHONE_HEADER_NAME];
   };
+
   setPhone = (phone) => {
     this[Const.PHONE_HEADER_NAME] = phone;
   };
 
   /// token:
-  getToken= () => {
+  getToken = () => {
     return this[Const.AUTH_HEADER_NAME];
   };
 
@@ -49,9 +47,9 @@ class CashService extends React.Component {
     this[Const.AUTH_HEADER_NAME] = token;
   };
 
-  persistToken(token){
+  persistToken(token) {
     AjaxService.doPut(Const.URLS.STORAGE_TOKEN + this.getPhone(), {
-      'json': JSON.stringify({"token": token})
+      'json': JSON.stringify({ "token": token })
     });
   }
 
@@ -77,7 +75,12 @@ class CashService extends React.Component {
   setBookmarks(bookmarks) {
     this.bookmarks = bookmarks;
   }
-
+  getBookmarksAsObject() {
+    return this.bookmarks.reduce((json, value, key) => {
+      json[value] = key;
+      return json;
+    }, {});
+  }
   persistBookmarks = function (arr) {
     let promise = AjaxService.doPost(Const.URLS.STORAGE_BOOKMARKS + this.getPhone(), {
       'json': JSON.stringify(arr)

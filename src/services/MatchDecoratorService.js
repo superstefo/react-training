@@ -6,13 +6,13 @@ class MatchDecoratorService extends React.Component {
 
   getUserData = (match, callbackFunc) => {
     let userId = match?.person?._id;
-
+    let person = match.person || {};
     let promise = AjaxService.doGet(Const.URLS.USER + userId, {});
     promise.then((data) => {
 
       let user = data?.data?.results;
       match.user = user;
-      let person = match.person || {};
+      
       person.distance_mi = user?.distance_mi;
       person.name = user?.name || person?.name
       person.birth_date = user?.birth_date || person?.birth_date
@@ -26,6 +26,8 @@ class MatchDecoratorService extends React.Component {
       callbackFunc(match);
     }).catch((e) => {
       console.error(e);
+      person.error = e
+      callbackFunc(match);
     })
   }
 

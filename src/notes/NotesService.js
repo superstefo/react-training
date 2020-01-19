@@ -6,21 +6,22 @@ import CashService from '../services/CashService';
 
 class NotesService extends React.Component {
 
-  sanitizeStore = function () {
+  sanitizeStore22deleteeee = function () {
     if (!store.bookmarked) {
       store.bookmarked = []
     }
   }
 
-  saveOneBookmark = function (personId) {
-    //this.sanitizeStore();
-    //store.bookmarked.push(personId);
+  saveBookmark = function (personId) {
     let bookmarks = CashService.getBookmarks();
+    if (bookmarks.indexOf(personId) !== -1) {
+      return;
+    }
     bookmarks.push(personId);
     CashService.persistBookmarks(bookmarks);
   }
 
-  removeOneBookmark = function (personId) {
+  removeBookmark = function (personId) {
     let bookmarks = CashService.getBookmarks();
     for (let index = 0; index < bookmarks.length; index++) {
       let oneFromArr = bookmarks[index];
@@ -30,20 +31,6 @@ class NotesService extends React.Component {
         break;
       }
     }
-  }
-
-  getBookmarks = function (phone  = CashService.getPhone()) {
-    let promise = AjaxService.doGet(Const.URLS.ghfj, {});
-
-    promise.then((data) => {
-      console.log(data);
-      if (data.result) {
-       // store.bookmarked = data.result
-      }
-      //this.sanitizeStore();
-    }).catch((e) => {
-      console.error(e);
-    })
   }
 
   saveAllByPhone = function (phone = CashService.getPhone()) {
@@ -60,8 +47,8 @@ class NotesService extends React.Component {
     })
   }
 
-  delete = function ( phone  = CashService.getPhone()) {
-    let promise = AjaxService.doDelete(Const.URLS.STORAGE  + phone, {});
+  delete = function (phone = CashService.getPhone()) {
+    let promise = AjaxService.doDelete(Const.URLS.STORAGE + phone, {});
 
     promise.then((data) => {
       console.log(data);
@@ -70,6 +57,5 @@ class NotesService extends React.Component {
     })
   }
 
- 
 }
 export default new NotesService;

@@ -1,8 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import BeanContextAware from '../services/BeanContextAware';
+import CashService from '../services/CashService';
+import Const from '../services/Constants'
 import MatchDecoratorService from '../services/MatchDecoratorService';
 import { withRouter } from 'react-router-dom';
+
 
 class Header extends React.Component {
   constructor(props) {
@@ -47,10 +50,10 @@ class Header extends React.Component {
     if (pos > -1) {
       let msgMatches = this.state.msgMatches
       msgMatches.splice(pos, 1);
-      this.setState({
-        msgMatches: msgMatches
-      })
-      this.toggleFlashTabTitle();
+      this.setState(
+        { msgMatches: msgMatches },
+        () => this.toggleFlashTabTitle()
+      )
     }
   }
 
@@ -69,7 +72,7 @@ class Header extends React.Component {
   toggleFlashTabTitle = () => {
     if (this.state.msgMatches.length > 0 && !this.flashIntervalObj) {
       this.startFlashTabTitle();
-    } else if (this.state.msgMatches.length = 0) {
+    } else if (this.state.msgMatches.length == 0) {
       this.stopFlashTabTitle();
     }
   }
@@ -94,20 +97,20 @@ class Header extends React.Component {
 
   getUserData = (match) => {
     let clBack = (match) => {
-         this.props.history.push({
-         pathname: '/friend',
-         state: { args: match }
-       })
-     }
-     MatchDecoratorService.getUserData(match, clBack);
-   }
-
-   goChat = (match) => {
       this.props.history.push({
-        pathname: '/chat',
-        state: { data: match }
+        pathname: '/friend',
+        state: { args: match }
       })
-   }
+    }
+    MatchDecoratorService.getUserData(match, clBack);
+  }
+
+  goChat = (match) => {
+    this.props.history.push({
+      pathname: '/chat',
+      state: { data: match }
+    })
+  }
 
   render() {
     let Btn = (props) => (
@@ -126,35 +129,37 @@ class Header extends React.Component {
       if (!mtch.messages || mtch.messages.length == 0) {
         return (
           <div>
-            <button onClick={() =>{ this.removeMsgMatch(mtch); this.getUserData(mtch)}} className="btn btn-primary" > 
-            New: {this.state.msgMatches.length} </button>
+            <button onClick={() => { this.removeMsgMatch(mtch); this.getUserData(mtch) }} className="btn btn-primary" >
+              New: {this.state.msgMatches.length} </button>
           </div>
         )
       } else {
         return (
           <div>
-            <button onClick={() => this.goChat(mtch)} className="btn btn-primary" > 
-            New: {this.state.msgMatches.length} </button>
+            <button onClick={() => this.goChat(mtch)} className="btn btn-primary" >
+              New: {this.state.msgMatches.length} </button>
           </div>
         )
       }
     }
 
     return (
-      <div className="text-center ">
-        <nav>
+      <nav>
+        <div className="text-center">
+          {this.state.isVisible ? <span className="float-left"> {CashService.getPhone()} </span> : null}
           <div className="btn-group">
             {!this.state.isVisible ? <Btn to="/home" label="Home" /> : null}
             {this.state.isVisible ? <Btn to="/user" label="User" /> : null}
             {this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null}
-            {this.state.isVisible ? <Btn to="/more-pals" label="More Pals" /> : null}
+            {this.state.isVisible ? <Btn to="/more-pals" label="Get Pals" /> : null}
+            {this.state.isVisible ? <Btn to="/notes" label="Notes" /> : null}
             {this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null}
-            {true ? <Btn to="/notes" label="Notes" /> : null}
             {this.state.isVisible ? <Btn to="/logout" label="|->" /> : null}
             {(this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
           </div>
-        </nav>
-      </div>
+          {this.state.isVisible ? <span className="float-right"> ver: {Const.VERSION}</span> : null}
+        </div>
+      </nav>
     );
   }
 }
