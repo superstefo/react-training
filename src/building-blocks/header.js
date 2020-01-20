@@ -72,7 +72,7 @@ class Header extends React.Component {
   toggleFlashTabTitle = () => {
     if (this.state.msgMatches.length > 0 && !this.flashIntervalObj) {
       this.startFlashTabTitle();
-    } else if (this.state.msgMatches.length == 0) {
+    } else if (this.state.msgMatches.length === 0) {
       this.stopFlashTabTitle();
     }
   }
@@ -126,7 +126,7 @@ class Header extends React.Component {
 
     let BtnBadge = (props) => {
       let mtch = props.data;
-      if (!mtch.messages || mtch.messages.length == 0) {
+      if (!mtch.messages || mtch.messages.length === 0) {
         return (
           <div>
             <button onClick={() => { this.removeMsgMatch(mtch); this.getUserData(mtch) }} className="btn btn-primary" >

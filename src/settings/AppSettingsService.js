@@ -20,7 +20,7 @@ class AppSettingsService extends React.Component {
       { "name": 'Light', "class": 'bg-light' }
     ]
 
-    this.updatePollInterval = 20000;
+    this.updatePollInterval = Const.UPDATE_POLL_INTERVAL;
     this.isToShowPhotos = true;
   }
 

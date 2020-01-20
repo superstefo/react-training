@@ -15,6 +15,8 @@ class EnterText extends React.Component {
             triggerRenderFunc: props.triggerRenderFunc
         }
         this.getStyles = AppSettingsService.getInputStyleClasses;
+        const dummyEmojiInjector = (msg) => { return msg;}
+        this.injectEmoji = props.emojiInjectorFunc || dummyEmojiInjector;
     }
 
     createMessage = (match, store) => {
@@ -35,14 +37,15 @@ class EnterText extends React.Component {
             return;
         }
 
-        let matches = store.update.data.matches;
-        for (let index = 0; index < matches.length; index++) {
-            const oneMatch = matches[index];
+        let matches = store?.update?.data?.matches || [];
+        for (let i = 0; i < matches.length; i++) {
+            const oneMatch = matches[i];
 
             if (oneMatch.person._id === this.state.friendId) {
                 let newMsgObj = this.createMessage(oneMatch, this.state.store);
-                AjaxService.doPost(Const.URLS.SEND_MESSAGE, newMsgObj, {})
-                store.update.data.matches[index].messages.push(newMsgObj);
+                this.injectEmoji(newMsgObj);
+                AjaxService.doPost(Const.URLS.SEND_MESSAGE, newMsgObj, {});
+                matches[i].messages.push(newMsgObj);
                 this.state.triggerRenderFunc();
                 break;
             }

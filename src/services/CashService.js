@@ -4,20 +4,20 @@ import AjaxService from './AjaxService';
 
 class CashService extends React.Component {
 
-  [Const.PHONE_HEADER_NAME] = null;
-  [Const.AUTH_HEADER_NAME] = null;
-  settings = { bgColor: "bg-dark", textColor: "text-white" };
-  bookmarks = [];
-
-  cashStructureTemplate = {
-    settings: this.settings,
-    [Const.AUTH_HEADER_NAME]: { token: this[Const.AUTH_HEADER_NAME] },
-    bookmarks: this.bookmarks
-  }
+  constructor(props) {
+    super(props);
+    this[Const.PHONE_HEADER_NAME] = null;
+    this[Const.AUTH_HEADER_NAME] = null;
+    this.settings = { bgColor: "bg-dark", textColor: "text-white" };
+    this.bookmarks = [];
+    this.cashStructureTemplate = {
+      settings: this.settings,
+      [Const.AUTH_HEADER_NAME]: { token: this[Const.AUTH_HEADER_NAME] },
+      bookmarks: this.bookmarks
+    }
+  };
 
   persistAll = function (phone, obj) {
-    console.log(obj);
-
     let promise = AjaxService.doPost(Const.URLS.STORAGE + phone, {
       'json': JSON.stringify(obj)
     }, {});
@@ -68,6 +68,7 @@ class CashService extends React.Component {
     });
   }
 
+  /// bookmarks:
   getBookmarks() {
     return this.bookmarks;
   }
@@ -75,12 +76,14 @@ class CashService extends React.Component {
   setBookmarks(bookmarks) {
     this.bookmarks = bookmarks;
   }
+
   getBookmarksAsObject() {
     return this.bookmarks.reduce((json, value, key) => {
       json[value] = key;
       return json;
     }, {});
   }
+
   persistBookmarks = function (arr) {
     let promise = AjaxService.doPost(Const.URLS.STORAGE_BOOKMARKS + this.getPhone(), {
       'json': JSON.stringify(arr)
@@ -92,7 +95,6 @@ class CashService extends React.Component {
       console.error(e);
     })
   }
-
 }
 
 export default new CashService();

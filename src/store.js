@@ -28,7 +28,7 @@ store.getMatchById = (id) => {
   if (!id) {
     throw new Error("'id' is not allowed to be: " + id);
   }
-  let matches = store.getStore().update.data.matches
+  let matches = store.getStore()?.update?.data?.matches || [];
   for (var i = 0; i < matches.length; i++) {
     if (id === matches[i]._id) {
       return matches[i];

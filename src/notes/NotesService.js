@@ -58,4 +58,4 @@ class NotesService extends React.Component {
   }
 
 }
-export default new NotesService;
+export default new NotesService();

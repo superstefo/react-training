@@ -25,6 +25,7 @@ const Const = {
     STORAGE_BOOKMARKS: ipAdress + 'storage/bookmarks/',
     STORAGE_SETTINGS: ipAdress + 'storage/settings/'
   },
+  UPDATE_POLL_INTERVAL: 20000,
   LOCAL_CASH_VAR_NAME: '__TnDr__',
   AUTH_HEADER_NAME: 'X-Auth-Token',
   PHONE_HEADER_NAME: 'phone-number',

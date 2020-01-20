@@ -9,6 +9,7 @@ import Select from './Select'
 import Const from '../services/Constants';
 import AjaxService from '../services/AjaxService'
 import AppSettingsService from '../settings/AppSettingsService';
+import { injectEmojiFunction } from './CyrilicEmojiStrategy';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class Chat extends React.Component {
     }
 
     //clear notification for new friends, who have not send message:
-    if (!allMsgs || !allMsgs.length) {
+    if (!allMsgs || !allMsgs?.length) {
       this.deleteFromHeader();
       return;
     }
@@ -157,11 +158,14 @@ class Chat extends React.Component {
     var reorderedMessages = this.prepareMessages(this.state.messages, this.state.friendId, this.state.numberMsgShown);
 
     this.sendSeen(reorderedMessages);
+
     let inputProps = {
       data: this.state.store,
       friendId: this.state.match.person._id,
-      triggerRenderFunc: this.triggerRenderFunc
+      triggerRenderFunc: this.triggerRenderFunc,
+      emojiInjectorFunc: injectEmojiFunction
     }
+
     if (this.isMountedOk) {
       return (
         <div><Select getStyles={this.inputStyles} />

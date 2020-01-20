@@ -4,7 +4,6 @@ import AjaxService from '../services/AjaxService';
 import PollService from '../services/PollService';
 import CashService from '../services/CashService';
 import RenderForm from '../building-blocks/RenderForm';
-//import './index.css';
 import { withRouter } from 'react-router-dom';
 
 class ConfirmCode extends React.Component {
