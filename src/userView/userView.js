@@ -67,8 +67,8 @@ class UserView extends React.Component {
           console.log(pointVals);
           postLocation(point);
         },
-        onRemove: point =>
-          console.log("I've just been clicked for removal :(", point)
+        onRemove: point =>{}
+         
       }
     };
 

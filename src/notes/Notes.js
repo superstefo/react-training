@@ -58,7 +58,6 @@ class Notes extends React.Component {
     }
   }
 
-
   pass = (userId) => {
     let promise = AjaxService.doGet(Const.URLS.PASS + userId, {})
     promise.then((data) => {
@@ -99,6 +98,19 @@ class Notes extends React.Component {
       this.index++;
     } else {
       this.index = 0;
+    }
+    let id = all[this.index]
+    let mtch = this.formDummyMatch(id);
+    MatchDecoratorService.getUserData(mtch, this.processUserData);
+  }
+
+  getPrev = () => {
+    let all = CashService.getBookmarks();
+
+    if (this.index > -1) {
+      this.index--;
+    } else {
+      this.index = all.length - 1;
     }
     let id = all[this.index]
     let mtch = this.formDummyMatch(id);
@@ -161,7 +173,7 @@ class Notes extends React.Component {
     return (
       <div>
         <div className="text-justify text-wrap text-center float-center">
-          <button type="button" disabled={true} className="btn btn-primary" onClick={this.getNext}> prev </button>
+          <button type="button" className="btn btn-primary" onClick={this.getPrev}> prev </button>
           <button type="button" disabled={true} className="btn btn-secondary"> all: {CashService.getBookmarks()?.length} </button>
           <button type="button" className="btn btn-primary" onClick={this.getNext}> next </button>
         </div>

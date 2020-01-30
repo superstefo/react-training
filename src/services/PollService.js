@@ -75,9 +75,9 @@ class PollService extends React.Component {
       let matchUpdate = matches[i];
       let oldMatch = store.getMatchById(matchUpdate._id);
 
-      let newLastSeenMsgId = matchUpdate.seen ? matchUpdate.seen.last_seen_msg_id : null;
-      let oldLastSeenMsgId = oldMatch.seen ? oldMatch.seen.last_seen_msg_id : null;
-      var localUser = store.profile.data;
+      let newLastSeenMsgId = matchUpdate?.seen?.last_seen_msg_id;
+      let oldLastSeenMsgId = oldMatch?.seen?.last_seen_msg_id;
+      var localUser = store?.profile?.data;
 
       newLastSeenMsgId = newLastSeenMsgId || oldLastSeenMsgId;
       if (!newLastSeenMsgId || !localUser || !localUser._id) {

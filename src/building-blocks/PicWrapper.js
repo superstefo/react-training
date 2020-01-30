@@ -4,23 +4,21 @@ import AppSettingsService from '../settings/AppSettingsService';
 class PicWrapper extends React.Component {
   constructor(props) {
     super(props);
-    let { photos, name  } = this.props;
+    let { photos, name } = this.props;
     this.personName = name;
+
     this.isToShowPhotos = AppSettingsService.isToShowPhotos;
     this.ind = 0;
-    let firstPic = this.isToShowPhotos ? photos[this.ind].url : null;
+
+    let imgSrc = this.isToShowPhotos ? photos?.[this.ind]?.url : null;
+
     this.state = {
       photos: photos,
-      imgSrc: firstPic
+      imgSrc: imgSrc
     };
   }
 
-  componentWillUnmount() {
-  }
-  componentDidMount() {
-  }
-
-  click = () => {
+   nextPic = () => {
     if (!this.isToShowPhotos) {
       return;
     }
@@ -38,13 +36,18 @@ class PicWrapper extends React.Component {
   }
 
   render() {
-    if (this.isToShowPhotos) {
+    if (!this.state.imgSrc) {
+      return (
+        <div>
+        </div>
+      )
+    } else if (this.isToShowPhotos) {
       return (
         <div className="container-fluid px-0">
-          <img onClick={this.click} src={this.state.imgSrc} alt="some image" className='img-fluid w-100'/>
+          <img onClick={this.nextPic} src={this.state.imgSrc} alt="some image" className='img-fluid w-100' />
         </div>
       );
-    } else  {
+    } else {
       return (
         <div>
           <label className="text-center">{this.personName} </label>

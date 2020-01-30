@@ -142,13 +142,13 @@ class Header extends React.Component {
         )
       }
     }
-
+    this.state.isVisible = true;
     return (
       <nav>
         <div className="text-center">
           {this.state.isVisible ? <span className="float-left"> {CashService.getPhone()} </span> : null}
           <div className="btn-group">
-            {!this.state.isVisible ? <Btn to="/home" label="Home" /> : null}
+            {this.state.isVisible ? <Btn to="/home" label="Home" /> : null}
             {this.state.isVisible ? <Btn to="/user" label="User" /> : null}
             {this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null}
             {this.state.isVisible ? <Btn to="/more-pals" label="Get Pals" /> : null}

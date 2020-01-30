@@ -6,6 +6,8 @@ import Info from "../building-blocks/Info";
 import NotesService from '../notes/NotesService';
 import PicWrapper from "../building-blocks/PicWrapper";
 import CashService from '../services/CashService';
+import AjaxService from '../services/AjaxService';
+import Const from '../services/Constants';
 
 class OneFriend extends React.Component {
   constructor(props) {
@@ -21,12 +23,18 @@ class OneFriend extends React.Component {
     NotesService.saveBookmark(userId);
   }
 
+  deleteMatch = (matchId) => {
+    AjaxService.doDelete(Const.URLS.MATCH + matchId, {});
+  }
+
   isBookmarked = (userId) => {
     return this.allBookmarks[userId] !== undefined && this.allBookmarks[userId] !== null;
   }
 
   render() {
     let { args } = this.props.location.state;
+    console.log(args);
+
     this.allBookmarks = CashService.getBookmarksAsObject();
     let InfoWithButton = () => (
       <div>
@@ -38,7 +46,7 @@ class OneFriend extends React.Component {
           {this.isBookmarked(args.person._id) ? <button type="button" className="btn btn-danger"
             onClick={() => this.remove(args.person._id)}> <span>&#9734;</span></button> : null}
 
-          <button type="button" disabled={true} className="btn btn-danger ml-2 float-right" onClick={this.isBookmarked}> Unlike </button>
+          <button type="button" className="btn btn-danger ml-2 float-right" onClick={() => this.deleteMatch(args.id)}> Unlike </button>
         </div>
         <Info person={args.person} />
       </div>
