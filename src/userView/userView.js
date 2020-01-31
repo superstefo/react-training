@@ -3,10 +3,12 @@ import LocationPicker from "react-leaflet-location-picker";
 import { withRouter } from 'react-router-dom'
 import "react-table/react-table.css"
 import ReactTable from "react-table";
+import Checkbox from '../settings/Checkbox';
 import Info from "../building-blocks/Info";
 import PicWrapper from "../building-blocks/PicWrapper";
-import AjaxService from '../services/AjaxService'
-import Const from '../services/Constants'
+import AjaxService from '../services/AjaxService';
+import store from '../store';
+import Const from '../services/Constants';
 
 class UserView extends React.Component {
   constructor(props) {
@@ -17,8 +19,57 @@ class UserView extends React.Component {
       hits: [],
       isLoading: false,
       error: null,
+      distanceFilter: null,
+      ageFilterMax: null,
+      ageFilterMin: null,
+      discoverable: false
     };
+    this.isLoading = false
   }
+
+  saveProfile = () => {
+    let data = {
+      age_filter_max: this.state.ageFilterMax,
+      age_filter_min: this.state.ageFilterMin,
+      distance_filter: this.state.distanceFilter,
+      discoverable: this.state.discoverable
+    }
+    AjaxService.doPost(Const.URLS.PROFILE, data, {})
+  }
+
+  getProfile = () => {
+    this.isLoading = true
+    let promise = AjaxService.doGet(Const.URLS.PROFILE, {})
+    promise.then((data) => {
+      console.log(data);
+      store.addToStore('profile', data);
+      this.setState({
+        distanceFilter: data?.data?.distance_filter,
+        ageFilterMax: data?.data?.age_filter_max,
+        ageFilterMin: data?.data?.age_filter_min,
+        discoverable: data?.data?.discoverable
+      }, () => { this.isLoading = false })
+    }).catch((e) => {
+      console.error(e);
+      this.isLoading = false
+    })
+  }
+  componentWillMount() {
+    if (this.isLoading) {
+      return;
+    }
+    this.getProfile();
+  }
+
+
+  toggleShowProfile = (event) => {
+    console.log(event?.target?.checked);
+    this.setState({
+      discoverable: event?.target?.checked
+    }, () => {console.log(this.state)})
+    console.log(this.state);
+  }
+
   render() {
     var profile = this.state?.profile
     if (!profile) {
@@ -26,7 +77,8 @@ class UserView extends React.Component {
         <div></div>
       )
     }
-    let pos = profile?.pos ? [profile.pos.lat, profile.pos.lon] : [0, 0]
+
+    let pos = profile?.pos ? [profile?.pos?.lat, profile?.pos?.lon] : [0, 0];
 
     let postLocation = (args) => {
       let newMsgObj = {
@@ -36,9 +88,19 @@ class UserView extends React.Component {
       AjaxService.doPost(Const.URLS.SEND_LOCATION, newMsgObj, {})
     }
 
+    let UserData = () => {
+
+      return (
+        <div>
+          <Info person={profile} />
+          <Checkbox label="public profile" condition={this.state.discoverable} changeHandler={this.toggleShowProfile} />
+        </div>
+      )
+    }
+
     let person = [{
       image: (<PicWrapper photos={profile.photos} name={profile.name} />),
-      info: (<Info person={profile} />)
+      info: (<UserData />)
     }]
 
     let present = [
@@ -67,8 +129,8 @@ class UserView extends React.Component {
           console.log(pointVals);
           postLocation(point);
         },
-        onRemove: point =>{}
-         
+        onRemove: point => { }
+
       }
     };
 
@@ -85,19 +147,26 @@ class UserView extends React.Component {
 
     return (
       <div>
-        <div>
-          <ReactTable
-            data={person}
-            columns={present}
-            sortable={false}
-            defaultPageSize={1}
-            showPagination={false}
-          />
-          <br />
-        </div><LocationPicker {...options} />
+        <ReactTable
+          data={person}
+          columns={present}
+          sortable={false}
+          defaultPageSize={1}
+          showPagination={false}
+        />
+        <br />
+        <LocationPicker {...options} />
+        <button type="button" className="btn btn-primary" onClick={this.getProfile}> get profile </button>
+        <button type="button" className="btn btn-primary" onClick={this.saveProfile}> Save </button>
       </div>
     )
   }
 }
 
 export default withRouter(UserView);
+//Request URL: https://api.gotinder.com/v2/profile?locale=en-GB
+// Request Method: POST
+// Status Code: 200 
+
+// {user: {age_filter_min: 25, age_filter_max: 45}}
+// {user: {discoverable: false, distance_filter: 24}}

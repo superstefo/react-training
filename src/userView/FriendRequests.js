@@ -5,8 +5,6 @@ import AjaxService from '../services/AjaxService'
 import Const from '../services/Constants';
 import PicWrapper from "../building-blocks/PicWrapper";
 
-
-
 class FriendRequests extends React.Component {
   constructor(props) {
     super(props);

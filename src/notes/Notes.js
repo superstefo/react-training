@@ -19,10 +19,6 @@ class Notes extends React.Component {
     this.index = 0;
   }
 
-  // componentDidMount() {
-  //   this.isMountedOk = true;
-  // }
-
   componentWillMount() {
     this.allBookmarks = CashService.getBookmarksAsObject();
     let all = CashService.getBookmarks();
@@ -47,10 +43,6 @@ class Notes extends React.Component {
   getBookmarks = function () {
     NotesService.getBookmarks();
   }
-
-  // delete = function () {
-  //   NotesService.delete();
-  // }
 
   removeBookmark = function (userId) {
     NotesService.removeBookmark(userId);
