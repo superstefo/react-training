@@ -6,12 +6,6 @@ import CashService from '../services/CashService';
 
 class NotesService extends React.Component {
 
-  sanitizeStore22deleteeee = function () {
-    if (!store.bookmarked) {
-      store.bookmarked = []
-    }
-  }
-
   saveBookmark = function (personId) {
     let bookmarks = CashService.getBookmarks();
     if (bookmarks.indexOf(personId) !== -1) {
@@ -47,15 +41,15 @@ class NotesService extends React.Component {
     })
   }
 
-  delete = function (phone = CashService.getPhone()) {
-    let promise = AjaxService.doDelete(Const.URLS.STORAGE + phone, {});
+  // delete = function (phone = CashService.getPhone()) {
+  //   let promise = AjaxService.doDelete(Const.URLS.STORAGE + phone, {});
 
-    promise.then((data) => {
-      console.log(data);
-    }).catch((e) => {
-      console.error(e);
-    })
-  }
+  //   promise.then((data) => {
+  //     console.log(data);
+  //   }).catch((e) => {
+  //     console.error(e);
+  //   })
+  // }
 
 }
 export default new NotesService();

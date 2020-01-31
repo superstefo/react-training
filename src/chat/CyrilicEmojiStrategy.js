@@ -4,7 +4,7 @@ const emojis = [
     {text:';)', face:'😉'},
     {text:':(', face:'😞'},
     {text:':*', face:'😘'},
-    {text:':P', face:'😛'}, {text:':p', face:'😛'}, {text:':П', face:'😛'},{text:':п', face:'😛'},
+    {text:':P', face:'😛'},{text:':p', face:'😛'},{text:':П', face:'😛'},{text:':п', face:'😛'},
     {text:':D', face:'😀'},{text:':Д', face:'😀'},{text:':д', face:'😀'}
 ];
 

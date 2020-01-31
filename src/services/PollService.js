@@ -10,7 +10,6 @@ class PollService extends React.Component {
     super(props);
     this.state = {
     };
-
     this.last_activity_date = "1984-08-01T00:00:00.000Z";
   };
 

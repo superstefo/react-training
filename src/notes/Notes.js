@@ -48,8 +48,13 @@ class Notes extends React.Component {
     NotesService.getBookmarks();
   }
 
-  delete = function () {
-    NotesService.delete();
+  // delete = function () {
+  //   NotesService.delete();
+  // }
+
+  removeBookmark = function (userId) {
+    NotesService.removeBookmark(userId);
+    this.index--;
   }
 
   formDummyMatch(id) {
@@ -78,7 +83,7 @@ class Notes extends React.Component {
   processUserData = (match) => {
     if (!!match?.person?.error) {
       try {
-        console.log('User id' + this.match?.person?._id + " will be removed from Bookmarks list");
+        console.log('User id: ' + match?.person?._id + " will be removed from Bookmarks list");
         NotesService.removeBookmark(this.match?.person?._id);
         this.match = null;
       } catch (error) {
@@ -91,28 +96,20 @@ class Notes extends React.Component {
     })
   }
 
-  getNext = () => {
+  get = (ind) => {
     let all = CashService.getBookmarks();
 
-    if (this.index < all.length - 1) {
-      this.index++;
-    } else {
+    if (this.index < 0) {
+      this.index = all.length - 1;
+    } else if (this.index > all.length - 1) {
       this.index = 0;
     }
-    let id = all[this.index]
-    let mtch = this.formDummyMatch(id);
-    MatchDecoratorService.getUserData(mtch, this.processUserData);
-  }
+    let id = all[this.index];
 
-  getPrev = () => {
-    let all = CashService.getBookmarks();
-
-    if (this.index > -1) {
-      this.index--;
-    } else {
-      this.index = all.length - 1;
+    if (!id) {
+      console.error("'id' is " + id);
+      return;
     }
-    let id = all[this.index]
     let mtch = this.formDummyMatch(id);
     MatchDecoratorService.getUserData(mtch, this.processUserData);
   }
@@ -124,7 +121,10 @@ class Notes extends React.Component {
   render() {
     if (!this.match) {
       return (
-        <div><button type="button" className="btn btn-primary" onClick={this.getNext}> next </button></div>
+        <div>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index--)}> prev </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index++)}> next </button>
+        </div>
       )
     }
     let match = this.match;
@@ -173,9 +173,9 @@ class Notes extends React.Component {
     return (
       <div>
         <div className="text-justify text-wrap text-center float-center">
-          <button type="button" className="btn btn-primary" onClick={this.getPrev}> prev </button>
-          <button type="button" disabled={true} className="btn btn-secondary"> all: {CashService.getBookmarks()?.length} </button>
-          <button type="button" className="btn btn-primary" onClick={this.getNext}> next </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index--)}> prev </button>
+          <button type="button" disabled={true} className="btn btn-secondary"> {this.index + 1} of {CashService.getBookmarks()?.length} </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index++)}> next </button>
         </div>
         <br />
         <div>
