@@ -88,16 +88,18 @@ class Notes extends React.Component {
     })
   }
 
-  get = (ind) => {
+  get = (step) => {
     let all = CashService.getBookmarks();
 
-    if (ind < 0) {
-      ind = all.length - 1;
-    } else if (ind > all.length - 1) {
-      ind = 0;
+    this.index = this.index + step;
+
+    if (this.index < 0) {
+      this.index = all.length - 1;
+    } else if (this.index > all.length - 1) {
+      this.index = 0;
     }
-    this.index = ind;
-    let id = all[ind];
+    
+    let id = all[this.index];
 
     if (!id) {
       console.error("'id' is " + id);
@@ -115,8 +117,8 @@ class Notes extends React.Component {
     if (!this.match) {
       return (
         <div>
-          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index--)}> prev </button>
-          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index++)}> next </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(-1)}> prev </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(1)}> next </button>
         </div>
       )
     }
@@ -166,9 +168,9 @@ class Notes extends React.Component {
     return (
       <div>
         <div className="text-justify text-wrap text-center float-center">
-          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index--)}> prev </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(-1)}> prev </button>
           <button type="button" disabled={true} className="btn btn-secondary"> {this.index + 1} of {CashService.getBookmarks()?.length} </button>
-          <button type="button" className="btn btn-primary" onClick={() => this.get(this.index++)}> next </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(1)}> next </button>
         </div>
         <br />
         <div>

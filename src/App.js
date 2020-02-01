@@ -8,7 +8,7 @@ import PhoneForm from './auth/PhoneForm';
 import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
 import Friends from './userView/friends';
-import OneFriend from './userView/oneFriend';
+import OneFriend from './userView/OneFriend';
 import MoreFriends from './userView/MoreFriends';
 import FriendRequests from './userView/FriendRequests';
 import AppSettings from './settings/AppSettings';
