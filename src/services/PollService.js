@@ -11,6 +11,7 @@ class PollService extends React.Component {
     this.state = {
     };
     this.last_activity_date = "1984-08-01T00:00:00.000Z";
+    this.exceptionCount = 0;
   };
 
   checkIfLogged = (headers, onSuccess, onFailure) => {
@@ -129,19 +130,27 @@ class PollService extends React.Component {
       /// merge global (updates polling) last_activity_date:
       this.last_activity_date = data.data.last_activity_date;
 
-      if (chat1) {
-        chat1.triggerRenderFunc();
-      }
+      if (chat1) chat1.triggerRenderFunc();
       if (header) header.changeButtonVisibility({ isVisible: true });
 
+      this.exceptionCount = 0;
+
     }).catch((e) => {
-      if (header) {
-        console.log("get updates errror ");
-        header.changeButtonVisibility({ isVisible: false })
-      }
-      this.stopUpdatePoll();
-      console.log(e);
+      console.error(e);
+
+      if (header) header.changeButtonVisibility({ isVisible: false })
+
+      if (this.isToStopUpdatePoll(e)) this.stopUpdatePoll();
+
+      this.exceptionCount++
     })
+  }
+
+  isToStopUpdatePoll = (exception) => {
+    if (this.exceptionCount > 2) {
+      return true;
+    }
+    return false;
   }
 
   startUpdatePoll = (seconds) => {

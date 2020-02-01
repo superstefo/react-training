@@ -45,14 +45,15 @@ class UserView extends React.Component {
     this.isLoading = true
     let promise = AjaxService.doGet(Const.URLS.PROFILE, {})
     promise.then((data) => {
-      console.log(data);
+      if (!data?.data) return;
+
       store.addToStore('profile', data);
       this.setState({
-        distanceFilter: data?.data?.distance_filter,
-        ageFilterMax: data?.data?.age_filter_max,
-        ageFilterMin: data?.data?.age_filter_min,
-        discoverable: data?.data?.discoverable,
-        profile: data?.data
+        distanceFilter: data.data.distance_filter,
+        ageFilterMax: data.data.age_filter_max,
+        ageFilterMin: data.data.age_filter_min,
+        discoverable: data.data.discoverable,
+        profile: data.data
       }, () => { this.isLoading = false })
     }).catch((e) => {
       console.error(e);
@@ -91,15 +92,16 @@ class UserView extends React.Component {
     }
 
     let UserData = () => {
-
       return (
         <div>
           <Info person={profile} />
           <br />
-          <Checkbox label="public profile" condition={this.state.discoverable} changeHandler={this.toggleShowProfile} />
           <SelectDistanceFilter initialRadius={this.state.distanceFilter} parentObject={this} />
           <SelectMinAgeFilter ageFilterMin={this.state.ageFilterMin} parentObject={this} />
           <SelectMaxAgeFilter ageFilterMax={this.state.ageFilterMax} parentObject={this} />
+          <Checkbox label="public profile" condition={this.state.discoverable} changeHandler={this.toggleShowProfile} />
+          <br />
+          <button type="button" className="btn btn-primary" onClick={this.saveProfile}> Save </button>
         </div>
       )
     }
@@ -132,11 +134,9 @@ class UserView extends React.Component {
         onClick: point => {
           pointVals = [point]
           pointMode.control.values = [point];
-          console.log(pointVals);
           postLocation(point);
         },
-        onRemove: point => { }
-
+        //  onRemove: point => { }
       }
     };
 
@@ -162,8 +162,6 @@ class UserView extends React.Component {
         />
         <br />
         <LocationPicker {...options} />
-        <button type="button" className="btn btn-primary" onClick={this.getProfile}> get profile </button>
-        <button type="button" className="btn btn-primary" onClick={this.saveProfile}> Save </button>
       </div>
     )
   }

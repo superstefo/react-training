@@ -76,7 +76,7 @@ class Notes extends React.Component {
     if (!!match?.person?.error) {
       try {
         console.log('User id: ' + match?.person?._id + " will be removed from Bookmarks list");
-        NotesService.removeBookmark(this.match?.person?._id);
+        NotesService.removeBookmark(match?.person?._id);
         this.match = null;
       } catch (error) {
         console.error(error);

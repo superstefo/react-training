@@ -16,7 +16,7 @@ class MoreFriends extends React.Component {
     this.state = {
       allFr: []
     };
-    //  this.abortController = new AbortController();
+
     this.isMountedOk = true;
     this.allBookmarks = null;
   }
