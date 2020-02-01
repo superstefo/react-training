@@ -91,12 +91,13 @@ class Notes extends React.Component {
   get = (ind) => {
     let all = CashService.getBookmarks();
 
-    if (this.index < 0) {
-      this.index = all.length - 1;
-    } else if (this.index > all.length - 1) {
-      this.index = 0;
+    if (ind < 0) {
+      ind = all.length - 1;
+    } else if (ind > all.length - 1) {
+      ind = 0;
     }
-    let id = all[this.index];
+    this.index = ind;
+    let id = all[ind];
 
     if (!id) {
       console.error("'id' is " + id);
