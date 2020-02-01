@@ -68,9 +68,9 @@ class PollService extends React.Component {
   }
 
   markLastUneadMessages = (store, updates) => {
-    let matches = updates.data.matches;
+    let matches = updates?.data?.matches;
 
-    for (let i = 0; i < matches.length; i++) {
+    for (let i = 0; i < matches?.length; i++) {
       let matchUpdate = matches[i];
       let oldMatch = store.getMatchById(matchUpdate._id);
 
@@ -132,9 +132,8 @@ class PollService extends React.Component {
       if (chat1) {
         chat1.triggerRenderFunc();
       }
-      if (header) {
-        header.changeButtonVisibility({ isVisible: true });
-      }
+      if (header) header.changeButtonVisibility({ isVisible: true });
+
     }).catch((e) => {
       if (header) {
         console.log("get updates errror ");

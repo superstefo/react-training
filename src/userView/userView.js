@@ -9,6 +9,9 @@ import PicWrapper from "../building-blocks/PicWrapper";
 import AjaxService from '../services/AjaxService';
 import store from '../store';
 import Const from '../services/Constants';
+import SelectDistanceFilter from './SelectDistanceFilter';
+import SelectMinAgeFilter from './SelectMinAgeFilter';
+import SelectMaxAgeFilter from './SelectMaxAgeFilter';
 
 class UserView extends React.Component {
   constructor(props) {
@@ -28,6 +31,7 @@ class UserView extends React.Component {
   }
 
   saveProfile = () => {
+    //{"user":{"show_gender_on_profile":false,"gender":0,"bio":"ddd"}}
     let data = {
       age_filter_max: this.state.ageFilterMax,
       age_filter_min: this.state.ageFilterMin,
@@ -47,7 +51,8 @@ class UserView extends React.Component {
         distanceFilter: data?.data?.distance_filter,
         ageFilterMax: data?.data?.age_filter_max,
         ageFilterMin: data?.data?.age_filter_min,
-        discoverable: data?.data?.discoverable
+        discoverable: data?.data?.discoverable,
+        profile: data?.data
       }, () => { this.isLoading = false })
     }).catch((e) => {
       console.error(e);
@@ -61,13 +66,10 @@ class UserView extends React.Component {
     this.getProfile();
   }
 
-
   toggleShowProfile = (event) => {
-    console.log(event?.target?.checked);
     this.setState({
       discoverable: event?.target?.checked
-    }, () => {console.log(this.state)})
-    console.log(this.state);
+    })
   }
 
   render() {
@@ -93,7 +95,11 @@ class UserView extends React.Component {
       return (
         <div>
           <Info person={profile} />
+          <br />
           <Checkbox label="public profile" condition={this.state.discoverable} changeHandler={this.toggleShowProfile} />
+          <SelectDistanceFilter initialRadius={this.state.distanceFilter} parentObject={this} />
+          <SelectMinAgeFilter ageFilterMin={this.state.ageFilterMin} parentObject={this} />
+          <SelectMaxAgeFilter ageFilterMax={this.state.ageFilterMax} parentObject={this} />
         </div>
       )
     }

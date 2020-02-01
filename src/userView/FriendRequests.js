@@ -15,7 +15,6 @@ class FriendRequests extends React.Component {
       isLoading: false,
       error: null,
     };
-    this.abortController = new AbortController();
     this.isMountedOk = true;
   }
 
@@ -77,7 +76,6 @@ class FriendRequests extends React.Component {
     return (
       <div>
         <div className="text-center p-1 ">
-          <button type="button" className="btn btn-primary" onClick={() => this.getFriendRequests()}> Reload </button>
         </div>
         <div>
           <ReactTable className="-striped -highlight"
