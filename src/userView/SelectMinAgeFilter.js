@@ -5,25 +5,27 @@ export default class SelectMinAgeFilter extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      ageFilterMin: props.ageFilterMin || 0
+      ageFilterMin: props.ageFilterMin || 18
     }
     this.parentObject = props.parentObject;
   }
 
   changeHandler = (e) => {
-    this.parentObject.setState({ ageFilterMin: e.target.value })
+    console.log(e.target.value)
+    let int = parseInt(e.target.value)
+    this.parentObject.changeState({ ageFilterMin: int })
   }
 
   render() {
     let cssClasses = AppSettingsService.getInputStyleClasses()
     let optionTags = [];
-    for (let value = 18; value < 100; value++) {
+    for (let value = 18; value < 50; value++) {
       optionTags.push(<option key={value} value={value}>{value}</option>);
     }
     return (
       <form>
         <div className='form-group'>
-          <label>Min age filter (mi):</label>
+          <label>Min age:</label>
           <select
             className={cssClasses}
             value={this.state.ageFilterMin}

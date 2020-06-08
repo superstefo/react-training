@@ -20,18 +20,17 @@ class UserView extends React.Component {
     this.state = {
       profile: this.props?.data?.profile?.data,
       hits: [],
-      isLoading: false,
       error: null,
       distanceFilter: null,
       ageFilterMax: null,
       ageFilterMin: null,
       discoverable: false
     };
-    this.isLoading = false
+    this.isButtonDisabled = false;
+    this.isLoading = false;
   }
 
   saveProfile = () => {
-    //{"user":{"show_gender_on_profile":false,"gender":0,"bio":"ddd"}}
     let data = {
       age_filter_max: this.state.ageFilterMax,
       age_filter_min: this.state.ageFilterMin,
@@ -39,6 +38,14 @@ class UserView extends React.Component {
       discoverable: this.state.discoverable
     }
     AjaxService.doPost(Const.URLS.PROFILE, data, {})
+  }
+
+  disableSaveButton = () => {
+    if (this.state.ageFilterMax < this.state.ageFilterMin) {
+      this.isButtonDisabled = false;
+      return;
+    }
+    this.isButtonDisabled = true;
   }
 
   getProfile = () => {
@@ -60,11 +67,17 @@ class UserView extends React.Component {
       this.isLoading = false
     })
   }
+
   componentWillMount() {
     if (this.isLoading) {
       return;
     }
     this.getProfile();
+  }
+
+  changeState = (obj) => {
+    this.disableSaveButton();
+    this.setState(obj);
   }
 
   toggleShowProfile = (event) => {
@@ -101,7 +114,7 @@ class UserView extends React.Component {
           <SelectMaxAgeFilter ageFilterMax={this.state.ageFilterMax} parentObject={this} />
           <Checkbox label="public profile" condition={this.state.discoverable} changeHandler={this.toggleShowProfile} />
           <br />
-          <button type="button" className="btn btn-primary" onClick={this.saveProfile}> Save </button>
+          <button type="button" className="btn btn-primary" disabled={this.isButtonDisabled} onClick={this.saveProfile}> Save </button>
         </div>
       )
     }
