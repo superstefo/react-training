@@ -46,18 +46,18 @@ class PhoneForm extends React.Component {
     let promise = CashService.loadAll(phone);
     CashService.setPhone(phone);
     promise.then((data) => {
-      console.log(data?.data?.result);
+      console.log(data?.data);
 
-      let settings = data?.data?.result?.settings;
+      let settings = data?.data?.settings;
       if (settings) {
         CashService.setSettings(settings);
         AppSettingsService.applyDesignSettings();
       }
-      let bookmarks = data?.data?.result?.bookmarks;
+      let bookmarks = data?.data?.bookmarks;
       if (bookmarks) {
         CashService.setBookmarks(bookmarks);
       }
-      let authToken = data?.data?.result?.[Const.AUTH_HEADER_NAME]?.token;
+      let authToken = data?.data?.[Const.AUTH_HEADER_NAME]?.token;
       this.processAuth(authToken, phone);
     }).catch((e) => {
       console.error(e);
