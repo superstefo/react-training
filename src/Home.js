@@ -20,6 +20,8 @@ class Home extends Component {
       <div >
         <h1>Welcome</h1>
         <Link to="/phone">  Login with phone</Link>
+        <p/>
+        <Link to="/phone-token">  Login with phone and token</Link>
       </div >
     )
   }

@@ -2,10 +2,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import BeanContextAware from '../services/BeanContextAware';
 import CashService from '../services/CashService';
-import Const from '../services/Constants'
+import store from '../store';
 import MatchDecoratorService from '../services/MatchDecoratorService';
 import { withRouter } from 'react-router-dom';
-
 
 class Header extends React.Component {
   constructor(props) {
@@ -14,6 +13,7 @@ class Header extends React.Component {
       beanId: props.beanId,
       showUser: false,
       isVisible: false,
+      isVisibleMoreFriendsTab: false,
       msgMatches: []
     };
     this.initialTitle = document.title;
@@ -57,6 +57,14 @@ class Header extends React.Component {
     }
   }
 
+  showMoreFriendsRefreshButton = () => {
+    this.setState({ isVisibleMoreFriendsTab: true });
+  }
+
+  hideMoreFriendsRefreshButton = () => {
+    this.setState({ isVisibleMoreFriendsTab: false });
+  }
+
   changeButtonVisibility = (obj) => {
     this.setState(obj);
   }
@@ -85,7 +93,7 @@ class Header extends React.Component {
         } else {
           document.title = this.initialTitle;
         }
-      }, 1000
+      }, 800
     );
   }
 
@@ -112,6 +120,13 @@ class Header extends React.Component {
     })
   }
 
+  getNewFriends = () => {
+    let moreFriends1 = BeanContextAware.get('moreFriends1');
+    if (this.state.isVisible && moreFriends1?.isMountedOk) {
+      moreFriends1.getNewFriends(moreFriends1.getBookmarksAsObject)
+    }
+  }
+
   render() {
     let Btn = (props) => (
       <div>
@@ -130,34 +145,36 @@ class Header extends React.Component {
         return (
           <div>
             <button onClick={() => { this.removeMsgMatch(mtch); this.getUserData(mtch) }} className="btn btn-primary" >
-              New: {this.state.msgMatches.length} </button>
+              💌 {this.state.msgMatches.length} </button>
           </div>
         )
       } else {
         return (
           <div>
             <button onClick={() => this.goChat(mtch)} className="btn btn-primary" >
-              New: {this.state.msgMatches.length} </button>
+              💌 {this.state.msgMatches.length} </button>
           </div>
         )
       }
     }
-    this.state.isVisible = true;
+    let localUser = store?.profile?.data;
     return (
       <nav>
         <div className="text-center">
           {this.state.isVisible ? <span className="float-left"> {CashService.getPhone()} </span> : null}
           <div className="btn-group">
-            {this.state.isVisible ? <Btn to="/home" label="Home" /> : null}
-            {this.state.isVisible ? <Btn to="/user" label="User" /> : null}
-            {this.state.isVisible ? <Btn to="/pals" label="Pals" /> : null}
-            {this.state.isVisible ? <Btn to="/more-pals" label="Get Pals" /> : null}
-            {this.state.isVisible ? <Btn to="/notes" label="Notes" /> : null}
-            {this.state.isVisible ? <Btn to="/settings" label="Settings" /> : null}
-            {this.state.isVisible ? <Btn to="/logout" label="|->" /> : null}
+            {false ? <Btn to="/home" label="🏠" /> : null}
+            {this.state.isVisible ? <Btn to="/user" label="👦" /> : null}
+            {this.state.isVisible ? <Btn to="/pals" label="🤝" /> : null}
+            {this.state.isVisible ? (this.state.isVisibleMoreFriendsTab ?
+              <button type="button" className="btn btn-primary" onClick={() => this.getNewFriends()}> 🌍 </button> :
+              <Btn to="/more-pals" label=" 🌍 " />) : null}
+            {this.state.isVisible ? <Btn to="/pal-requests" label="👋" /> : null}
+            {this.state.isVisible ? <Btn to="/notes" label="📑" /> : null}
+            {(!this.state.isVisible && !!localUser) ? <Btn to="/settings" label="🛠️" /> : null}
+            {false ? <Btn to="/logout" label="|->" /> : null}
             {(this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
           </div>
-          {this.state.isVisible ? <span className="float-right"> ver: {Const.VERSION}</span> : null}
         </div>
       </nav>
     );

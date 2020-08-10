@@ -90,7 +90,9 @@ class PhoneForm extends React.Component {
     const optns = {
       handleSubmit: this.handleSubmit,
       fields: [
-        { name: 'Phone number', placeholder: 'Please, fill in ur phone number', onChangeFun: this.handleChange }
+        { name: 'Phone number', label: 'Phone number', 
+        placeholder: 'Please, fill in ur phone number', 
+        onChange: this.handleChange }
       ]
     }
 

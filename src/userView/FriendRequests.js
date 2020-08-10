@@ -49,8 +49,10 @@ class FriendRequests extends React.Component {
     let allFr = this.state.allFr;
 
     let persons = allFr.map(one => {
+      let isActiveRecently = one?.user?.recently_active ? "🕐" : ""
+      console.log(isActiveRecently);
       let obj = {
-        info: (<Info info={one.user._id} />),
+        info: (<Info info={isActiveRecently} />),
         image: (<Pic photos={one.user.photos} />)
       }
       return { ...obj };
@@ -63,10 +65,10 @@ class FriendRequests extends React.Component {
             Header: "Photos",
             accessor: "image"
           },
-          {
-            Header: "Info",
-            accessor: "info"
-          }
+           {
+             Header: "Recently Active",
+             accessor: "info"
+           }
         ]
       }
     ]

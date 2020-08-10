@@ -13,20 +13,35 @@ import SelectDistanceFilter from './SelectDistanceFilter';
 import SelectMinAgeFilter from './SelectMinAgeFilter';
 import SelectMaxAgeFilter from './SelectMaxAgeFilter';
 
+
+import PollService from '../services/PollService';
+
+import SelectPollInterval from '../settings/SelectPollInterval';
+import AppSettingsService from '../settings/AppSettingsService';
+import SelectTextColor from '../settings/SelectTextColor';
+import SelectBackgroundColor from '../settings/SelectBackgroundColor';
+
+
 class UserView extends React.Component {
   constructor(props) {
     super(props);
 
+
+
     this.state = {
+      styles: AppSettingsService.getInputStyleClasses(),
+      isToShowPhotos: AppSettingsService.isToShowPhotos,
+
       profile: this.props?.data?.profile?.data,
       hits: [],
       error: null,
       distanceFilter: null,
       ageFilterMax: null,
       ageFilterMin: null,
-      discoverable: false
+      discoverable: false,
+      isButtonDisabled: false
     };
-    this.isButtonDisabled = false;
+    //this.isButtonDisabled = false;
     this.isLoading = false;
   }
 
@@ -42,10 +57,10 @@ class UserView extends React.Component {
 
   disableSaveButton = () => {
     if (this.state.ageFilterMax < this.state.ageFilterMin) {
-      this.isButtonDisabled = false;
+      this.setState({ isButtonDisabled: true })
       return;
     }
-    this.isButtonDisabled = true;
+    this.setState({ isButtonDisabled: false })
   }
 
   getProfile = () => {
@@ -76,13 +91,32 @@ class UserView extends React.Component {
   }
 
   changeState = (obj) => {
-    this.disableSaveButton();
-    this.setState(obj);
+    this.setState(obj, () => { this.disableSaveButton() });
   }
 
   toggleShowProfile = (event) => {
     this.setState({
       discoverable: event?.target?.checked
+    })
+  }
+
+  onSelectPollInterval = (val) => {
+    PollService.startUpdatePoll(val);
+    this.setState({
+      pollInterval: val
+    })
+  }
+
+  triggerRender = () => {
+    this.setState({
+      styles: AppSettingsService.getInputStyleClasses()
+    })
+  }
+
+  toggleShowPicsCheckbox = (event) => {
+    AppSettingsService.isToShowPhotos = event.target.checked;
+    this.setState({
+      isToShowPhotos: AppSettingsService.isToShowPhotos
     })
   }
 
@@ -114,7 +148,17 @@ class UserView extends React.Component {
           <SelectMaxAgeFilter ageFilterMax={this.state.ageFilterMax} parentObject={this} />
           <Checkbox label="public profile" condition={this.state.discoverable} changeHandler={this.toggleShowProfile} />
           <br />
-          <button type="button" className="btn btn-primary" disabled={this.isButtonDisabled} onClick={this.saveProfile}> Save </button>
+          <button type="button" className="btn btn-primary" disabled={this.state.isButtonDisabled} onClick={this.saveProfile}> Save </button>
+          <br />
+          <br />
+          <div>
+            <p />
+            <p />
+            <SelectPollInterval styles={this.state.styles} onSelectPollInterval={this.onSelectPollInterval} />
+            <SelectBackgroundColor styles={this.state.styles} triggerRender={this.triggerRender} />
+            <SelectTextColor styles={this.state.styles} triggerRender={this.triggerRender} />
+            <Checkbox label="show photos" condition={this.state.isToShowPhotos} changeHandler={this.toggleShowPicsCheckbox} />
+          </div>
         </div>
       )
     }
@@ -175,15 +219,13 @@ class UserView extends React.Component {
         />
         <br />
         <LocationPicker {...options} />
+        <br />
+        <span className="float-right"> ver: {Const.VERSION}</span>
+        <br />
+        <p />
       </div>
     )
   }
 }
 
 export default withRouter(UserView);
-//Request URL: https://api.gotinder.com/v2/profile?locale=en-GB
-// Request Method: POST
-// Status Code: 200 
-
-// {user: {age_filter_min: 25, age_filter_max: 45}}
-// {user: {discoverable: false, distance_filter: 24}}

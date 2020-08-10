@@ -64,7 +64,8 @@ class ConfirmCode extends React.Component {
     const optns = {
       handleSubmit: this.handleSubmit,
       fields: [
-        { name: 'Confirmation code', placeholder: 'Please, enter your confirmation code:', onChangeFun: this.handleChange }
+        { name: 'Confirmation code', label: 'Confirmation code', placeholder: 'confirmation code...', 
+        noCash: true, onChangeFun: this.handleChange }
       ]
     }
     return (

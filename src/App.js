@@ -5,6 +5,7 @@ import PollService from './services/PollService';
 import NotesService from './notes/NotesService';
 import Home from './Home';
 import PhoneForm from './auth/PhoneForm';
+import PhoneToken from './auth/PhoneToken';
 import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
 import Friends from './userView/friends';
@@ -29,11 +30,12 @@ const App = () => {
           < Route exact path="/" component={Home} />
           < Route path="/user" render={() => <UserView data={store} />} />
           < Route path="/phone" component={PhoneForm} />
+          < Route path="/phone-token" component={PhoneToken} />
           < Route path="/friend" component={OneFriend} />
           < Route path="/chat" render={() => <Chat beanId="chat1"/>} />
           < Route path="/notes" render={() => <Notes beanId="notes1"/>} />
           < Route path="/pals" render={() => <Friends data={store.updates} />} />
-          < Route path="/more-pals" render={() => <MoreFriends data={store.updates} />} />
+          < Route path="/more-pals" render={() => <MoreFriends data={store.updates} beanId="moreFriends1"/>} />
           < Route path="/pal-requests" render={() => <FriendRequests data={store.updates} />} />
           < Route path="/settings"render={() => <AppSettings beanId="appSettings1"/>} />
           < Route path="/confirm-token" component={ConfirmCode} />

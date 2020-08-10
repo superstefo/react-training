@@ -117,8 +117,8 @@ class Notes extends React.Component {
     if (!this.match) {
       return (
         <div>
-          <button type="button" className="btn btn-primary" onClick={() => this.get(-1)}> prev </button>
-          <button type="button" className="btn btn-primary" onClick={() => this.get(1)}> next </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(-1)}> ⬅️ </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(1)}> ➡️ </button>
         </div>
       )
     }
@@ -126,18 +126,19 @@ class Notes extends React.Component {
 
     let InfoWithButton = () => {
       let userId = match?.person?._id;
+      let isBookmarked = this.isBookmarked(userId);
       return (
 
         <div>
           <div className="text-justify text-wrap">
-            <button type="button" className="btn btn-success" onClick={() => this.like(userId)}> Like </button>
-            <button type="button" className="btn btn-danger ml-2" onClick={() => this.pass(userId)}> Pass </button>
+            <button type="button" className="btn btn-success" onClick={() => this.like(userId)}> 👍 </button>
+            <button type="button" className="btn btn-danger" onClick={() => this.pass(userId)}> 👎 </button>
 
-            {!this.isBookmarked(userId) ? <button type="button" className="btn btn-primary float-right ml-2"
-              onClick={() => NotesService.saveBookmark(userId)}> <span>&#9734;</span> </button> : null}
+            {!isBookmarked ? <button type="button" className="btn btn-primary float-right ml-1"
+              onClick={() => NotesService.saveBookmark(userId)}> 📑 </button> : null}
 
-            {this.isBookmarked(userId) ? <button type="button" className="btn btn-danger float-right ml-2"
-              onClick={() => NotesService.removeBookmark(userId)}> <span>&#9734;</span> </button> : null}
+            {isBookmarked ? <button type="button" className="btn btn-danger float-right ml-1"
+              onClick={() => NotesService.removeBookmark(userId)}> 📑 </button> : null}
 
           </div>
           <Info person={match?.person} />
@@ -168,9 +169,9 @@ class Notes extends React.Component {
     return (
       <div>
         <div className="text-justify text-wrap text-center float-center">
-          <button type="button" className="btn btn-primary" onClick={() => this.get(-1)}> prev </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(-1)}> ⬅️ </button>
           <button type="button" disabled={true} className="btn btn-secondary"> {this.index + 1} of {CashService.getBookmarks()?.length} </button>
-          <button type="button" className="btn btn-primary" onClick={() => this.get(1)}> next </button>
+          <button type="button" className="btn btn-primary" onClick={() => this.get(1)}> ➡️ </button>
         </div>
         <br />
         <div>

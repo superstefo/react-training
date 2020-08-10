@@ -1,5 +1,6 @@
 import React from 'react';
 import PollService from '../services/PollService';
+import Const from '../services/Constants';
 import SelectPollInterval from './SelectPollInterval';
 import AppSettingsService from './AppSettingsService';
 import SelectTextColor from './SelectTextColor';
@@ -39,6 +40,8 @@ class AppSettings extends React.Component {
   render() {
     return (
       <div>
+        <span className="float-right"> ver: {Const.VERSION}</span> 
+        <p/>
         <SelectPollInterval styles={this.state.styles} onSelectPollInterval={this.onSelectPollInterval} />
         <SelectBackgroundColor styles={this.state.styles} triggerRender={this.triggerRender} />
         <SelectTextColor styles={this.state.styles} triggerRender={this.triggerRender} />
