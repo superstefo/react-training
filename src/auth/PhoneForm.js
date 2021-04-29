@@ -66,19 +66,11 @@ class PhoneForm extends React.Component {
 
   processAuth = (authToken, phone) => {
     if (authToken) {
-
-      let isToUseCurrent = window.confirm('A session with this phone numer: '
-        + phone + ' already exists.\nUse current session?');
-
-      if (isToUseCurrent) {
-        console.log("use current session:");
-        CashService.setToken(authToken);
-        PollService.checkIfLogged({},
-          () => { this.props.history.push('/user') },
-          () => { this.ifNotLogged(phone) });
-      } else {
-        this.phoneNumAuth(phone);
-      }
+      console.log("use current session:");
+      CashService.setToken(authToken);
+      PollService.checkIfLogged({},
+        () => { this.props.history.push('/user') },
+        () => { this.ifNotLogged(phone) });
 
     } else {
       CashService.persistAll(phone, CashService.cashStructureTemplate);
@@ -90,9 +82,11 @@ class PhoneForm extends React.Component {
     const optns = {
       handleSubmit: this.handleSubmit,
       fields: [
-        { name: 'Phone number', label: 'Phone number', 
-        placeholder: 'Please, fill in ur phone number', 
-        onChange: this.handleChange }
+        {
+          name: 'Phone number', label: 'Phone number',
+          placeholder: 'Please, fill in ur phone number',
+          onChange: this.handleChange
+        }
       ]
     }
 

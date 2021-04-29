@@ -30,7 +30,7 @@ const Const = {
   LOCAL_CASH_VAR_NAME: '__TnDr__',
   AUTH_HEADER_NAME: 'X-Auth-Token',
   PHONE_HEADER_NAME: 'phone-number',
-  VERSION: '1.30'
+  VERSION: '1.35'
 }
 
 export default Const;

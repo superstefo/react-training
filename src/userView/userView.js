@@ -119,7 +119,12 @@ class UserView extends React.Component {
       isToShowPhotos: AppSettingsService.isToShowPhotos
     })
   }
-
+  goChat = () => {
+    this.props.history.push({
+      pathname: '/edit-bio',
+      state: { data: {} }
+    })
+  }
   render() {
     var profile = this.state?.profile
     if (!profile) {
@@ -142,6 +147,7 @@ class UserView extends React.Component {
       return (
         <div>
           <Info person={profile} />
+          <button type="button" className="btn btn-primary" onClick={this.goChat}> Edit bio </button>
           <br />
           <SelectDistanceFilter initialRadius={this.state.distanceFilter} parentObject={this} />
           <SelectMinAgeFilter ageFilterMin={this.state.ageFilterMin} parentObject={this} />

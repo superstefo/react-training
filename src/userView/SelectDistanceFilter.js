@@ -23,7 +23,7 @@ export default class SelectDistanceFilter extends React.Component {
     return (
       <form>
         <div className='form-group'>
-          <label>Distance filter (mi):</label>
+          <label>Distance (miles):</label>
           <select
             className={cssClasses}
             value={this.state.radius}

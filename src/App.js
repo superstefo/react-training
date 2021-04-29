@@ -8,6 +8,7 @@ import PhoneForm from './auth/PhoneForm';
 import PhoneToken from './auth/PhoneToken';
 import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
+import EditBio from './userView/EditBio';
 import Friends from './userView/friends';
 import OneFriend from './userView/OneFriend';
 import MoreFriends from './userView/MoreFriends';
@@ -29,6 +30,7 @@ const App = () => {
         <Switch>
           < Route exact path="/" component={Home} />
           < Route path="/user" render={() => <UserView data={store} />} />
+          < Route path="/edit-bio" render={() => <EditBio data={store} />} />
           < Route path="/phone" component={PhoneForm} />
           < Route path="/phone-token" component={PhoneToken} />
           < Route path="/friend" component={OneFriend} />

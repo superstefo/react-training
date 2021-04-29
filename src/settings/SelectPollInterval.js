@@ -22,7 +22,7 @@ export default class SelectPollInterval extends Component {
     return (
       <form>
         <div className='form-group'>
-          <label>Poll interval for getting updates to be every:</label>
+          <label>Updates interval:</label>
           <select
             className={this.props.styles}
             value={this.state.interval}

@@ -70,6 +70,7 @@ class EnterText extends React.Component {
         return (
             <div>
                 <input {...inputProps} type="text" />
+                <button type="button" className="btn btn-primary ml-2 float-right" onClick={() => this.onKeyPress({key:'Enter'})}> Send </button>
             </div>
         )
     }
