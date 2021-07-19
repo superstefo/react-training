@@ -26,7 +26,7 @@ export default class SelectMaxAgeFilter extends React.Component {
     return (
       <form>
         <div className='form-group'>
-          <label>Maximal age:</label>
+          <label>Max age:</label>
           <select
             className={cssClasses}
             value={this.state.ageFilterMax}

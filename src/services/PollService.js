@@ -30,7 +30,7 @@ class PollService extends React.Component {
   }
 
   mergeUpdates = (store, updates) => {
-    let matches = updates.data.matches;
+    let matches = updates?.data?.matches || [];
 
     for (let i = 0; i < matches.length; i++) {
       let matchUpdate = matches[i];

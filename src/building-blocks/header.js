@@ -158,10 +158,13 @@ class Header extends React.Component {
       }
     }
     let localUser = store?.profile?.data;
+    let username = CashService.getPhone() || "N/A";
+    let length = CashService.getPhone()?.length || 3;
+    username = username?.substring(length -3)
     return (
       <nav>
         <div className="text-center">
-          {this.state.isVisible ? <span className="float-left"> {CashService.getPhone()} </span> : null}
+          {this.state.isVisible ? <span className="float-left"> {username} </span> : null}
           <div className="btn-group">
             {false ? <Btn to="/home" label="🏠" /> : null}
             {this.state.isVisible ? <Btn to="/user" label="👦" /> : null}

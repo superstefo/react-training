@@ -65,7 +65,7 @@ class Notes extends React.Component {
 
   like = (userId) => {
     let promise = AjaxService.doGet(Const.URLS.LIKE + userId, {})
-    promise.then((data) => {
+    promise.then((data) => { 
       console.log(data);
     }).catch((e) => {
       console.log(e);
@@ -131,14 +131,14 @@ class Notes extends React.Component {
 
         <div>
           <div className="text-justify text-wrap">
-            <button type="button" className="btn btn-success" onClick={() => this.like(userId)}> 👍 </button>
-            <button type="button" className="btn btn-danger" onClick={() => this.pass(userId)}> 👎 </button>
+            <button type="button" className="btn btn-success" onClick={() => this.like(userId)}>y</button>
+            <button type="button" className="btn btn-danger" onClick={() => this.pass(userId)}>n</button>
 
             {!isBookmarked ? <button type="button" className="btn btn-primary float-right ml-1"
-              onClick={() => NotesService.saveBookmark(userId)}> 📑 </button> : null}
+              onClick={() => NotesService.saveBookmark(userId)}>s</button> : null}
 
             {isBookmarked ? <button type="button" className="btn btn-danger float-right ml-1"
-              onClick={() => NotesService.removeBookmark(userId)}> 📑 </button> : null}
+              onClick={() => NotesService.removeBookmark(userId)}>s</button> : null}
 
           </div>
           <Info person={match?.person} />

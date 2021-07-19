@@ -19,11 +19,13 @@ class MatchDecoratorService extends React.Component {
       person.name = user?.name || person?.name
       person.birth_date = user?.birth_date || person?.birth_date
       person.bio = user?.bio || person?.bio
-      person.jobs = user?.jobs || person.jobs
+      person.jobs = user?.jobs || person?.jobs
       person.schools = user?.schools || person.schools
       let posInfo = {city:{name: user?.city?.name }, 
           country:{name: user?.city?.region }};
       person.pos_info = person?.pos_info || posInfo;
+      person.interests = user?.user_interests?.selected_interests || person?.interests
+      person.sexuality = user?.sexual_orientations || person?.sexuality
 
       callbackFunc(match);
     }).catch((e) => {

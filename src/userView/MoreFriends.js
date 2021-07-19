@@ -60,16 +60,24 @@ class MoreFriends extends React.Component {
     })
   }
 
-  pass = (userId) => {
-    let promise = AjaxService.doGet(Const.URLS.PASS + userId, {})
+  pass = (targetId) => {
+    let phoneNumber = CashService.getPhone();
+    if (!phoneNumber) {
+      throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
+    }
+    let promise = AjaxService.doGet(Const.URLS.PASS + phoneNumber +"/"+targetId, {})
     promise.then((data) => {
     }).catch((e) => {
       console.log(e);
     })
   }
 
-  like = (userId) => {
-    let promise = AjaxService.doGet(Const.URLS.LIKE + userId, {})
+  like = (targetId) => {
+    let phoneNumber = CashService.getPhone();
+    if (!phoneNumber) {
+      throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
+    }
+    let promise = AjaxService.doGet(Const.URLS.LIKE + phoneNumber +"/"+targetId, {}) 
     promise.then((data) => {
       console.log(data);
     }).catch((e) => {
@@ -88,13 +96,13 @@ class MoreFriends extends React.Component {
       return (
         <div className="text-justify text-wrap">
           <div>
-            <button type="button" className="btn btn-success" onClick={() => this.like(person._id)}> 👍 </button>
-            <button type="button" className="btn btn-danger" onClick={() => this.pass(person._id)}> 👎 </button>
+            <button type="button" className="btn btn-success" onClick={() => this.like(person._id)}>y</button>
+            <button type="button" className="btn btn-danger" onClick={() => this.pass(person._id)}>n</button>
 
             {!isBookmarked ? <button type="button" className="btn btn-primary float-right ml-1"
-              onClick={() => NotesService.saveBookmark(person?._id)}> 📑 </button> : null}
+              onClick={() => NotesService.saveBookmark(person?._id)}>s</button> : null}
             {isBookmarked ? <button type="button" className="btn btn-danger float-right ml-1"
-              onClick={() => NotesService.removeBookmark(person?._id)}> 📑 </button> : null}
+              onClick={() => NotesService.removeBookmark(person?._id)}>s</button> : null}
           </div>
           <Info person={person} />
         </div>

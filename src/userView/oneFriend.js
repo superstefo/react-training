@@ -38,15 +38,15 @@ class OneFriend extends React.Component {
     this.allBookmarks = CashService.getBookmarksAsObject();
     let InfoWithButton = () => (
       <div>
-        <BtnLink label=" ✍️ " data={args} pathname="/chat" />
+        <BtnLink label="w" data={args} pathname="/chat" />
         <div className="mt-1">
           {!this.isBookmarked(args.person._id) ? <button type="button" className="btn btn-success"
-            onClick={() => this.save(args.person._id)}> <span>&#9734;</span> </button> : null}
+            onClick={() => this.save(args.person._id)}> <span>s</span> </button> : null}
 
           {this.isBookmarked(args.person._id) ? <button type="button" className="btn btn-danger"
-            onClick={() => this.remove(args.person._id)}> <span>&#9734;</span></button> : null}
+            onClick={() => this.remove(args.person._id)}> <span>s</span></button> : null}
 
-          <button type="button" className="btn btn-danger ml-2 float-right" onClick={() => this.deleteMatch(args.id)}> ✖️ </button>
+          <button type="button" className="btn btn-danger ml-2 float-right" onClick={() => this.deleteMatch(args.id)}>x</button>
         </div>
         <Info person={args.person} />
       </div>
