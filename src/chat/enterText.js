@@ -15,7 +15,7 @@ class EnterText extends React.Component {
             triggerRenderFunc: props.triggerRenderFunc
         }
         this.getStyles = AppSettingsService.getInputStyleClasses;
-        const dummyEmojiInjector = (msg) => { return msg;}
+        const dummyEmojiInjector = (msg) => { return msg; }
         this.injectEmoji = props.emojiInjectorFunc || dummyEmojiInjector;
     }
 
@@ -63,14 +63,14 @@ class EnterText extends React.Component {
             placeholder: 'Write...',
             value: this.state.value,
             onChange: this.onChange,
-            className: this.getStyles(),
+            className: this.getStyles() + " d-inline w-75",
             onKeyPress: this.onKeyPress
         }
 
         return (
             <div>
                 <input {...inputProps} type="text" />
-                <button type="button" className="btn btn-primary ml-2 float-right" onClick={() => this.onKeyPress({key:'Enter'})}> Send </button>
+                <button type="button" className="d-inline btn btn-primary float-right" onClick={() => this.onKeyPress({ key: 'Enter' })}> Send </button>
             </div>
         )
     }

@@ -5,6 +5,7 @@ import CashService from '../services/CashService';
 import store from '../store';
 import MatchDecoratorService from '../services/MatchDecoratorService';
 import { withRouter } from 'react-router-dom';
+import PollService from "../services/PollService";
 
 class Header extends React.Component {
   constructor(props) {
@@ -127,7 +128,12 @@ class Header extends React.Component {
     }
   }
 
+  updateFromBackend = () => {
+    PollService.getUpdates();
+  }
+
   render() {
+    let isMobile = CashService.isMobile();
     let Btn = (props) => (
       <div>
         <NavLink exact activeClassName="active" to={props.to}>
@@ -145,14 +151,14 @@ class Header extends React.Component {
         return (
           <div>
             <button onClick={() => { this.removeMsgMatch(mtch); this.getUserData(mtch) }} className="btn btn-primary" >
-              💌 {this.state.msgMatches.length} </button>
+              {this.state.msgMatches.length} </button>
           </div>
         )
       } else {
         return (
           <div>
             <button onClick={() => this.goChat(mtch)} className="btn btn-primary" >
-              💌 {this.state.msgMatches.length} </button>
+              {this.state.msgMatches.length} </button>
           </div>
         )
       }
@@ -160,23 +166,21 @@ class Header extends React.Component {
     let localUser = store?.profile?.data;
     let username = CashService.getPhone() || "N/A";
     let length = CashService.getPhone()?.length || 3;
-    username = username?.substring(length -3)
+    username = username?.substring(length - 3)
     return (
       <nav>
         <div className="text-center">
-          {this.state.isVisible ? <span className="float-left"> {username} </span> : null}
           <div className="btn-group">
-            {false ? <Btn to="/home" label="🏠" /> : null}
-            {this.state.isVisible ? <Btn to="/user" label="👦" /> : null}
+            <Btn to="/user" label={username} />
             {this.state.isVisible ? <Btn to="/pals" label="🤝" /> : null}
             {this.state.isVisible ? (this.state.isVisibleMoreFriendsTab ?
-              <button type="button" className="btn btn-primary" onClick={() => this.getNewFriends()}> 🌍 </button> :
+              <button type="button" className="btn btn-primary" onClick={this.getNewFriends}>🌍</button> :
               <Btn to="/more-pals" label=" 🌍 " />) : null}
-            {this.state.isVisible ? <Btn to="/pal-requests" label="👋" /> : null}
-            {this.state.isVisible ? <Btn to="/notes" label="📑" /> : null}
+            {this.state.isVisible && !isMobile ? <Btn to="/pal-requests" label="👋" /> : null}
+            {(this.state.isVisible && !isMobile) ? <Btn to="/notes" label="📑" /> : null}
+            {isMobile ? <button type="button" className="btn btn-primary" onClick={this.updateFromBackend}>🔄</button> : null}
             {(!this.state.isVisible && !!localUser) ? <Btn to="/settings" label="🛠️" /> : null}
-            {false ? <Btn to="/logout" label="|->" /> : null}
-            {(this.state.isVisible && isVisibleNewMsgs) ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
+            {(isVisibleNewMsgs) ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
           </div>
         </div>
       </nav>

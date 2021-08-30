@@ -1,5 +1,4 @@
 import React from 'react';
-import store from '../store';
 import Const from '../services/Constants';
 import AjaxService from '../services/AjaxService';
 import CashService from '../services/CashService';

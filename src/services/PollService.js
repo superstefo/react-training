@@ -20,7 +20,7 @@ class PollService extends React.Component {
     promise.then((data) => {
       store.addToStore('profile', data);
       onSuccess()
-      this.getUpdates(this.getLastActivityDate());
+      this.getUpdatesForDate(this.getLastActivityDate());
       this.startUpdatePoll(AppSettingsService.updatePollInterval);
 
     }).catch((e) => {
@@ -107,7 +107,7 @@ class PollService extends React.Component {
     }
   }
 
-  getUpdates = (lastDate) => {
+  getUpdatesForDate = (lastDate) => {
     let header = BeanContextAware.get('header1');
     let chat1 = BeanContextAware.get('chat1');
     let data = {
@@ -159,9 +159,13 @@ class PollService extends React.Component {
     this.pollInterval = seconds
     this.pollIntervalObj = setInterval(
       () => {
-        this.getUpdates(this.getLastActivityDate());
+        this.getUpdatesForDate(this.getLastActivityDate());
       }, seconds
     );
+  }
+
+  getUpdates = () => {
+    this.getUpdatesForDate(this.getLastActivityDate());
   }
 
   getLastActivityDate = () => {

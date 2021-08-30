@@ -15,9 +15,28 @@ class CashService extends React.Component {
       [Const.AUTH_HEADER_NAME]: { token: this[Const.AUTH_HEADER_NAME] },
       bookmarks: this.bookmarks
     }
+    window.addEventListener('resize', this.handleWindowSizeChange);
+    this.setWidth(window.innerWidth);
   };
 
-  persistAll = function (phone, obj) {
+  handleWindowSizeChange =  ()=> {
+     this.setWidth(window.innerWidth);
+  }
+
+  setWidth = (innerWidth)=> {
+    innerWidth = parseInt(innerWidth)
+    //check if NaN 
+    if (innerWidth !== innerWidth) {
+      innerWidth = 1000;
+    }
+    this.innerWidth = innerWidth;
+  }
+
+  isMobile = () => {
+    return this.innerWidth <= 768
+  }
+
+  persistAll =  (phone, obj) => {
     let promise = AjaxService.doPost(Const.URLS.STORAGE + phone, {
       'json': JSON.stringify(obj)
     }, {});
@@ -90,7 +109,6 @@ class CashService extends React.Component {
     }, {});
 
     promise.then((data) => {
-      console.log(data);
     }).catch((e) => {
       console.error(e);
     })

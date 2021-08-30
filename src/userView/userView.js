@@ -1,6 +1,6 @@
 import React from 'react';
 import LocationPicker from "react-leaflet-location-picker";
-import { withRouter } from 'react-router-dom'
+import { withRouter, NavLink } from 'react-router-dom'
 import "react-table/react-table.css"
 import ReactTable from "react-table";
 import Checkbox from '../settings/Checkbox';
@@ -20,13 +20,12 @@ import SelectPollInterval from '../settings/SelectPollInterval';
 import AppSettingsService from '../settings/AppSettingsService';
 import SelectTextColor from '../settings/SelectTextColor';
 import SelectBackgroundColor from '../settings/SelectBackgroundColor';
+import CashService from '../services/CashService';
 
 
 class UserView extends React.Component {
   constructor(props) {
     super(props);
-
-
 
     this.state = {
       styles: AppSettingsService.getInputStyleClasses(),
@@ -87,6 +86,9 @@ class UserView extends React.Component {
     if (this.isLoading) {
       return;
     }
+    if (!!store?.profile && CashService.isMobile()) {
+      return;
+    }
     this.getProfile();
   }
 
@@ -119,12 +121,14 @@ class UserView extends React.Component {
       isToShowPhotos: AppSettingsService.isToShowPhotos
     })
   }
+
   goChat = () => {
     this.props.history.push({
       pathname: '/edit-bio',
       state: { data: {} }
     })
   }
+
   render() {
     var profile = this.state?.profile
     if (!profile) {
@@ -142,6 +146,16 @@ class UserView extends React.Component {
       }
       AjaxService.doPost(Const.URLS.SEND_LOCATION, newMsgObj, {})
     }
+
+    let Btn = (props) => (
+      <div>
+        <NavLink exact activeClassName="active" to={props.to}>
+          <button type="button" className="btn btn-primary">
+            {props.label}
+          </button>
+        </NavLink>
+      </div>
+    )
 
     let UserData = () => {
       return (
@@ -164,6 +178,18 @@ class UserView extends React.Component {
             <SelectBackgroundColor styles={this.state.styles} triggerRender={this.triggerRender} />
             <SelectTextColor styles={this.state.styles} triggerRender={this.triggerRender} />
             <Checkbox label="show photos" condition={this.state.isToShowPhotos} changeHandler={this.toggleShowPicsCheckbox} />
+          </div>
+        </div>
+      )
+    }
+
+    let MobileButttons = () => {
+      return (
+        <div className="text-center">
+          <div className="btn-group">
+            <button type="button" className="btn btn-primary" onClick={this.getProfile}> 👦 </button>
+            <Btn to="/pal-requests" label="👋" />
+            <Btn to="/notes" label="📑" />
           </div>
         </div>
       )
@@ -216,6 +242,9 @@ class UserView extends React.Component {
 
     return (
       <div>
+        {CashService.isMobile() ? (<MobileButttons />) : null}
+        <br />
+        <p />
         <ReactTable
           data={person}
           columns={present}
