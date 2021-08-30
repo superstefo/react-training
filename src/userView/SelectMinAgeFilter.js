@@ -11,7 +11,6 @@ export default class SelectMinAgeFilter extends React.Component {
   }
 
   changeHandler = (e) => {
-    console.log(e.target.value)
     let int = parseInt(e.target.value)
     this.parentObject.changeState({ ageFilterMin: int })
   }

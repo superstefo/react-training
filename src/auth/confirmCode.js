@@ -31,7 +31,6 @@ class ConfirmCode extends React.Component {
     let promise = AjaxService.doGet(Const.URLS.AUTH.GET_TOKEN + this.state.confirmToken + "/" + phoneNumber);
 
     promise.then(function (value) {
-      console.log(value);
       if (value && value.status === 200 && value.data) {
         let token = value.data[Const.AUTH_HEADER_NAME];
 

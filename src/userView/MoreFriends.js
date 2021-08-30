@@ -79,7 +79,6 @@ class MoreFriends extends React.Component {
     }
     let promise = AjaxService.doGet(Const.URLS.LIKE + phoneNumber +"/"+targetId, {}) 
     promise.then((data) => {
-      console.log(data);
     }).catch((e) => {
       console.log(e);
     })

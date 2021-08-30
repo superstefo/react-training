@@ -5,7 +5,6 @@ import AjaxService from './AjaxService';
 class MatchDecoratorService extends React.Component {
 
   getUserData = (match, callbackFunc) => {
-    console.log(match);
     
     let userId = match?.person?._id;
     let person = match.person || {};

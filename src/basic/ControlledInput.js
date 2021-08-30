@@ -16,7 +16,6 @@ export default class ControlledInput extends Component {
   }
   submitHandler(e) {
     e.preventDefault()
-    console.log(this.state.greet)
   }
   render() {
     return (

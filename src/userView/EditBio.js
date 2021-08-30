@@ -8,7 +8,6 @@ import AppSettingsService from '../settings/AppSettingsService';
 class EditBio extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
       value: props?.data?.profile?.data?.bio || ''
     }
@@ -40,7 +39,6 @@ class EditBio extends React.Component {
   }
 
   render() {
-    console.log(this.getStyles());
     let inputProps = {
       value: this.state.value,
       onChange: this.onChange,

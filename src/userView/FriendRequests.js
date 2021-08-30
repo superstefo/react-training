@@ -50,7 +50,6 @@ class FriendRequests extends React.Component {
 
     let persons = allFr.map(one => {
       let isActiveRecently = one?.user?.recently_active ? "🕐" : ""
-      console.log(isActiveRecently);
       let obj = {
         info: (<Info info={isActiveRecently} />),
         image: (<Pic photos={one.user.photos} />)

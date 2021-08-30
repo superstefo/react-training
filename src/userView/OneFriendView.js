@@ -33,7 +33,6 @@ class OneFriendView extends React.Component {
 
   render() {
     let { args } = this.props.location.state;
-    console.log(args);
 
     this.allBookmarks = CashService.getBookmarksAsObject();
     let InfoWithButton = () => (

@@ -20,7 +20,6 @@ function arrayToStr(array) {
 
 function Info(args) {
   let { person } = args;
-  console.log(person)
   if (!person) {
     return (
       <div> </div>

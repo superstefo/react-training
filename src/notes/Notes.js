@@ -66,7 +66,6 @@ class Notes extends React.Component {
   like = (userId) => {
     let promise = AjaxService.doGet(Const.URLS.LIKE + userId, {})
     promise.then((data) => { 
-      console.log(data);
     }).catch((e) => {
       console.log(e);
     })
@@ -75,7 +74,6 @@ class Notes extends React.Component {
   processUserData = (match) => {
     if (!!match?.person?.error) {
       try {
-        console.log('User id: ' + match?.person?._id + " will be removed from Bookmarks list");
         NotesService.removeBookmark(match?.person?._id);
         this.match = null;
       } catch (error) {

@@ -66,7 +66,6 @@ class PhoneForm extends React.Component {
 
   processAuth = (authToken, phone) => {
     if (authToken) {
-      console.log("use current session:");
       CashService.setToken(authToken);
       PollService.checkIfLogged({},
         () => { this.props.history.push('/user') },
