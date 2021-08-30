@@ -10,7 +10,7 @@ import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
 import EditBio from './userView/EditBio';
 import Friends from './userView/friends';
-import OneFriend from './userView/OneFriend';
+import OneFriendView from './userView/OneFriendView';
 import MoreFriends from './userView/MoreFriends';
 import FriendRequests from './userView/FriendRequests';
 import AppSettings from './settings/AppSettings';
@@ -33,7 +33,7 @@ const App = () => {
           < Route path="/edit-bio" render={() => <EditBio data={store} />} />
           < Route path="/phone" component={PhoneForm} />
           < Route path="/phone-token" component={PhoneToken} />
-          < Route path="/friend" component={OneFriend} />
+          < Route path="/friend" component={OneFriendView} />
           < Route path="/chat" render={() => <Chat beanId="chat1"/>} />
           < Route path="/notes" render={() => <Notes beanId="notes1"/>} />
           < Route path="/pals" render={() => <Friends data={store.updates} />} />

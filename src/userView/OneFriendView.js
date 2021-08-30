@@ -9,7 +9,7 @@ import CashService from '../services/CashService';
 import AjaxService from '../services/AjaxService';
 import Const from '../services/Constants';
 
-class OneFriend extends React.Component {
+class OneFriendView extends React.Component {
   constructor(props) {
     super(props);
     this.allBookmarks = null;
@@ -88,4 +88,4 @@ class OneFriend extends React.Component {
   }
 }
 
-export default OneFriend;
+export default OneFriendView;
