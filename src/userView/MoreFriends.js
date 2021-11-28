@@ -9,6 +9,7 @@ import BeanContextAware from '../services/BeanContextAware';
 import PicWrapper from "../building-blocks/PicWrapper";
 import BtnLink from "../building-blocks/BtnLink";
 import Info from "../building-blocks/Info";
+import FriendRequests from './FriendRequests';
 
 class MoreFriends extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class MoreFriends extends React.Component {
       beanId: props.beanId,
       allFr: []
     };
-
+    this.friendRequestPicIds = "";
     this.isMountedOk = true;
     this.allBookmarks = null;
   }
@@ -29,12 +30,30 @@ class MoreFriends extends React.Component {
 
   componentDidMount() {
     BeanContextAware.add(this);
-    this.getNewFriends(this.getBookmarksAsObject);
+    this.getFriendRequests();
     this.isMountedOk = true;
     let header = BeanContextAware.get('header1');
     if (header) {
-      header.showMoreFriendsRefreshButton()
+      header.showMoreFriendsRefreshButton();
     }
+  }
+
+
+  getFriendRequests = () => {
+    let promise = AjaxService.doGet(Const.URLS.FAST_MATCH, {})
+    promise.then((data) => {
+      if (!data?.data?.data?.results) {
+        return;
+      }
+      let picIds = "";
+      data.data.data.results.forEach(like => { picIds = picIds + like.user.photos[0].id + " " })
+      this.friendRequestPicIds = picIds;
+
+      this.getNewFriends(this.getBookmarksAsObject);
+
+    }).catch((e) => {
+      console.log(e);
+    })
   }
 
   componentWillUnmount() {
@@ -65,7 +84,7 @@ class MoreFriends extends React.Component {
     if (!phoneNumber) {
       throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
     }
-    let promise = AjaxService.doGet(Const.URLS.PASS + phoneNumber +"/"+targetId, {})
+    let promise = AjaxService.doGet(Const.URLS.PASS + phoneNumber + "/" + targetId, {})
     promise.then((data) => {
     }).catch((e) => {
       console.log(e);
@@ -77,7 +96,7 @@ class MoreFriends extends React.Component {
     if (!phoneNumber) {
       throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
     }
-    let promise = AjaxService.doGet(Const.URLS.LIKE + phoneNumber +"/"+targetId, {}) 
+    let promise = AjaxService.doGet(Const.URLS.LIKE + phoneNumber + "/" + targetId, {})
     promise.then((data) => {
     }).catch((e) => {
       console.log(e);
@@ -88,6 +107,16 @@ class MoreFriends extends React.Component {
     return this.allBookmarks[userId] !== undefined && this.allBookmarks[userId] !== null;
   }
 
+  isLiked = (photos) => {
+    for (let index = 0; index < photos.length; index++) {
+      const pic = photos[index];
+      if (this.friendRequestPicIds.indexOf(pic.id) != -1) {
+        return true
+      }
+    }
+    return false;
+  }
+
   render() {
     let InfoWrapper = (args) => {
       let { person } = args;
@@ -95,12 +124,12 @@ class MoreFriends extends React.Component {
       return (
         <div className="text-justify text-wrap">
           <div>
-            <button type="button" className="btn btn-success" onClick={() => this.like(person._id)}>y</button>
-            <button type="button" className="btn btn-danger" onClick={() => this.pass(person._id)}>n</button>
+            <button className="btn btn-success" onClick={() => this.like(person._id)}>y</button>
+            <button className="btn btn-danger" onClick={() => this.pass(person._id)}>n</button>
 
-            {!isBookmarked ? <button type="button" className="btn btn-primary float-right ml-1"
+            {!isBookmarked ? <button className="btn btn-primary float-right ml-1"
               onClick={() => NotesService.saveBookmark(person?._id)}>s</button> : null}
-            {isBookmarked ? <button type="button" className="btn btn-danger float-right ml-1"
+            {isBookmarked ? <button className="btn btn-danger float-right ml-1"
               onClick={() => NotesService.removeBookmark(person?._id)}>s</button> : null}
           </div>
           <Info person={person} />
@@ -108,14 +137,19 @@ class MoreFriends extends React.Component {
       )
     }
 
-    let Pic = args => (<PicWrapper photos={args.photos} name={args.name} />)
+    let Pic = args => (
+      <div className="d">
+        <button hidden={!args.isLiked} className="btn position-absolute btn-danger">❤️</button>
+        <PicWrapper photos={args.photos} name={args.name} />
+      </div>)
 
     let allFr = this.state.allFr;
 
     let persons = allFr.map(one => {
+      one.isLiked = this.isLiked(one.photos)
       let obj = {
         info: (<InfoWrapper person={one} />),
-        image: (<Pic photos={one.photos} name={one.name} />)
+        image: (<Pic photos={one.photos} name={one.name} isLiked={this.isLiked(one.photos)} />)
       }
       return { ...obj };
     });

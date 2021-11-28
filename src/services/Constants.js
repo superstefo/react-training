@@ -1,4 +1,4 @@
-let ipAdress = ' https://bender-app.herokuapp.com/';
+let ipAdress = 'https://bender-app.herokuapp.com/';
 
 const Const = {
   URLS: {
@@ -30,7 +30,7 @@ const Const = {
   LOCAL_CASH_VAR_NAME: '__TnDr__',
   AUTH_HEADER_NAME: 'X-Auth-Token',
   PHONE_HEADER_NAME: 'phone-number',
-  VERSION: '1.45'
+  VERSION: '1.5'
 }
 
 export default Const;
