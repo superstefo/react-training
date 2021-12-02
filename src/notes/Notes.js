@@ -40,10 +40,6 @@ class Notes extends React.Component {
     NotesService.getOne();
   }
 
-  getBookmarks = function () {
-    NotesService.getBookmarks();
-  }
-
   removeBookmark = function (userId) {
     NotesService.removeBookmark(userId);
     this.index--;

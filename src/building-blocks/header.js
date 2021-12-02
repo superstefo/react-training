@@ -171,16 +171,17 @@ class Header extends React.Component {
       <nav>
         <div className="text-center">
           <div className="btn-group">
-            <Btn to="/user" label={username} />
+            {!!localUser ? <Btn to="/user" label={username} /> : null}
             {this.state.isVisible ? <Btn to="/pals" label="🤝" /> : null}
             {this.state.isVisible ? (this.state.isVisibleMoreFriendsTab ?
               <button type="button" className="btn btn-primary" onClick={this.getNewFriends}>🌍</button> :
               <Btn to="/more-pals" label=" 🌍 " />) : null}
             {this.state.isVisible && !isMobile ? <Btn to="/pal-requests" label="👋" /> : null}
-            {(this.state.isVisible && !isMobile) ? <Btn to="/notes" label="📑" /> : null}
+            {this.state.isVisible && !isMobile ? <Btn to="/notes" label="📑" /> : null}
             {isMobile ? <button type="button" className="btn btn-primary" onClick={this.updateFromBackend}>🔄</button> : null}
-            {(!this.state.isVisible && !!localUser) ? <Btn to="/settings" label="🛠️" /> : null}
-            {(isVisibleNewMsgs) ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
+            {this.state.isVisible && !isMobile ? <Btn to="/see-user" label="👀" /> : null}
+            {!this.state.isVisible && !!localUser ? <Btn to="/settings" label="🛠️" /> : null}
+            {isVisibleNewMsgs ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
           </div>
         </div>
       </nav>

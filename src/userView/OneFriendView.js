@@ -63,7 +63,7 @@ class OneFriendView extends React.Component {
             accessor: "image"
           },
           {
-            Header: "Info",
+            Header: args?.person?._id,
             accessor: "info"
           }
         ]

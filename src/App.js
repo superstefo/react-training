@@ -9,12 +9,14 @@ import PhoneToken from './auth/PhoneToken';
 import ConfirmCode from './auth/confirmCode';
 import UserView from './userView/userView';
 import EditBio from './userView/EditBio';
+import EnterUserId from './userView/EnterUserId';
 import Friends from './userView/friends';
 import OneFriendView from './userView/OneFriendView';
 import MoreFriends from './userView/MoreFriends';
 import FriendRequests from './userView/FriendRequests';
 import AppSettings from './settings/AppSettings';
 import Header from './building-blocks/header';
+import RemoteUser from './userView/RemoteUser';
 import Chat from './chat/chat.js';
 import Notes from './notes/Notes';
 import store from './store';
@@ -34,6 +36,8 @@ const App = () => {
           < Route path="/phone" component={PhoneForm} />
           < Route path="/phone-token" component={PhoneToken} />
           < Route path="/friend" component={OneFriendView} />
+          < Route path="/see-user" component={EnterUserId} />
+          < Route path="/remote-user" component={RemoteUser } />
           < Route path="/chat" render={() => <Chat beanId="chat1"/>} />
           < Route path="/notes" render={() => <Notes beanId="notes1"/>} />
           < Route path="/pals" render={() => <Friends data={store.updates} />} />
