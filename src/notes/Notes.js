@@ -153,7 +153,7 @@ class Notes extends React.Component {
             accessor: "image"
           },
           {
-            Header: "Info",
+            Header: match?.person?._id,
             accessor: "info"
           }
         ]
