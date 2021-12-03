@@ -137,7 +137,7 @@ class Header extends React.Component {
     let Btn = (props) => (
       <div>
         <NavLink exact activeClassName="active" to={props.to}>
-          <button type="button" className="btn btn-primary">
+          <button type="button" {...props} className="btn btn-primary">
             {props.label}
           </button>
         </NavLink>
@@ -163,6 +163,7 @@ class Header extends React.Component {
         )
       }
     }
+    let isVisible = this.state.isVisible;
     let localUser = store?.profile?.data;
     let username = CashService.getPhone() || "N/A";
     let length = CashService.getPhone()?.length || 3;
@@ -171,16 +172,13 @@ class Header extends React.Component {
       <nav>
         <div className="text-center">
           <div className="btn-group">
-            {!!localUser ? <Btn to="/user" label={username} /> : null}
-            {this.state.isVisible ? <Btn to="/pals" label="🤝" /> : null}
-            {this.state.isVisible ? (this.state.isVisibleMoreFriendsTab ?
-              <button type="button" className="btn btn-primary" onClick={this.getNewFriends}>🌍</button> :
-              <Btn to="/more-pals" label=" 🌍 " />) : null}
-            {this.state.isVisible && !isMobile ? <Btn to="/pal-requests" label="👋" /> : null}
-            {this.state.isVisible && !isMobile ? <Btn to="/notes" label="📑" /> : null}
-            {isMobile ? <button type="button" className="btn btn-primary" onClick={this.updateFromBackend}>🔄</button> : null}
-            {this.state.isVisible && !isMobile ? <Btn to="/see-user" label="👀" /> : null}
-            {!this.state.isVisible && !!localUser ? <Btn to="/settings" label="🛠️" /> : null}
+            <Btn to="/user" hidden={!localUser} label={username} />
+            <Btn to="/pals" hidden={!isVisible} label="🤝" />
+            <Btn to="/more-pals" onClick={this.getNewFriends} hidden={!isVisible} label="🌍2" />
+            <Btn to="/pal-requests" hidden={!isVisible || isMobile} label="👋" />
+            <Btn to="/notes" hidden={!isVisible || isMobile} label="📑" />
+            <Btn to="/see-user" hidden={!isVisible || isMobile} label="👀" />
+            <button type="button" className="btn btn-primary" hidden={!isVisible || !isMobile} onClick={this.updateFromBackend}>🔄</button>
             {isVisibleNewMsgs ? <BtnBadge data={this.state.msgMatches[0]} /> : null}
           </div>
         </div>

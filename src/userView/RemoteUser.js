@@ -20,7 +20,6 @@ class RemoteUser extends React.Component {
     this.setState({ user: args })
   }
 
-
   saveAllByPhone = function () {
     NotesService.saveAllByPhone();
   }

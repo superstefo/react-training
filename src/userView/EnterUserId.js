@@ -15,20 +15,17 @@ class EnterUserId extends React.Component {
   }
 
   goToView = (args) => {
-      this.props.history.push({
-        pathname: '/remote-user',
-        state: args
-      })
+    this.props.history.push({
+      pathname: '/remote-user',
+      state: args
+    })
   }
 
-  getUserData = ( ) => {
+  getUserData = () => {
     let promise = AjaxService.doGet(Const.URLS.USER + this.state.value, {});
     promise.then((data) => {
-
-    let user = data?.data?.results;
-
-
-this.goToView(user);
+      let user = data?.data?.results;
+      this.goToView(user);
     }).catch((e) => {
       console.error(e);
 
@@ -44,14 +41,14 @@ this.goToView(user);
     let inputProps = {
       value: this.state.value,
       onChange: this.onChange,
-      className: this.getStyles()
+      className: this.getStyles() + " d-inline w-25"
     }
 
     return (
       <div>
-             <br/>
+        <br />
         <input {...inputProps} type="text" />
-        <br/>
+      
         <button type="button" className="btn btn-primary" onClick={this.getUserData}> Sее </button>
       </div>
     )

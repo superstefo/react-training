@@ -84,7 +84,7 @@ class MoreFriends extends React.Component {
     if (!phoneNumber) {
       throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
     }
-    let promise = AjaxService.doGet(Const.URLS.PASS + phoneNumber + "/" + targetId, {})
+    let promise = AjaxService.doGet(Const.URLS.PASS + targetId, {})
     promise.then((data) => {
     }).catch((e) => {
       console.log(e);
@@ -96,7 +96,7 @@ class MoreFriends extends React.Component {
     if (!phoneNumber) {
       throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
     }
-    let promise = AjaxService.doGet(Const.URLS.LIKE + phoneNumber + "/" + targetId, {})
+    let promise = AjaxService.doGet(Const.URLS.LIKE + targetId, {})
     promise.then((data) => {
     }).catch((e) => {
       console.log(e);
@@ -138,7 +138,7 @@ class MoreFriends extends React.Component {
     }
 
     let Pic = args => (
-      <div className="d">
+      <div>
         <button hidden={!args.isLiked} className="btn position-absolute btn-danger">❤️</button>
         <PicWrapper photos={args.photos} name={args.name} />
       </div>)

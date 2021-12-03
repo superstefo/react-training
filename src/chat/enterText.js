@@ -3,6 +3,7 @@ import store from '../store'
 import Const from '../services/Constants';
 import AjaxService from '../services/AjaxService';
 import AppSettingsService from '../settings/AppSettingsService';
+import CashService from '../services/CashService';
 
 class EnterText extends React.Component {
     constructor(props) {
@@ -59,18 +60,20 @@ class EnterText extends React.Component {
     }
 
     render() {
+        let isMobile = CashService.isMobile();
         let inputProps = {
             placeholder: 'Write...',
             value: this.state.value,
             onChange: this.onChange,
-            className: this.getStyles() + " d-inline w-75",
+            className: this.getStyles() + (isMobile ? "" : " d-inline w-75"),
             onKeyPress: this.onKeyPress
         }
 
         return (
             <div>
                 <input {...inputProps} type="text" />
-                <button type="button" className="d-inline btn btn-primary float-right" onClick={() => this.onKeyPress({ key: 'Enter' })}> Send </button>
+                <button type="button" hidden={isMobile} className="btn btn-primary d-inliner float-right"
+                    onClick={() => this.onKeyPress({ key: 'Enter' })}> Send </button>
             </div>
         )
     }
