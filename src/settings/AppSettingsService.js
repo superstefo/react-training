@@ -27,8 +27,6 @@ class AppSettingsService extends React.Component {
   applyDesignSettings = () => {
     let textColor = this.getSetting("textColor") || this.textColors[0]?.class;
     if (textColor) {
-      console.log(textColor);
-      
       this.applyClass(document.body, this.textColors, textColor);
     }
 

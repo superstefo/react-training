@@ -40,15 +40,5 @@ class NotesService extends React.Component {
     })
   }
 
-  // delete = function (phone = CashService.getPhone()) {
-  //   let promise = AjaxService.doDelete(Const.URLS.STORAGE + phone, {});
-
-  //   promise.then((data) => {
-  //     console.log(data);
-  //   }).catch((e) => {
-  //     console.error(e);
-  //   })
-  // }
-
 }
 export default new NotesService();

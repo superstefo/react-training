@@ -55,7 +55,6 @@ class RemoteUser extends React.Component {
   }
 
   render() {
-
     let user = this.state?.user;
     if (!user) {
       return <div></div>

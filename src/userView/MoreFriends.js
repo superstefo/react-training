@@ -7,9 +7,7 @@ import CashService from '../services/CashService';
 import Const from '../services/Constants';
 import BeanContextAware from '../services/BeanContextAware';
 import PicWrapper from "../building-blocks/PicWrapper";
-import BtnLink from "../building-blocks/BtnLink";
 import Info from "../building-blocks/Info";
-import FriendRequests from './FriendRequests';
 
 class MoreFriends extends React.Component {
   constructor(props) {
@@ -30,30 +28,12 @@ class MoreFriends extends React.Component {
 
   componentDidMount() {
     BeanContextAware.add(this);
-    this.getFriendRequests();
+    this.getNewFriends(this.getBookmarksAsObject);
     this.isMountedOk = true;
     let header = BeanContextAware.get('header1');
     if (header) {
       header.showMoreFriendsRefreshButton();
     }
-  }
-
-
-  getFriendRequests = () => {
-    let promise = AjaxService.doGet(Const.URLS.FAST_MATCH, {})
-    promise.then((data) => {
-      if (!data?.data?.data?.results) {
-        return;
-      }
-      let picIds = "";
-      data.data.data.results.forEach(like => { picIds = picIds + like.user.photos[0].id + " " })
-      this.friendRequestPicIds = picIds;
-
-      this.getNewFriends(this.getBookmarksAsObject);
-
-    }).catch((e) => {
-      console.log(e);
-    })
   }
 
   componentWillUnmount() {
@@ -79,12 +59,12 @@ class MoreFriends extends React.Component {
     })
   }
 
-  pass = (targetId) => {
+  pass = (targetId, sNumber) => {
     let phoneNumber = CashService.getPhone();
     if (!phoneNumber) {
       throw new Error("CashService[Const.PHONE_HEADER_NAME] is not allowed to be " + phoneNumber);
     }
-    let promise = AjaxService.doGet(Const.URLS.PASS + targetId, {})
+    let promise = AjaxService.doGet(Const.URLS.PASS + targetId + "/" + sNumber, {})
     promise.then((data) => {
     }).catch((e) => {
       console.log(e);
@@ -98,6 +78,12 @@ class MoreFriends extends React.Component {
     }
     let promise = AjaxService.doGet(Const.URLS.LIKE + targetId, {})
     promise.then((data) => {
+      if (data.data.likes_remaining === 0) {
+           window.alert('Out of likes!!! ');
+      }
+      if (data.data.match) {
+        window.alert('MATCH!!!');
+      }
     }).catch((e) => {
       console.log(e);
     })
@@ -125,7 +111,7 @@ class MoreFriends extends React.Component {
         <div className="text-justify text-wrap">
           <div>
             <button className="btn btn-success" onClick={() => this.like(person._id)}>y</button>
-            <button className="btn btn-danger" onClick={() => this.pass(person._id)}>n</button>
+            <button className="btn btn-danger" onClick={() => this.pass(person._id, person.s_number)}>n</button>
 
             {!isBookmarked ? <button className="btn btn-primary float-right ml-1"
               onClick={() => NotesService.saveBookmark(person?._id)}>s</button> : null}
@@ -146,10 +132,10 @@ class MoreFriends extends React.Component {
     let allFr = this.state.allFr;
 
     let persons = allFr.map(one => {
-      one.isLiked = this.isLiked(one.photos)
+      //one.isLiked = this.isLiked(one.photos)
       let obj = {
         info: (<InfoWrapper person={one} />),
-        image: (<Pic photos={one.photos} name={one.name} isLiked={this.isLiked(one.photos)} />)
+        image: (<Pic photos={one.photos} name={one.name} isLiked={false} />)
       }
       return { ...obj };
     });

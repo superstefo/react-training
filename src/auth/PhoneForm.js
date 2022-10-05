@@ -46,8 +46,6 @@ class PhoneForm extends React.Component {
     let promise = CashService.loadAll(phone);
     CashService.setPhone(phone);
     promise.then((data) => {
-      console.log(data?.data);
-
       let settings = data?.data?.settings;
       if (settings) {
         CashService.setSettings(settings);

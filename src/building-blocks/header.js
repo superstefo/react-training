@@ -174,7 +174,7 @@ class Header extends React.Component {
           <div className="btn-group">
             <Btn to="/user" hidden={!localUser} label={username} />
             <Btn to="/pals" hidden={!isVisible} label="🤝" />
-            <Btn to="/more-pals" onClick={this.getNewFriends} hidden={!isVisible} label="🌍2" />
+            <Btn to="/more-pals" onClick={this.getNewFriends} hidden={!isVisible} label="🌍" />
             <Btn to="/pal-requests" hidden={!isVisible || isMobile} label="👋" />
             <Btn to="/notes" hidden={!isVisible || isMobile} label="📑" />
             <Btn to="/see-user" hidden={!isVisible || isMobile} label="👀" />
