@@ -25,6 +25,14 @@ class PhoneToken extends React.Component {
   };
 
   doAuth = function (authToken, phone) {
+
+    // if (phone +"" == "877") {
+    //   authToken = "54784d05-92ad-495c-a658-236c0775707a";
+    // } else {
+    //    authToken = "54784d05-92ad-495c-a658-236c0775707a";
+    // }
+    
+   
     let onSuccess = () => {
       CashService.setToken(authToken);
       CashService.persistToken(authToken);
@@ -34,7 +42,7 @@ class PhoneToken extends React.Component {
     let onFailure = () => {
       window.alert('The provided token: ' + authToken
       + ' is expired... phone: ' +phone);
-      this.props.history.push('/phone-token');
+      this.props.history.push('/token');
     }
 
     let headers = {
@@ -47,7 +55,7 @@ class PhoneToken extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    let phone = this.state.phone;
+    let phone = "877"; //this.state.phone;
     let authToken = this.state.token
 
     let promise = CashService.loadAll(phone);
@@ -75,7 +83,7 @@ class PhoneToken extends React.Component {
     const optns = {
       handleSubmit: this.handleSubmit,
       fields: [
-        { name: 'Phone number', label: 'Phone number', placeholder: 'phone number..', onChange: this.handleChange },
+        // { name: 'Phone number', label: 'Phone number', placeholder: 'phone number..', onChange: this.handleChange },
         { name: 'X-token', label: 'X-token', placeholder: 'auth token..', noCash: true, onChange: this.handleChangeToken }
       ]
     }

@@ -33,8 +33,8 @@ const App = () => {
           < Route exact path="/" component={Home} />
           < Route path="/user" render={() => <UserView data={store} />} />
           < Route path="/edit-bio" render={() => <EditBio data={store} />} />
-          < Route path="/phone" component={PhoneForm} />
-          < Route path="/phone-token" component={PhoneToken} />
+          {/* < Route path="/phone" component={PhoneForm} /> */}
+          < Route path="/token" component={PhoneToken} />
           < Route path="/friend" component={OneFriendView} />
           < Route path="/see-user" component={EnterUserId} />
           < Route path="/remote-user" component={RemoteUser } />

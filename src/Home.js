@@ -19,9 +19,9 @@ class Home extends Component {
     return (
       <div >
         <h1>Welcome</h1>
-        <Link to="/phone">  Login with phone</Link>
-        <p/>
-        <Link to="/phone-token">  Login with phone and token</Link>
+        {/* <Link to="/phone">  Login with phone</Link>
+        <p/> */}
+        <Link to="/token">  Login with token</Link>
       </div >
     )
   }
