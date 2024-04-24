@@ -1,4 +1,4 @@
-let ipAdress = 'https://bender-app.herokuapp.com/';
+let ipAdress = 'http://78.90.175.41:5000/';
 
 const Const = {
   URLS: {
